@@ -1,36 +1,44 @@
-import React from 'react';
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import {
-	Box,
-	IconButton,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuItem,
-} from '@chakra-ui/react';
-import { IoSettingsOutline, IoLogOutOutline } from 'react-icons/io5';
-const Footer = () => {
+  Box,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from "@chakra-ui/react";
+import { IoSettingsOutline, IoLogOutOutline } from "react-icons/io5";
+import AuthContext from "../../context/AuthContext";
 
-	return (
-		<>
-			<Box alignSelf="flex-end">
-				<Menu>
-					<MenuButton
-						as={IconButton}
-						aria-label="Options"
-						icon={<IoSettingsOutline fontSize="1.5rem" />}
-						bg="transparent"
-					/>
-					<MenuList bg="dark" boxShadow="base" border="none">
-						<MenuItem borderRadius="9px" _hover={{ borderRadius: '9px'}}>
-						</MenuItem>
-					</MenuList>
-				</Menu>
-				<IconButton ml={1} bg="transparent">
-					<IoLogOutOutline fontSize="1.7rem" />
-				</IconButton>
-			</Box>
-		</>
-	);
+const Footer = () => {
+  const { logOut } = useContext(AuthContext);
+
+  return (
+    <>
+      <Box alignSelf="flex-end">
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="Options"
+            icon={<IoSettingsOutline fontSize="1.5rem" />}
+            bg="transparent"
+          />
+          <MenuList bg="dark" boxShadow="base" border="none">
+            <MenuItem
+              borderRadius="9px"
+              _hover={{ borderRadius: "9px" }}
+            ></MenuItem>
+          </MenuList>
+        </Menu>
+        <Link to="/login">
+          <IconButton onClick={() => logOut()} ml={1} bg="transparent">
+            <IoLogOutOutline fontSize="1.7rem" />
+          </IconButton>
+        </Link>
+      </Box>
+    </>
+  );
 };
 
 export default Footer;

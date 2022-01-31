@@ -18,23 +18,19 @@ import {
   Switch,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { HiPlus } from "react-icons/hi";
 import PropertiesContext from "../../../context/PropertiesContext";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale, setDefaultLocale } from "react-datepicker";
-import es from "date-fns/locale/es";
-import "./DatePicker.css";
 import SocialList from "../../Social/SocialList";
 import { Controller, useForm } from "react-hook-form";
-registerLocale("es", es);
-setDefaultLocale("es");
+import DatePicker from "../../Other/DatePicker/DatePicker";
 
 const CreatePost = (props) => {
-  const { full, property, normalAddButton } = props;
+  const { full, property, normalAddButton, noRightMargin } = props;
   const { addPost } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isForRentDisabled, setIsForRentDisabled] = useState(true);
+  const [isForSaleDisabled, setIsForSaleDisabled] = useState(true);
 
   const {
     register,
@@ -45,13 +41,10 @@ const CreatePost = (props) => {
   } = useForm();
 
   const submitPost = (data) => {
+    debugger;
     addPost(data, property._id);
     reset();
     onClose();
-  };
-
-  const submitForm = () => {
-    document.getElementById("submitButtonCreatePost").click();
   };
 
   return (
@@ -62,8 +55,8 @@ const CreatePost = (props) => {
           w={full === "yes" ? "100%" : "8rem"}
           onClick={onOpen}
           fontSize="15px"
-          leftIcon={normalAddButton ? <HiPlus fontSize="1.2rem" /> : null}
-          mr={5}
+          leftIcon={<HiPlus fontSize="1.2rem" />}
+          mr={noRightMargin ? 0 : 5}
           borderRadius="9px"
           variant={normalAddButton ? "add-button-dark" : "add-button-clear"}
         >
@@ -81,12 +74,20 @@ const CreatePost = (props) => {
                 <Stack spacing="14px">
                   <SimpleGrid mb="-5" columns={1}>
                     <Box display="flex" mb="4">
-                      <FormControl display="flex" mt="2rem" alignItems="center">
+                      <FormControl
+                        display="flex"
+                        mt="2rem"
+                        alignItems="center"
+                        onChange={() =>
+                          setIsForSaleDisabled(!isForSaleDisabled)
+                        }
+                      >
                         <FormLabel htmlFor="createPostSellSwitch" mb="0">
                           Disponible para vender
                         </FormLabel>
                         <Switch
-                          {...register("isForRent")}
+                          value={!isForSaleDisabled}
+                          {...register("isForSale")}
                           id="createPostSellSwitch"
                         />
                       </FormControl>
@@ -98,18 +99,28 @@ const CreatePost = (props) => {
                           Precio venta
                         </FormLabel>
                         <Input
+                          defaultValue="0"
+                          disabled={isForSaleDisabled}
                           {...register("forSalePrice")}
                           id="createPostSellPrice"
                         ></Input>
                       </Box>
                     </Box>
                     <Box display="flex" mb="4">
-                      <FormControl display="flex" mt="2rem" alignItems="center">
+                      <FormControl
+                        display="flex"
+                        mt="2rem"
+                        alignItems="center"
+                        onChange={() =>
+                          setIsForRentDisabled(!isForRentDisabled)
+                        }
+                      >
                         <FormLabel htmlFor="createPostRentSwitch" mb="0">
                           Disponible para alquilar
                         </FormLabel>
                         <Switch
-                          {...register("isForSale")}
+                          value={!isForRentDisabled}
+                          {...register("isForRent")}
                           id="createPostRentSwitch"
                         />
                       </FormControl>
@@ -121,6 +132,8 @@ const CreatePost = (props) => {
                           Precio alquiler
                         </FormLabel>
                         <Input
+                          defaultValue="0"
+                          disabled={isForRentDisabled}
                           {...register("forRentPrice")}
                           id="createPostRentPrice"
                         ></Input>
@@ -139,17 +152,9 @@ const CreatePost = (props) => {
                           rules={{ required: "Fecha de inicio es requerida." }}
                           render={({ field }) => (
                             <DatePicker
-                              autoComplete="off"
-                              id="createPostStartDate"
-                              placeholderText="Ingresa la fecha de inicio"
-                              className="datePicker"
-                              dateFormat="dd/MM/yyyy"
-                              todayButton="Hoy"
-                              showYearDropdown
-                              yearDropdownItemNumber={4}
-                              locale="es"
-                              onChange={(date) => field.onChange(date)}
-                              selected={field.value}
+                              field={field}
+                              placeholderText={"Ingresa la fecha de inicio"}
+                              id={"createPostStartDate"}
                             />
                           )}
                         />
@@ -171,17 +176,9 @@ const CreatePost = (props) => {
                           rules={{ required: "Fecha de fin es requerida." }}
                           render={({ field }) => (
                             <DatePicker
-                              autoComplete="off"
-                              id="createPostEndDate"
-                              placeholderText="Ingresa la fecha de fin"
-                              className="datePicker"
-                              dateFormat="dd/MM/yyyy"
-                              todayButton="Hoy"
-                              showYearDropdown
-                              yearDropdownItemNumber={4}
-                              locale="es"
-                              onChange={(date) => field.onChange(date)}
-                              selected={field.value}
+                              field={field}
+                              placeholderText={"Ingresa la fecha de fin"}
+                              id={"createPostEndDate"}
                             />
                           )}
                         />
@@ -211,6 +208,7 @@ const CreatePost = (props) => {
                     >
                       <option value="Active">Activa</option>
                       <option value="Paused">Pausada</option>
+                      <option value="Pending">Pendiente</option>
                       <option value="Finished">Finalizada</option>
                     </Select>
                     {errors.status && (
@@ -229,7 +227,11 @@ const CreatePost = (props) => {
               <Button variant="cancel-action" mr={3} onClick={onClose}>
                 Cancelar
               </Button>
-              <Button onClick={submitForm} variant="confirm-add-button">
+              <Button
+                form="formPost"
+                type="submit"
+                variant="confirm-add-button"
+              >
                 Confirmar
               </Button>
             </DrawerFooter>

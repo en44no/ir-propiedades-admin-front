@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
   useDisclosure,
@@ -10,34 +10,48 @@ import {
   DrawerBody,
   DrawerFooter,
   Box,
-  Badge,
   Text,
   HStack,
   Divider,
-  Image,
 } from "@chakra-ui/react";
-import { HiPlus } from "react-icons/hi";
-import "react-datepicker/dist/react-datepicker.css";
-import "./DatePicker.css";
-import { FaFacebookF } from "react-icons/fa";
 import CreatePost from "./CreatePost";
+import SocialList from "../../Social/SocialList";
+import BadgePostState from "./BadgePostState";
+import { MdOutlineList } from "react-icons/md";
+import PropertiesContext from "../../../context/PropertiesContext";
 
 const PostList = (props) => {
-  const { full, property, propertyPosts } = props;
+  const { full, property } = props;
+  const { getPostsByProperty, propertyPosts } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  console.log(propertyPosts);
 
   const parsePostState = (post) => {
     if (post.status[0] === "Active") {
-      return "Activo";
+      return <BadgePostState bgColor="#00b894" text="Activa" />;
     } else if (post.status[0] === "Paused") {
-      return "Pausado";
+      return <BadgePostState bgColor="#FFB835" text="Pausada" />;
     } else if (post.status[0] === "Pending") {
-      return "Pendiente";
+      return <BadgePostState bgColor="#0984e3" text="Pendiente" />;
     } else if (post.status[0] === "Finished") {
-      return "Finalizado";
+      return <BadgePostState bgColor="#d63031" text="Finalizada" />;
     }
   };
+
+  const formatDate = (date) => {
+    const newDate = new Date(date);
+    return newDate.toLocaleDateString();
+  };
+
+  const formatToUSD = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      getPostsByProperty(property._id);
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -47,7 +61,7 @@ const PostList = (props) => {
           w={full === "yes" ? "100%" : "8rem"}
           onClick={onOpen}
           fontSize="15px"
-          leftIcon={HiPlus}
+          leftIcon={<MdOutlineList fontSize="22px" />}
           mr={5}
           borderRadius="9px"
           variant="add-button-clear"
@@ -59,14 +73,12 @@ const PostList = (props) => {
           <DrawerContent bg="defaultColor.400">
             <DrawerCloseButton color="#fff" mt="2" />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
-              Ver publicaciones de la propiedad "{property.name}"
+              Publicaciones de la propiedad "{property.name}"
             </DrawerHeader>
             <DrawerBody color="#fff">
-              <Box display="flex" justifyContent="end" mr="-5" mb="4">
-                <CreatePost property={property} normalAddButton="yes" />
-              </Box>
               {propertyPosts.map((post) => (
                 <Box
+                  key={post._id}
                   display="flex"
                   bg="defaultColor.300"
                   p="3"
@@ -76,55 +88,64 @@ const PostList = (props) => {
                 >
                   <HStack w="100%" spacing="13px" height="25px">
                     <>
-                      <Box minW="11%" maxW="11%">
-                        <Badge
-                          minW="100%"
-                          maxW="100%"
-                          borderRadius="7px"
-                          px="2"
-                          py="0.5"
-                          bg="defaultColor.400"
-                          color="#fff"
-                        >
-                          <Text textAlign="center">{parsePostState(post)}</Text>
-                        </Badge>
+                      <Box p="0" minW="10%" maxW="10%">
+                        {parsePostState(post)}
                       </Box>
                       <Divider orientation="vertical" />
-                      <HStack spacing="3px" minW="14%" maxW="14%">
+                      <HStack
+                        spacing="3px"
+                        minW="17%"
+                        maxW="17%"
+                        justifyContent="center"
+                        textAlign="center"
+                      >
                         {post.isForSale ? (
                           <>
                             <Text>Venta</Text>
                             <Text>-</Text>
-                            <Text>$400000</Text>
+                            <Text>
+                              {formatToUSD
+                                .format(post.forSalePrice)
+                                .slice(0, 10)
+                                .concat(
+                                  post.forSalePrice.length > 10 ? "..." : ""
+                                )}
+                            </Text>
                           </>
                         ) : null}
                       </HStack>
                       <Divider orientation="vertical" />
-                      <HStack spacing="3px" minW="14%" maxW="14%">
+                      <HStack
+                        spacing="3px"
+                        minW="17%"
+                        maxW="17%"
+                        justifyContent="center"
+                        textAlign="center"
+                      >
                         {post.isForRent ? (
                           <>
                             <Text>Alquiler</Text>
                             <Text>-</Text>
-                            <Text>$2000</Text>
+                            <Text>
+                              {formatToUSD
+                                .format(post.forRentPrice)
+                                .slice(0, 10)}
+                              {post.forSalePrice.length > 10 ? "..." : ""}
+                            </Text>
                           </>
                         ) : null}
                       </HStack>
                       <Divider orientation="vertical" />
-                      <Box w="17%">
-                        <Text>Desde 09/12/2021</Text>
+                      <Box w="17%" justifyContent="center" textAlign="center">
+                        <Text>Desde {formatDate(post.startDate)}</Text>
                       </Box>
                       <Divider orientation="vertical" />
-                      <Box w="17%">
-                        <Text>Hasta 09/12/2021</Text>
+                      <Box w="17%" justifyContent="center" textAlign="center">
+                        <Text>Hasta {formatDate(post.endDate)}</Text>
                       </Box>
                       <Divider orientation="vertical" />
-                      <HStack minW="11%" maxW="11%">
-                        <FaFacebookF />
-                        <Image
-                          h="17px"
-                          src="https://i.postimg.cc/vBbmvVhf/Capture-removebg-preview.png"
-                          alt="MercadoLibre"
-                        />
+                      <HStack minW="8%" maxW="8%" justifyContent="center">
+                        <SocialList onlyIcons="true" />
                       </HStack>
                     </>
                   </HStack>
@@ -133,9 +154,13 @@ const PostList = (props) => {
             </DrawerBody>
             <DrawerFooter borderTopWidth="1px">
               <Button variant="cancel-action" mr={3} onClick={onClose}>
-                Cancelar
+                Cerrar
               </Button>
-              <Button variant="confirm-add-button">Confirmar</Button>
+              <CreatePost
+                property={property}
+                normalAddButton="yes"
+                noRightMargin
+              />
             </DrawerFooter>
           </DrawerContent>
         </Drawer>

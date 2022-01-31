@@ -17,14 +17,14 @@ import {
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
-import { HiPlus } from "react-icons/hi";
-import PropertiesContext from "../../context/PropertiesContext";
+import PropertiesContext from "../../../context/PropertiesContext";
 import { useForm } from "react-hook-form";
+import { FaRegEdit } from "react-icons/fa";
 
-const CreateAddress = (props) => {
-  const { addAddress } = useContext(PropertiesContext);
+const EditAddress = (props) => {
+  const { editAddress } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { full } = props;
+  const { full, address, direction } = props;
 
   const {
     register,
@@ -34,8 +34,7 @@ const CreateAddress = (props) => {
   } = useForm();
 
   const submitAddress = (data) => {
-    addAddress(data);
-    document.getElementById("requiredAddress").style.display = "none";
+    editAddress(data, address._id);
     reset();
     onClose();
   };
@@ -46,20 +45,25 @@ const CreateAddress = (props) => {
         w={full === "yes" ? "100%" : "8rem"}
         onClick={onOpen}
         fontSize="15px"
-        leftIcon={HiPlus}
+        leftIcon={<FaRegEdit fontSize="18px" />}
         mr={5}
         mb={5}
         borderRadius="9px"
         variant="add-button-clear"
       >
-        Ingresar dirección
+        Editar dirección
       </Button>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+
+      <Drawer
+        isOpen={isOpen}
+        placement={direction ? direction : "left"}
+        onClose={onClose}
+      >
         <DrawerOverlay />
         <DrawerContent bg="defaultColor.400">
           <DrawerCloseButton color="#fff" mt="2" />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
-            Agregar dirección
+            Editar dirección
           </DrawerHeader>
           <DrawerBody color="#fff">
             <form id="addressForm" onSubmit={handleSubmit(submitAddress)}>
@@ -71,12 +75,10 @@ const CreateAddress = (props) => {
                       required: " País es requerido.",
                     })}
                     id="addressCountry"
-                    defaultValue="option1"
                     placeholder="Ingresa el país"
+                    defaultValue={address.country}
                   >
-                    <option value="option1">Uruguay</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                    <option value="argentina">Argentina</option>
                   </Select>
                   {errors.country && (
                     <Badge variant="required-error">
@@ -93,6 +95,7 @@ const CreateAddress = (props) => {
                     id="AddressState"
                     placeholder="Ingresa la provincia"
                     autoComplete="off"
+                    defaultValue={address.state}
                   />
                   {errors.state && (
                     <Badge variant="required-error">
@@ -107,6 +110,7 @@ const CreateAddress = (props) => {
                     id="AddressCity"
                     placeholder="Ingresa la ciudad"
                     autoComplete="off"
+                    defaultValue={address.city}
                   />
                   {errors.city && (
                     <Badge variant="required-error">
@@ -123,6 +127,7 @@ const CreateAddress = (props) => {
                     id="AddressNeighborhood"
                     placeholder="Ingresa el barrio"
                     autoComplete="off"
+                    defaultValue={address.neighborhood}
                   />
                   {errors.neighborhood && (
                     <Badge variant="required-error">
@@ -139,6 +144,7 @@ const CreateAddress = (props) => {
                     id="AddressStreet"
                     placeholder="Ingresa la calle"
                     autoComplete="off"
+                    defaultValue={address.street}
                   />
                   {errors.street && (
                     <Badge variant="required-error">
@@ -155,6 +161,7 @@ const CreateAddress = (props) => {
                     id="AddressDoor"
                     placeholder="Ingresa el número de puerta"
                     autoComplete="off"
+                    defaultValue={address.door}
                   />
                   {errors.door && (
                     <Badge variant="required-error">
@@ -171,6 +178,7 @@ const CreateAddress = (props) => {
                     id="AddressDetails"
                     placeholder="Ingresa los detalles"
                     autoComplete="off"
+                    defaultValue={address.details}
                   />
                   {errors.details && (
                     <Badge variant="required-error">
@@ -185,7 +193,11 @@ const CreateAddress = (props) => {
             <Button variant="cancel-action" mr={3} onClick={onClose}>
               Cancelar
             </Button>
-            <Button  type="submit" form="addressForm" variant="confirm-add-button">
+            <Button
+              type="submit"
+              form="addressForm"
+              variant="confirm-add-button"
+            >
               Confirmar
             </Button>
           </DrawerFooter>
@@ -195,4 +207,4 @@ const CreateAddress = (props) => {
   );
 };
 
-export default CreateAddress;
+export default EditAddress;

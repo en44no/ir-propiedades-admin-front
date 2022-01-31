@@ -23,3 +23,17 @@
 option {
   color: initial;
 }
+
+::-webkit-file-upload-button {
+  background: #4f6193;
+  color: #fff;
+  border: none;
+  border-right: 2px solid #fff;
+  margin-right: 0.5rem;
+  margin-top: 0.1rem;
+  cursor: pointer;
+  margin-left: -0.3rem;
+}
+::-webkit-file-upload-textfield {
+  color: red;
+}

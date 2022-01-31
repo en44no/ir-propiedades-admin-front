@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Switch, FormLabel, Image } from "@chakra-ui/react";
+import { Box, Switch, FormLabel } from "@chakra-ui/react";
 
 const SocialCard = (props) => {
   const { appColor, appName, appIcon } = props;

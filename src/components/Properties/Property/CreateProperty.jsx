@@ -18,14 +18,15 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { HiPlus } from "react-icons/hi";
-import { MdClose } from "react-icons/md";
-import CreateAddress from "./CreateAddress";
+import CreateAddress from "../Address/CreateAddress";
 import { useForm } from "react-hook-form";
-import PropertiesContext from "../../context/PropertiesContext";
+import PropertiesContext from "../../../context/PropertiesContext";
+import EditAddress from "../Address/EditAddress";
 
 const CreateProperty = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { addProperty, address, setAddress } = useContext(PropertiesContext);
+  const { addProperty, addressToAdd, setAddressToAdd } =
+    useContext(PropertiesContext);
   const [showAddressError, setShowAddressError] = useState(false);
 
   const {
@@ -36,8 +37,8 @@ const CreateProperty = () => {
   } = useForm();
 
   const handleSubmitProperty = async (data) => {
-    if (address !== null) {
-      await addProperty(data, address);
+    if (addressToAdd !== null) {
+      await addProperty(data, addressToAdd);
       reset();
       onClose();
     } else {
@@ -46,7 +47,7 @@ const CreateProperty = () => {
   };
 
   const removeSelectedAddresss = () => {
-    setAddress(null);
+    setAddressToAdd(null);
   };
 
   return (
@@ -128,26 +129,12 @@ const CreateProperty = () => {
             </form>
             <Box mt="4">
               <FormLabel htmlFor="propertyAddress">Dirección</FormLabel>
-              {address ? (
-                <FormLabel
-                  textAlign="center"
-                  display="flex"
-                  justifyContent="center"
-                  p="2"
-                  bg="defaultColor.300"
-                  borderRadius="7px"
-                >
-                  {`${address.neighborhood}, ${address.city}`}
-                  <Box
-                    onClick={removeSelectedAddresss}
-                    alignSelf="center"
-                    ml="2"
-                    fontSize="1.2rem"
-                    cursor="pointer"
-                  >
-                    <MdClose />
-                  </Box>
-                </FormLabel>
+              {addressToAdd ? (
+                <EditAddress
+                  address={addressToAdd}
+                  full="yes"
+                  direction="right"
+                />
               ) : (
                 <Box>
                   <CreateAddress full="yes" />

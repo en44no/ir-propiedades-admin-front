@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import {
+  Badge,
   Box,
   Button,
   Drawer,
@@ -12,8 +13,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Radio,
-  RadioGroup,
   Select,
   SimpleGrid,
   Stack,
@@ -22,48 +21,64 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { FiInfo } from "react-icons/fi";
-import PropertiesContext from "../../context/PropertiesContext";
+import { BsFillInfoCircleFill } from "react-icons/bs";
+import PropertiesContext from "../../../context/PropertiesContext";
+import FeatureList from "../Features/FeatureList";
+import EditAddress from "../Address/EditAddress";
+import CreateAddress from "../Address/CreateAddress";
 import ConfirmDeleteProperty from "./ConfirmDeleteProperty";
-import CreatePost from "./Posts/CreatePost";
-import PostList from "./Posts/PostList";
+import PostList from "../Posts/PostList";
+import MediaList from "../Media/MediaList";
 
 const PropertyDetails = (props) => {
-  const { deleteProperty, getPostsByProperty, propertyPosts } =
+  const { deleteProperty, addDetailsToProperty } =
     useContext(PropertiesContext);
   const { propertyName, property } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
-  const setPostsUseForm = useForm();
 
   const handleDeleteProperty = () => {
     deleteProperty(property);
     onClose();
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      getPostsByProperty(property._id);
-    }
-  }, [isOpen]);
+  const submitPropertyDetails = (data) => {
+    addDetailsToProperty(data, property);
+    reset();
+    onClose();
+  };
 
   return (
     <>
       <Button
         position="absolute"
         p="0"
+        minW="1.7rem"
+        minH="1.7rem"
+        h="1.7rem"
+        w="1.7rem"
         right="2"
         top="2"
         onClick={onOpen}
-        variant="add-button"
+        bg="defaultColor.400"
+        _hover={{ bg: "defaultColor.500" }}
         borderRadius="50%"
         color="white"
       >
-        <FiInfo fontSize={22} />
+        <Box fontSize="0.9rem">
+          <BsFillInfoCircleFill />
+        </Box>
+        {/*
+        ESTO ES PARA CUANDO LA PROPIEDAD NO TENGA TODOS LOS DATOS COMPLETADOS
+         <Box fontSize="0.9rem">
+          <GoAlert />
+        </Box> */}
       </Button>
       <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
@@ -73,53 +88,45 @@ const PropertyDetails = (props) => {
             Detalles de la propiedad {propertyName ? `"${propertyName}"` : ""}
           </DrawerHeader>
           <DrawerBody color="#fff">
-            <form>
-              <RadioGroup
-                display="flex"
-                justifyContent="center"
-                mt="1rem"
-                mb="1rem"
-              >
-                <Stack direction="row">
-                  <Radio id="usdPrices" value="usdPrices">
-                    <FormLabel htmlFor="usdPrices" mb="0">
-                      Precios en USD
-                    </FormLabel>
-                  </Radio>
-                  <Radio id="pesosPrices" value="pesosPrices">
-                    <FormLabel htmlFor="pesosPrices" mb="0">
-                      Precios en Pesos
-                    </FormLabel>
-                  </Radio>
-                </Stack>
-              </RadioGroup>
+            <form
+              id="formPropertyDetails"
+              onSubmit={handleSubmit(submitPropertyDetails)}
+            >
               <SimpleGrid columns={2} spacing={10}>
                 <Box display="flex" mb="4">
                   <FormControl display="flex" mt="2rem" alignItems="center">
-                    <FormLabel htmlFor="sellSwitch" mb="0">
+                    <FormLabel htmlFor="detailsSellSwitch" mb="0">
                       Disponible para vender
                     </FormLabel>
-                    <Switch id="sellSwitch" />
+                    <Switch {...register("isForSale")} id="detailsSellSwitch" />
                   </FormControl>
                   <Box>
-                    <FormLabel textAlign="center" htmlFor="salePrice">
-                      Precio venta
+                    <FormLabel textAlign="center" htmlFor="detailsSellPrice">
+                      Tasación venta
                     </FormLabel>
-                    <Input id="salePrice"></Input>
+                    <Input
+                      defaultValue={property.appraisedSalePrice || 0}
+                      {...register("appraisedSalePrice")}
+                      id="detailsSellPrice"
+                    ></Input>
                   </Box>
                 </Box>
                 <Box display="flex" mb="4">
                   <FormControl display="flex" mt="2rem" alignItems="center">
-                    <FormLabel htmlFor="rentSwitch" mb="0">
+                    <FormLabel htmlFor="detailsRentSwitch" mb="0">
                       Disponible para alquilar
                     </FormLabel>
-                    <Switch id="rentSwitch" />
+                    <Switch {...register("isForRent")} id="detailsRentSwitch" />
                   </FormControl>
                   <Box>
-                    <FormLabel textAlign="center" htmlFor="rentPrice">
-                      Precio alquiler
+                    <FormLabel textAlign="center" htmlFor="detailsRentPrice">
+                      Tasación alquiler
                     </FormLabel>
-                    <Input id="rentPrice"></Input>
+                    <Input
+                      defaultValue={property.appraisedRentPrice || 0}
+                      {...register("appraisedRentPrice")}
+                      id="detailsRentPrice"
+                    ></Input>
                   </Box>
                 </Box>
               </SimpleGrid>
@@ -128,25 +135,30 @@ const PropertyDetails = (props) => {
                   <Box>
                     <FormLabel htmlFor="propertyTypes">Tipo</FormLabel>
                     <Select
-                      {...register("type", { required: "Types es requerido." })}
-                      id="propertyTypes"
-                      defaultValue="option1"
-                      placeholder="Agrega el tipo"
+                      {...register("type", { required: "Tipo es requerido." })}
+                      id="propertyType"
+                      defaultValue={property.type}
+                      placeholder="Ingresa el tipo"
                     >
                       <option value="House">Casa</option>
                       <option value="Deposit">Depósito</option>
                       <option value="Apartment">Apartamento</option>
                     </Select>
-                    {errors.types && <span>wadwad</span>}
+                    {errors.type && (
+                      <Badge variant="required-error">
+                        {errors.type.message}
+                      </Badge>
+                    )}
                   </Box>
                   <Box>
                     <FormLabel htmlFor="propertyComments">
                       Comentarios
                     </FormLabel>
                     <Textarea
+                      defaultValue={property.comment}
                       {...register("comment")}
                       id="propertyComments"
-                      placeholder="Agrega los comentarios"
+                      placeholder="Ingresa los comentarios"
                     />
                     {errors.comments && <span>wad</span>}
                   </Box>
@@ -154,7 +166,9 @@ const PropertyDetails = (props) => {
                     <FormLabel htmlFor="propertyComments">
                       Características
                     </FormLabel>
-                    <Input></Input>
+                    <Box>
+                      <FeatureList property={property} full="yes" />
+                    </Box>
                   </Box>
                   <Box>
                     <FormLabel htmlFor="propertyComments">
@@ -163,65 +177,43 @@ const PropertyDetails = (props) => {
                     <Input></Input>
                   </Box>
                   <Box>
-                    <FormLabel htmlFor="propertyComments">Dirección</FormLabel>
-                    <Input></Input>
+                    <FormLabel htmlFor="propertyAddress">Dirección</FormLabel>
+                    {property.address ? (
+                      <EditAddress address={property.address} full="yes" />
+                    ) : (
+                      <CreateAddress full="yes" />
+                    )}
                   </Box>
                 </Stack>
                 <Stack spacing="14px" id="rightColumn">
-                  <Box>
-                    <FormLabel htmlFor="propertyState">Estado</FormLabel>
-                    <Select
-                      {...register("type", {
-                        required: "Types es requerido.",
-                      })}
-                      id="propertyState"
-                      defaultValue="option1"
-                      placeholder="Agrega el tipo"
-                    >
-                      <option value="House">Casa</option>
-                      <option value="Deposit">Depósito</option>
-                      <option value="Apartment">Apartamento</option>
-                    </Select>
-                    {errors.types && <span>wadwad</span>}
-                  </Box>
-                  <Box>
-                    <FormLabel htmlFor="propertyDescription">
-                      Descripcion
-                    </FormLabel>
-                    <Textarea
-                      {...register("description")}
-                      id="propertyDescription"
-                      placeholder="Agrega los Description"
-                    />
-                    {errors.comments && <span>wad</span>}
-                  </Box>
                   <Box>
                     <FormLabel htmlFor="propertyComments">Documentos</FormLabel>
                     <Input></Input>
                   </Box>
                   <Box>
+                    <FormLabel htmlFor="propertyDescription">
+                      Descripción
+                    </FormLabel>
+                    <Textarea
+                      defaultValue={property.description}
+                      {...register("description")}
+                      id="propertyDescription"
+                      placeholder="Ingresa la descripción"
+                    />
+                  </Box>
+                  <Box>
                     <FormLabel htmlFor="propertyComments">Media</FormLabel>
-                    <Input></Input>
+                    <MediaList full="yes" property={property} />
                   </Box>
                   <Box>
                     <FormLabel>Publicaciones</FormLabel>
-                    {propertyPosts.length > 0 ? (
-                      <PostList
-                        propertyPosts={propertyPosts}
-                        full="yes"
-                        property={property}
-                      />
-                    ) : (
-                      <Box>
-                        <CreatePost property={property} full="yes" />
-                      </Box>
-                    )}
-                    <Box>
-                      <FormLabel htmlFor="propertyComments">
-                        Inventarios
-                      </FormLabel>
-                      <Input></Input>
-                    </Box>
+                    <PostList full="yes" property={property} />
+                  </Box>
+                  <Box>
+                    <FormLabel htmlFor="propertyComments">
+                      Inventarios
+                    </FormLabel>
+                    <Input></Input>
                   </Box>
                 </Stack>
                 <Button
@@ -239,7 +231,13 @@ const PropertyDetails = (props) => {
             <Button variant="cancel-action" mr={3} onClick={onClose}>
               Cancelar
             </Button>
-            <Button variant="confirm-add-button">Confirmar</Button>
+            <Button
+              form="formPropertyDetails"
+              type="submit"
+              variant="confirm-add-button"
+            >
+              Confirmar
+            </Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

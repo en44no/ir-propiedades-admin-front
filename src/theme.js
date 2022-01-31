@@ -57,12 +57,12 @@ const theme = extendTheme({
           _hover: { bg: "#f05657" },
         },
         "cancel-action": {
-          outline: "2px solid #cbd5e0",
+          border: "2px solid #cbd5e0",
           color: "#fff",
           _hover: { bg: "rgba(0, 0, 0, 0.20)" },
         },
         "cancel-action-black": {
-          outline: "2px solid #cbd5e0",
+          border: "2px solid #cbd5e0",
           color: "#000",
           _hover: { bg: "rgba(0, 0, 0, 0.20)" },
         },

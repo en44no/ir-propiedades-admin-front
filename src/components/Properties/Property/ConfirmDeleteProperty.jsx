@@ -29,7 +29,7 @@ const ConfirmDeleteProperty = (props) => {
       >
         <PopoverTrigger>
           <Button variant="delete-button" mr={3} onClick={open}>
-            Borrar propiedad
+            Eliminar
           </Button>
         </PopoverTrigger>
         <PopoverContent bg="defaultColor.50" _focus={{ boxShadow: "none" }}>

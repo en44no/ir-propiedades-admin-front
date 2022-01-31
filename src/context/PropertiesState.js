@@ -1,13 +1,20 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import Notification from "../components/Notification";
+import Notification from "../components/Other/Notification";
 import PropertiesContext from "./PropertiesContext";
 
 const PropertiesState = (props) => {
   const [properties, setProperties] = useState([]);
-  const [address, setAddress] = useState(null);
+  const [addressToAdd, setAddressToAdd] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [addresses, setAddresses] = useState([]);
   const [propertyPosts, setPropertyPosts] = useState([]);
+  const [features, setFeatures] = useState([]);
+  const [featuresProperty, setFeaturesProperty] = useState([]);
+
+  useEffect(() => {
+    fetchProperties();
+  }, []);
 
   const fetchProperties = async () => {
     await axios
@@ -29,8 +36,8 @@ const PropertiesState = (props) => {
               "Has agregado una nueva propiedad",
               "success"
             ),
-            setAddress(null),
             (res.data.address = address),
+            setAddressToAdd(null),
             setProperties([...properties, res.data]))
           : null
       )
@@ -43,17 +50,54 @@ const PropertiesState = (props) => {
       });
   };
 
+  const editAddress = async (data, addressId) => {
+    let property = properties.find(
+      (property) => property.address._id === addressId
+    );
+    if (!property) {
+      return addAddress(data);
+    }
+    await axios
+      .put(`http://localhost:4000/addresses/${addressId}`, data)
+      .then((res) => {
+        if (res.status === 200) {
+          Notification(
+            "Dirección editada correctamente",
+            "Has editado una dirección",
+            "success"
+          );
+          property.address = res.data;
+          setAddresses([...addresses, res.data]);
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          setProperties(newProperties);
+        }
+      })
+      .catch((error) => {
+        Notification(
+          "Error al editar la dirección",
+          "Ocurrió un error intentado editar la dirección",
+          "error"
+        );
+      });
+  };
+
   const deleteProperty = async (data) => {
     await axios
       .delete(`http://localhost:4000/properties/${data._id}`)
       .then((res) =>
         res.status === 201
           ? (Notification(
-              "Dirección agregada correctamente",
-              "Has agregado una nueva dirección",
+              "propiedad eliminada correctamente",
+              "Has eliminado una propiedad",
               "success"
             ),
-            setAddress(null),
+            setAddressToAdd(null),
             setProperties(
               properties.filter((property) => property._id !== res.data._id)
             ))
@@ -78,13 +122,43 @@ const PropertiesState = (props) => {
               "Has agregado una nueva dirección",
               "success"
             ),
-            setAddress(res.data))
+            setAddressToAdd(res.data),
+            setAddresses([...addresses, res.data]))
           : null
       )
       .catch((error) => {
         Notification(
           "Error al agregar la dirección",
           "Ocurrió un error intentado agregar la dirección",
+          "error"
+        );
+      });
+  };
+
+  const addDetailsToProperty = async (data, property) => {
+    await axios
+      .put(`http://localhost:4000/properties/${property._id}`, data)
+      .then((res) => {
+        if (res.status === 200) {
+          Notification(
+            "Detalles agregados correctamente",
+            "Has agregado detalles a una propiedad",
+            "success"
+          );
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          setProperties(newProperties);
+        }
+      })
+      .catch((error) => {
+        Notification(
+          "Error al agregar detalles a la propiedad",
+          "Ocurrió un error intentado agregar detalles a la propiedad",
           "error"
         );
       });
@@ -101,7 +175,8 @@ const PropertiesState = (props) => {
               "Has creado una nueva publicación",
               "success"
             ),
-            setPosts([...posts, res.data]))
+            setPosts([...posts, res.data]),
+            getPostsByProperty(propertyId))
           : null
       )
       .catch((error) => {
@@ -122,23 +197,123 @@ const PropertiesState = (props) => {
       .catch((error) => {});
   };
 
-  useEffect(() => {
-    fetchProperties();
-  }, []);
+  const addFeature = async (data, propertyId) => {
+    data.property = propertyId;
+    await axios
+      .post("http://localhost:4000/features", data)
+      .then((res) =>
+        res.status === 201
+          ? (Notification(
+              "Característica agregada correctamente",
+              "Has agregado una nueva característica",
+              "success"
+            ),
+            setFeatures([...features, res.data]),
+            addFeatureToProperty(res.data._id, propertyId))
+          : null
+      )
+      .catch((error) => {
+        Notification(
+          "Error al agregar la característica",
+          "Ocurrió un error intentado agregar la característica",
+          "error"
+        );
+      });
+  };
+
+  const addFeatureToProperty = async (featureId, propertyId) => {
+    const property = properties.find((property) => property._id === propertyId);
+    await axios
+      .put(`http://localhost:4000/properties/${propertyId}`, {
+        features: [...property.features, featureId],
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          property.address = res.data;
+          setAddresses([...addresses, res.data]);
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          setProperties(newProperties);
+        }
+      })
+      .catch((error) => {});
+  };
+
+  const getFeaturesByProperty = async (propertyId) => {
+    const property = properties.find((property) => property._id === propertyId);
+    const features = property.features;
+    await axios
+      .post("http://localhost:4000/features/many", features)
+      .then((res) => {
+        setFeaturesProperty(res.data);
+      })
+      .catch((error) => {});
+  };
+
+  const addMedia = async (data, property) => {
+    let images = new FormData();
+    images.append("images", [data.image]);
+    await axios
+      .post("http://localhost:4000/uploads", images)
+      .then(async (res) => {
+        let url = "http://localhost:4000/static/" + res.filename;
+        data.url = url;
+        await axios
+          .post("http://localhost:4000/media", data)
+          .then((res) => {
+            property.media = res.data;
+            const newProperties = properties.map((prop) => {
+              if (prop._id === property._id) {
+                return property;
+              } else {
+                return prop;
+              }
+            });
+            setProperties(newProperties);
+            if (res.status === 201) {
+              Notification(
+                "Imagen agregada correctamente",
+                "Has agregado una nueva imagen",
+                "success"
+              );
+            }
+          })
+          .catch((error) => {
+            Notification(
+              "Error al agregar la imagen",
+              "Ocurrió un error intentado agregar la imagen",
+              "error"
+            );
+          })
+          .catch((error) => {});
+      });
+  };
 
   return (
     <PropertiesContext.Provider
       value={{
         properties,
         setProperties,
-        address,
-        setAddress,
+        addressToAdd,
+        setAddressToAdd,
         addProperty,
         addAddress,
         deleteProperty,
         addPost,
         getPostsByProperty,
         propertyPosts,
+        editAddress,
+        addresses,
+        addFeature,
+        featuresProperty,
+        getFeaturesByProperty,
+        addMedia,
+        addDetailsToProperty,
       }}
     >
       {props.children}

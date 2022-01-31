@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import { Box } from "@chakra-ui/react";
-import PropertyCard from "../components/Properties/PropertyCard";
-import CreateProperty from "../components/Properties/CreateProperty";
 import PropertiesContext from "../context/PropertiesContext";
+import Loader from "../components/Other/Loader/Loader";
+import CreateProperty from "../components/Properties/Property/CreateProperty";
+import PropertyCard from "../components/Properties/Property/Card/PropertyCard";
 
 const PropertiesPage = () => {
   const { properties } = useContext(PropertiesContext);
@@ -21,11 +22,15 @@ const PropertiesPage = () => {
         overflowY="auto"
         height="90%"
       >
-        {properties.map((property) => (
-          <Box key={property._id}>
-            <PropertyCard property={property} />
-          </Box>
-        ))}
+        {properties.length > 0 ? (
+          properties.map((property) => (
+            <Box key={property._id}>
+              <PropertyCard property={property} />
+            </Box>
+          ))
+        ) : (
+          <Loader />
+        )}
       </Box>
     </>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import { createStandaloneToast } from "@chakra-ui/react";
-import theme from "../theme";
+import theme from "../../theme";
 
 const Notification = (title, description, status) => {
   const toast = createStandaloneToast({ theme: theme });
