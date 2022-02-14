@@ -18,8 +18,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { HiPlus } from "react-icons/hi";
-import PropertiesContext from "../../../context/PropertiesContext";
+import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import { useForm } from "react-hook-form";
+import { MdLocationPin } from "react-icons/md";
 
 const CreateAddress = (props) => {
   const { addAddress } = useContext(PropertiesContext);
@@ -43,10 +44,10 @@ const CreateAddress = (props) => {
   return (
     <>
       <Button
-        w={full === "yes" ? "100%" : "8rem"}
+        w={full === "yes" ? "100%" : "7rem"}
         onClick={onOpen}
         fontSize="15px"
-        leftIcon={HiPlus}
+        leftIcon={<MdLocationPin fontSize="18px" />}
         mr={5}
         mb={5}
         borderRadius="9px"

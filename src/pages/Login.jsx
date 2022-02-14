@@ -12,7 +12,7 @@ import {
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ImEye, ImEyeBlocked } from "react-icons/im";
-import AuthContext from "../context/AuthContext";
+import AuthContext from "../context/Auth/AuthContext";
 
 const Login = () => {
   const { authenticateUser, logOut } = useContext(AuthContext);
@@ -64,6 +64,8 @@ const Login = () => {
               transition: "transform .2s",
               transform: "scale(0.98)",
             }}
+            p="2"
+            ml="2"
           />
           <form onSubmit={handleSubmit(handleLogin)}>
             <VStack spacing="14px" px="4" py="4">

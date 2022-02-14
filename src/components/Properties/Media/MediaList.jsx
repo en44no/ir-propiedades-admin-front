@@ -9,10 +9,12 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
+  Text,
 } from "@chakra-ui/react";
-import { MdOutlineList } from "react-icons/md";
-import PropertiesContext from "../../../context/PropertiesContext";
+import { BsImages } from "react-icons/bs";
+import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import CreateMedia from "./CreateMedia";
+import CopyInternalCode from "../CopyInternalCode";
 
 const MediaList = (props) => {
   const { full, property } = props;
@@ -30,10 +32,10 @@ const MediaList = (props) => {
       <>
         <Button
           id="viewImages"
-          w={full === "yes" ? "100%" : "8rem"}
+          w={full === "yes" ? "100%" : "7rem"}
           onClick={onOpen}
           fontSize="15px"
-          leftIcon={<MdOutlineList fontSize="22px" />}
+          leftIcon={<BsImages fontSize="20px" />}
           mr={5}
           borderRadius="9px"
           variant="add-button-clear"
@@ -45,9 +47,32 @@ const MediaList = (props) => {
           <DrawerContent bg="defaultColor.400">
             <DrawerCloseButton color="#fff" mt="2" />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
-              Imágenes de la propiedad "{property.name}"
+              <Text display="flex">
+                Imágenes de la propiedad{" "}
+                <CopyInternalCode
+                  internalCode={
+                    property.internalCode ? property.internalCode : "CÓDIGO"
+                  }
+                />
+              </Text>
             </DrawerHeader>
-            <DrawerBody color="#fff">{property.media.length}</DrawerBody>
+            <DrawerBody color="#fff">
+              {property.media.length === 0 ? (
+                <Text
+                  fontSize="xl"
+                  color="#EAE9ED"
+                  display="flex"
+                  h="100%"
+                  w="100%"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  Esta propiedad aún no cuenta con imágenes.
+                </Text>
+              ) : (
+                <Text>Aca van las imagenes</Text>
+              )}
+            </DrawerBody>
             <DrawerFooter borderTopWidth="1px">
               <Button variant="cancel-action" mr={3} onClick={onClose}>
                 Cerrar

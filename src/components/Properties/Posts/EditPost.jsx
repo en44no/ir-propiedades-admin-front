@@ -16,17 +16,17 @@ import {
   SimpleGrid,
   Stack,
   Switch,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { HiPlus } from "react-icons/hi";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import SocialList from "../../Social/SocialList";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "../../Other/DatePicker/DatePicker";
 
-const CreatePost = (props) => {
-  const { full, property, normalAddButton, noRightMargin } = props;
+const EditPost = (props) => {
+  const { post } = props;
   const { addPost } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isForRentDisabled, setIsForRentDisabled] = useState(true);
@@ -41,7 +41,7 @@ const CreatePost = (props) => {
   } = useForm();
 
   const submitPost = (data) => {
-    addPost(data, property._id);
+    //addPost(data, property._id);
     reset();
     onClose();
   };
@@ -51,22 +51,21 @@ const CreatePost = (props) => {
       <>
         <Button
           id="createPosts"
-          w={full === "yes" ? "100%" : "7rem"}
+          w="100%"
           onClick={onOpen}
-          fontSize="15px"
-          leftIcon={<HiPlus fontSize="1.2rem" />}
-          mr={noRightMargin ? 0 : 5}
-          borderRadius="9px"
-          variant={normalAddButton ? "add-button-dark" : "add-button-clear"}
+          bg="none"
+          _hover={{ background: "none" }}
+          _active={{ boxShadow: "none" }}
+          _focus={{ boxShadow: "none" }}
         >
-          {normalAddButton ? "Agregar" : " Crear publicación"}
+          <Text pt="0.7rem">Editar</Text>
         </Button>
         <Drawer size="md" isOpen={isOpen} placement="left" onClose={onClose}>
           <DrawerOverlay />
           <DrawerContent bg="defaultColor.400">
             <DrawerCloseButton color="#fff" mt="2" />
             <DrawerHeader color="#fff" borderBottomWidth="1px">
-              Crear publicación
+              Editar publicación
             </DrawerHeader>
             <DrawerBody color="#fff">
               <form id="formPost" onSubmit={handleSubmit(submitPost)}>
@@ -85,7 +84,8 @@ const CreatePost = (props) => {
                           Disponible para vender
                         </FormLabel>
                         <Switch
-                          value={!isForSaleDisabled}
+                          defaultChecked={post.isForSale}
+                          value={post.isForSale}
                           {...register("isForSale")}
                           id="createPostSellSwitch"
                         />
@@ -98,29 +98,26 @@ const CreatePost = (props) => {
                           Precio venta
                         </FormLabel>
                         <Input
-                          defaultValue="0"
-                          disabled={isForSaleDisabled}
+                          disabled={!isForSaleDisabled}
+                          defaultValue={post.forSalePrice}
                           {...register("forSalePrice")}
                           id="createPostSellPrice"
                         ></Input>
                       </Box>
                     </Box>
                     <Box display="flex" mb="4">
-                      <FormControl
-                        display="flex"
-                        mt="2rem"
-                        alignItems="center"
-                        onChange={() =>
-                          setIsForRentDisabled(!isForRentDisabled)
-                        }
-                      >
+                      <FormControl display="flex" mt="2rem" alignItems="center">
                         <FormLabel htmlFor="createPostRentSwitch" mb="0">
                           Disponible para alquilar
                         </FormLabel>
                         <Switch
-                          value={!isForRentDisabled}
+                          defaultChecked={post.isForRent}
+                          value={post.isForRent}
                           {...register("isForRent")}
                           id="createPostRentSwitch"
+                          onChange={() =>
+                            setIsForRentDisabled(!isForRentDisabled)
+                          }
                         />
                       </FormControl>
                       <Box>
@@ -131,9 +128,9 @@ const CreatePost = (props) => {
                           Precio alquiler
                         </FormLabel>
                         <Input
-                          defaultValue="0"
-                          disabled={isForRentDisabled}
                           {...register("forRentPrice")}
+                          disabled={!isForRentDisabled}
+                          defaultValue={post.forRentPrice}
                           id="createPostRentPrice"
                         ></Input>
                       </Box>
@@ -151,6 +148,7 @@ const CreatePost = (props) => {
                           rules={{ required: "Fecha de inicio es requerida." }}
                           render={({ field }) => (
                             <DatePicker
+                              defaultSelected={post.startDate}
                               field={field}
                               placeholderText={"Ingresa la fecha de inicio"}
                               id={"createPostStartDate"}
@@ -175,6 +173,7 @@ const CreatePost = (props) => {
                           rules={{ required: "Fecha de fin es requerida." }}
                           render={({ field }) => (
                             <DatePicker
+                              selected={post.endDate}
                               field={field}
                               placeholderText={"Ingresa la fecha de fin"}
                               id={"createPostEndDate"}
@@ -202,6 +201,7 @@ const CreatePost = (props) => {
                       {...register("status", {
                         required: "Estado es requerido.",
                       })}
+                      defaultValue={post.status}
                       id="propertyTypes"
                       placeholder="Ingresa el estado"
                     >
@@ -241,4 +241,4 @@ const CreatePost = (props) => {
   );
 };
 
-export default CreatePost;
+export default EditPost;

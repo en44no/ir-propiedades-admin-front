@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import Notification from "../components/Other/Notification";
+import Notification from "../../components/Other/Notification";
 import PropertiesContext from "./PropertiesContext";
 
 const PropertiesState = (props) => {
@@ -91,9 +91,9 @@ const PropertiesState = (props) => {
     await axios
       .delete(`http://localhost:4000/properties/${data._id}`)
       .then((res) =>
-        res.status === 201
+        res.status === 200
           ? (Notification(
-              "propiedad eliminada correctamente",
+              "Propiedad eliminada correctamente",
               "Has eliminado una propiedad",
               "success"
             ),
@@ -197,6 +197,31 @@ const PropertiesState = (props) => {
       .catch((error) => {});
   };
 
+  const deletePost = async (data) => {
+    await axios
+      .delete(`http://localhost:4000/posts/${data._id}`)
+      .then((res) =>
+        res.status === 200
+          ? (Notification(
+              "Publicación eliminada correctamente",
+              "Has eliminado una publicación",
+              "success"
+            ),
+            setPosts(posts.filter((post) => post._id !== res.data._id)),
+            setPropertyPosts(
+              propertyPosts.filter((post) => post._id !== res.data._id)
+            ))
+          : null
+      )
+      .catch((err) => {
+        Notification(
+          "Error al eliminar la publicación",
+          "Ocurrió un error intentado eliminar la publicación",
+          "error"
+        );
+      });
+  };
+
   const addFeature = async (data, propertyId) => {
     data.property = propertyId;
     await axios
@@ -221,6 +246,67 @@ const PropertiesState = (props) => {
       });
   };
 
+  const editFeature = async (data, featureId, propertyId) => {
+    let property = properties.find((property) => property._id === propertyId);
+    await axios
+      .put(`http://localhost:4000/features/${featureId}`, data)
+      .then((res) => {
+        if (res.status === 200) {
+          Notification(
+            "Característica editada correctamente",
+            "Has editado una característica",
+            "success"
+          );
+          setFeaturesProperty([
+            ...featuresProperty.filter((feature) => feature._id !== featureId),
+            res.data,
+          ]);
+          const newProperties = properties.map((prop) => {
+            if (prop._id === propertyId) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          setProperties(newProperties);
+        }
+      })
+      .catch((error) => {
+        Notification(
+          "Error al editar la característica",
+          "Ocurrió un error intentado editar la característica",
+          "error"
+        );
+      });
+  };
+
+  const deleteFeature = async (data) => {
+    await axios
+      .delete(`http://localhost:4000/features/${data._id}`)
+      .then((res) =>
+        res.status === 200
+          ? (Notification(
+              "Característica eliminada correctamente",
+              "Has eliminado una característica",
+              "success"
+            ),
+            setFeatures(
+              features.filter((feature) => feature._id !== res.data._id)
+            ),
+            setFeaturesProperty(
+              featuresProperty.filter((feature) => feature._id !== res.data._id)
+            ))
+          : null
+      )
+      .catch((err) => {
+        Notification(
+          "Error al eliminar la característica",
+          "Ocurrió un error intentado eliminar la característica",
+          "error"
+        );
+      });
+  };
+
   const addFeatureToProperty = async (featureId, propertyId) => {
     const property = properties.find((property) => property._id === propertyId);
     await axios
@@ -230,7 +316,6 @@ const PropertiesState = (props) => {
       .then((res) => {
         if (res.status === 200) {
           property.address = res.data;
-          setAddresses([...addresses, res.data]);
           const newProperties = properties.map((prop) => {
             if (prop._id === property._id) {
               return property;
@@ -256,8 +341,9 @@ const PropertiesState = (props) => {
   };
 
   const addMedia = async (data, property) => {
-    let images = new FormData();
-    images.append("images", [data.image]);
+    let images = [];
+    images.push(data.image);
+    console.log(images);
     await axios
       .post("http://localhost:4000/uploads", images)
       .then(async (res) => {
@@ -304,6 +390,7 @@ const PropertiesState = (props) => {
         addProperty,
         addAddress,
         deleteProperty,
+        deletePost,
         addPost,
         getPostsByProperty,
         propertyPosts,
@@ -314,6 +401,8 @@ const PropertiesState = (props) => {
         getFeaturesByProperty,
         addMedia,
         addDetailsToProperty,
+        deleteFeature,
+        editFeature,
       }}
     >
       {props.children}

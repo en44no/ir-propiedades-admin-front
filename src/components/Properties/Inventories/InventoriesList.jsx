@@ -13,41 +13,45 @@ import {
   HStack,
   Box,
   Divider,
-  Badge,
   Tooltip,
 } from "@chakra-ui/react";
-import { MdStar } from "react-icons/md";
-import CreateFeature from "./CreateFeature";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
+import CreateInventory from "./CreateInventory";
+import BadgeInventoryStatus from "./BadgeInventoryStatus";
+import { BsImages } from "react-icons/bs";
+import { FaBoxes } from "react-icons/fa";
 import CopyInternalCode from "../CopyInternalCode";
-import ConfirmDelete from "../../Other/ConfirmDelete";
-import EditFeature from "./EditFeature";
 
-const FeatureList = (props) => {
+const InventoriesList = (props) => {
   const { full, property } = props;
-  const { getFeaturesByProperty, featuresProperty, deleteFeature } =
-    useContext(PropertiesContext);
+  const {} = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const inventories = [
+    {
+      id: 1,
+      status: "Closed",
+      date: new Date(),
+      description: "Un inventario",
+    },
+  ];
+
+  const formatDate = (date) => {
+    const newDate = new Date(date);
+    return newDate.toLocaleDateString("en-GB");
+  };
 
   useEffect(() => {
     if (isOpen) {
-      getFeaturesByProperty(property._id);
+      //getFeaturesByProperty(property._id);
     }
   }, [isOpen]);
 
-  const parseFeatureType = (feature) => {
-    if (feature.type[0] === "Bathroom") {
-      return "Baño";
-    } else if (feature.type[0] === "Kitchen") {
-      return "Cocina";
-    } else if (feature.type[0] === "Bedroom") {
-      return "Dormitorio";
-    } else if (feature.type[0] === "Living Room") {
-      return "Sala de estar";
-    } else if (feature.type[0] === "Garage") {
-      return "Garaje";
-    } else if (feature.type[0] === "Other") {
-      return "Otro";
+  const parseInventoryStatus = (inventory) => {
+    if (inventory.status === "Open") {
+      return <BadgeInventoryStatus bgColor="#00b894" text="Abierto" />;
+    } else if (inventory.status === "Closed") {
+      return <BadgeInventoryStatus bgColor="#d63031" text="Cerrado" />;
     }
   };
 
@@ -59,12 +63,12 @@ const FeatureList = (props) => {
           w={full === "yes" ? "100%" : "7rem"}
           onClick={onOpen}
           fontSize="15px"
-          leftIcon={<MdStar fontSize="22px" />}
+          leftIcon={<FaBoxes fontSize="22px" />}
           mr={5}
           borderRadius="9px"
           variant="add-button-clear"
         >
-          Ver características
+          Ver inventarios
         </Button>
         <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
@@ -72,7 +76,7 @@ const FeatureList = (props) => {
             <DrawerCloseButton color="#fff" mt="2" />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
               <Text display="flex">
-                Características de la propiedad{" "}
+                Inventarios de la propiedad{" "}
                 <CopyInternalCode
                   internalCode={
                     property.internalCode ? property.internalCode : "CÓDIGO"
@@ -81,7 +85,7 @@ const FeatureList = (props) => {
               </Text>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
-              {featuresProperty.length === 0 ? (
+              {inventories.length === 0 ? (
                 <Text
                   fontSize="xl"
                   color="#EAE9ED"
@@ -91,78 +95,96 @@ const FeatureList = (props) => {
                   justifyContent="center"
                   alignItems="center"
                 >
-                  Esta propiedad aún no cuenta con características.
+                  Esta propiedad aún no cuenta con inventarios.
                 </Text>
               ) : (
-                featuresProperty.map((feature) => (
+                inventories.map((inventory) => (
                   <Box position="relative">
                     <Box
-                      key={feature._id}
+                      key={inventory._id}
                       display="flex"
                       bg="defaultColor.300"
                       p="3"
                       borderRadius="7px"
                       alignItems="center"
-                      mb="8"
+                      mb="5"
                     >
                       <HStack w="100%" spacing="13px" height="25px">
                         <>
-                          <Badge
-                            w="25%"
-                            borderRadius="7px"
-                            px="1rem"
-                            py="0.5"
-                            fontSize="11px"
-                            bgColor="defaultColor.400"
-                            border="2px solid #fff"
-                            color="#fff"
-                          >
-                            <Text textAlign="center">
-                              {parseFeatureType(feature)}
-                            </Text>
-                          </Badge>
-                          <Divider orientation="vertical" />
-                          <Box
-                            w="50%"
-                            justifyContent="center"
-                            textAlign="center"
-                          >
-                            {feature.title.length > 24 ? (
-                              <Tooltip
-                                hasArrow
-                                label={feature.title}
-                                bg="defaultColor.500"
-                              >
-                                <Text>
-                                  {feature.title.slice(0, 24).concat("...")}
-                                </Text>
-                              </Tooltip>
-                            ) : (
-                              <Text>{feature.title}</Text>
-                            )}
+                          <Box p="0" minW="10%" maxW="10%">
+                            {parseInventoryStatus(inventory)}
                           </Box>
                           <Divider orientation="vertical" />
                           <Box
-                            w="100%"
+                            w="60%"
                             justifyContent="center"
                             textAlign="center"
                           >
-                            {feature.description.length > 50 ? (
+                            {inventory.description.length > 24 ? (
                               <Tooltip
                                 hasArrow
-                                label={feature.description}
+                                label={inventory.description}
                                 bg="defaultColor.500"
                               >
                                 <Text>
-                                  {feature.description
-                                    .slice(0, 50)
+                                  {inventory.description
+                                    .slice(0, 24)
                                     .concat("...")}
                                 </Text>
                               </Tooltip>
                             ) : (
-                              <Text>{feature.description}</Text>
+                              <Text>{inventory.description}</Text>
                             )}
                           </Box>
+                          <Divider orientation="vertical" />
+                          <Box
+                            w="20%"
+                            justifyContent="center"
+                            textAlign="center"
+                          >
+                            <Text>{formatDate(inventory.date)}</Text>
+                          </Box>
+                          <Divider orientation="vertical" />
+                          <HStack spacing="10px">
+                            <Tooltip
+                              hasArrow
+                              label="Ver imágenes"
+                              bg="defaultColor.500"
+                            >
+                              <HStack
+                                cursor="pointer"
+                                px="3"
+                                py="1.5"
+                                bg="defaultColor.400"
+                                borderRadius="7px"
+                                alignItems="center"
+                              >
+                                <Text fontSize="0.8rem" fontWeight="500">
+                                  150
+                                </Text>
+                                <BsImages fontSize="1.2rem" />
+                              </HStack>
+                            </Tooltip>
+                            <Tooltip
+                              hasArrow
+                              label="Ver objetos"
+                              bg="defaultColor.500"
+                            >
+                              <HStack
+                                cursor="pointer"
+                                px="3"
+                                py="1.5"
+                                bg="defaultColor.400"
+                                borderRadius="7px"
+                                alignItems="center"
+                              >
+                                <Text fontSize="0.8rem" fontWeight="500">
+                                  150
+                                </Text>
+                                <FaBoxes fontSize="1.2rem" />
+                              </HStack>
+                            </Tooltip>
+                          </HStack>
                         </>
                       </HStack>
                     </Box>
@@ -175,32 +197,28 @@ const FeatureList = (props) => {
                     >
                       <Box
                         cursor="pointer"
+                        pt="1rem"
                         position="relative"
                         _hover={{ top: "20px" }}
                         bg="#cc5e5d"
                         w="50%"
                         borderRadius="5px"
                       >
-                        <Text pb="0rem" textAlign="center" fontWeight="500">
-                          <ConfirmDelete
-                            text="¿Estás seguro de que deseas eliminar esta característica?"
-                            name="característica"
-                            onlyText="yes"
-                            functionToExecute={deleteFeature}
-                            element={feature}
-                          />
+                        <Text pb="0.2rem" textAlign="center" fontWeight="500">
+                          Borrar
                         </Text>
                       </Box>
                       <Box
                         cursor="pointer"
+                        pt="1rem"
                         position="relative"
                         _hover={{ top: "20px" }}
                         bg="#F0B955"
                         w="50%"
                         borderRadius="5px"
                       >
-                        <Text pb="0rem" textAlign="center" fontWeight="500">
-                          <EditFeature feature={feature} property={property} />
+                        <Text pb="0.2rem" textAlign="center" fontWeight="500">
+                          Editar
                         </Text>
                       </Box>
                     </HStack>
@@ -212,7 +230,7 @@ const FeatureList = (props) => {
               <Button variant="cancel-action" mr={3} onClick={onClose}>
                 Cerrar
               </Button>
-              <CreateFeature
+              <CreateInventory
                 property={property}
                 normalAddButton="yes"
                 noRightMargin
@@ -225,4 +243,4 @@ const FeatureList = (props) => {
   );
 };
 
-export default FeatureList;
+export default InventoriesList;

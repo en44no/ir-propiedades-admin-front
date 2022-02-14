@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Badge,
   Box,
@@ -17,13 +17,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { HiPlus } from "react-icons/hi";
-import PropertiesContext from "../../../context/PropertiesContext";
+import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import { useForm } from "react-hook-form";
 
 const CreateMedia = (props) => {
   const { full, property, normalAddButton, noRightMargin } = props;
   const { addMedia } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const {
     register,
@@ -34,7 +35,7 @@ const CreateMedia = (props) => {
   } = useForm();
 
   const submitMedia = (data) => {
-    console.log(data);
+    data.image = selectedImage;
     addMedia(data, property._id);
     reset();
     onClose();
@@ -45,7 +46,7 @@ const CreateMedia = (props) => {
       <>
         <Button
           id="createPosts"
-          w={full === "yes" ? "100%" : "8rem"}
+          w={full === "yes" ? "100%" : "7rem"}
           onClick={onOpen}
           fontSize="15px"
           leftIcon={<HiPlus fontSize="1.2rem" />}
@@ -55,7 +56,7 @@ const CreateMedia = (props) => {
         >
           {normalAddButton ? "Subir" : " Subir imagen"}
         </Button>
-        <Drawer size="md" isOpen={isOpen} placement="left" onClose={onClose}>
+        <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
           <DrawerOverlay />
           <DrawerContent bg="defaultColor.400">
             <DrawerCloseButton color="#fff" mt="2" />
@@ -67,12 +68,16 @@ const CreateMedia = (props) => {
                 <Stack spacing="14px">
                   <Box>
                     <FormLabel htmlFor="createMediaImage">Imagen</FormLabel>
-                    <input
-                      pt="0.25rem"
+                    <Input
+                      pt="0.5rem"
                       type="file"
-                      {...register("image")}
+                      onChange={(e) => {
+                        setSelectedImage(e.target.files[0]);
+                      }}
                       id="createMediaImage"
-                    ></input>
+                      w="100%"
+                      fontSize="0.80rem"
+                    ></Input>
                   </Box>
                   <Box>
                     <FormLabel htmlFor="createMediaDescription">

@@ -1,5 +1,22 @@
 import React, { useContext } from "react";
-import { FormLabel, Input, Box, useDisclosure, Button, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Stack, Select, Badge, Textarea, DrawerFooter } from "@chakra-ui/react";
+import {
+  FormLabel,
+  Input,
+  Box,
+  useDisclosure,
+  Button,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
+  Stack,
+  Select,
+  Badge,
+  Textarea,
+  DrawerFooter,
+} from "@chakra-ui/react";
 import { HiPlus } from "react-icons/hi";
 import { useForm } from "react-hook-form";
 
@@ -15,19 +32,19 @@ function CreateUser() {
   } = useForm();
 
   const handleSubmitProperty = async (data) => {
-      //await addProperty(data);
-      reset();
-      onClose();
+    //await addProperty(data);
+    reset();
+    onClose();
   };
 
-const submitForm = () => {
-  document.getElementById("submitButtonCreateProperty").click();
-};
+  const submitForm = () => {
+    document.getElementById("submitButtonCreateProperty").click();
+  };
 
   return (
     <>
-     <Button
-        w="8rem"
+      <Button
+        w="7rem"
         onClick={onOpen}
         fontSize="15px"
         leftIcon={<HiPlus fontSize="1.2rem" />}
@@ -119,7 +136,7 @@ const submitForm = () => {
         </DrawerContent>
       </Drawer>
     </>
-  )}           
-                  
+  );
+}
 
 export default CreateUser;

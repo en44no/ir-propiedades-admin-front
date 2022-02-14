@@ -20,7 +20,7 @@ import {
 import { HiPlus } from "react-icons/hi";
 import CreateAddress from "../Address/CreateAddress";
 import { useForm } from "react-hook-form";
-import PropertiesContext from "../../../context/PropertiesContext";
+import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import EditAddress from "../Address/EditAddress";
 
 const CreateProperty = () => {

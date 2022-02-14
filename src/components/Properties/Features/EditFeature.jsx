@@ -16,14 +16,14 @@ import {
   Textarea,
   useDisclosure,
   Badge,
+  Text,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { HiPlus } from "react-icons/hi";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 
-const CreateFeature = (props) => {
-  const { full, normalAddButton, noRightMargin, property } = props;
-  const { addFeature } = useContext(PropertiesContext);
+const EditFeature = (props) => {
+  const { property, feature } = props;
+  const { editFeature } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
@@ -34,7 +34,7 @@ const CreateFeature = (props) => {
   } = useForm();
 
   const submitFeature = (data) => {
-    addFeature(data, property._id);
+    editFeature(data, feature._id, property._id);
     reset();
     onClose();
   };
@@ -42,23 +42,22 @@ const CreateFeature = (props) => {
   return (
     <>
       <Button
-        id="createFeatures"
-        w={full === "yes" ? "100%" : "7rem"}
+        id="createPosts"
+        w="100%"
         onClick={onOpen}
-        fontSize="15px"
-        leftIcon={<HiPlus fontSize="1.2rem" />}
-        mr={noRightMargin ? 0 : 5}
-        borderRadius="9px"
-        variant={normalAddButton ? "add-button-dark" : "add-button-clear"}
+        bg="none"
+        _hover={{ background: "none" }}
+        _active={{ boxShadow: "none" }}
+        _focus={{ boxShadow: "none" }}
       >
-        {normalAddButton ? "Agregar" : "Agregar características"}
+        <Text pt="0.7rem">Editar</Text>
       </Button>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent bg="defaultColor.400">
           <DrawerCloseButton color="#fff" mt="2" />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
-            Agregar características
+            Editar característica
           </DrawerHeader>
           <DrawerBody color="#fff">
             <form id="formFeature" onSubmit={handleSubmit(submitFeature)}>
@@ -70,7 +69,7 @@ const CreateFeature = (props) => {
                       required: "Tipo es requerido.",
                     })}
                     id="createFeatureType"
-                    defaultValue="option1"
+                    defaultValue={feature.type}
                     placeholder="Ingresa el tipo"
                   >
                     <option value="Bathroom">Baño</option>
@@ -94,6 +93,7 @@ const CreateFeature = (props) => {
                     })}
                     id="createFeatureTitle"
                     placeholder="Ingresa el título"
+                    defaultValue={feature.title}
                   ></Input>
                   {errors.title && (
                     <Badge variant="required-error">
@@ -111,6 +111,7 @@ const CreateFeature = (props) => {
                     })}
                     id="createFeatureDescription"
                     placeholder="Ingresa la descripción"
+                    defaultValue={feature.description}
                   ></Textarea>
                   {errors.description && (
                     <Badge variant="required-error">
@@ -139,4 +140,4 @@ const CreateFeature = (props) => {
   );
 };
 
-export default CreateFeature;
+export default EditFeature;

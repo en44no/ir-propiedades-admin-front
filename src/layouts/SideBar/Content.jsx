@@ -16,7 +16,7 @@ const Content = () => {
     <>
       <Box px={0} flexGrow="1">
         <Accordion allowMultiple border="transparent">
-          <AccordionItem>
+          <AccordionItem pt="0" borderBottom="2px solid #e3e3e3" pb="1">
             <h2>
               <AccordionButton
                 _hover={{
@@ -55,9 +55,8 @@ const Content = () => {
             >
               Inventarios
             </AccordionPanel>
-            <Divider background="#BABABA" mt="2" mb="2" />
           </AccordionItem>
-          <AccordionItem>
+          <AccordionItem pt="1" borderBottom="2px solid #e3e3e3" pb="1">
             <h2>
               <AccordionButton
                 _hover={{
@@ -85,9 +84,13 @@ const Content = () => {
                 <Text fontSize="0.95rem">Manejo de usuarios</Text>
               </Link>
             </AccordionPanel>
-            <Divider background="#BABABA" mt="2" mb="2" />
           </AccordionItem>
-          <AccordionItem>
+          <AccordionItem
+            pt="1"
+            borderBottom="2px solid #e3e3e3"
+            pb="1"
+            borderBottomWidth="2px !important"
+          >
             <h2>
               <AccordionButton
                 _hover={{
@@ -113,7 +116,6 @@ const Content = () => {
             >
               <Text fontSize="0.95rem">Alquileres por año</Text>
             </AccordionPanel>
-            <Divider background="#BABABA" mt="2" mb="2" />
           </AccordionItem>
         </Accordion>
       </Box>

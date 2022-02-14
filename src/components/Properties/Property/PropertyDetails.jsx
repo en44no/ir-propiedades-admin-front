@@ -17,18 +17,21 @@ import {
   SimpleGrid,
   Stack,
   Switch,
+  Text,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { BsFillInfoCircleFill } from "react-icons/bs";
-import PropertiesContext from "../../../context/PropertiesContext";
+import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import FeatureList from "../Features/FeatureList";
 import EditAddress from "../Address/EditAddress";
 import CreateAddress from "../Address/CreateAddress";
-import ConfirmDeleteProperty from "./ConfirmDeleteProperty";
 import PostList from "../Posts/PostList";
 import MediaList from "../Media/MediaList";
+import InventoriesList from "../Inventories/InventoriesList";
+import CopyInternalCode from "../CopyInternalCode";
+import ConfirmDelete from "../../Other/ConfirmDelete";
 
 const PropertyDetails = (props) => {
   const { deleteProperty, addDetailsToProperty } =
@@ -63,15 +66,15 @@ const PropertyDetails = (props) => {
         minH="1.7rem"
         h="1.7rem"
         w="1.7rem"
-        right="2"
-        top="2"
+        right="1.5"
+        top="1.5"
         onClick={onOpen}
         bg="defaultColor.400"
         _hover={{ bg: "defaultColor.500" }}
         borderRadius="50%"
         color="white"
       >
-        <Box fontSize="0.9rem">
+        <Box fontSize="1rem">
           <BsFillInfoCircleFill />
         </Box>
         {/*
@@ -85,20 +88,28 @@ const PropertyDetails = (props) => {
         <DrawerContent bg="defaultColor.400">
           <DrawerCloseButton color="#fff" mt="2" />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
-            Detalles de la propiedad {propertyName ? `"${propertyName}"` : ""}
+            <Text display="flex">
+              Detalles de la propiedad{" "}
+              <CopyInternalCode
+                internalCode={
+                  property.internalCode ? property.internalCode : "CÓDIGO"
+                }
+              />
+            </Text>
           </DrawerHeader>
           <DrawerBody color="#fff">
-            <form
-              id="formPropertyDetails"
-              onSubmit={handleSubmit(submitPropertyDetails)}
-            >
+            <form>
               <SimpleGrid columns={2} spacing={10}>
                 <Box display="flex" mb="4">
                   <FormControl display="flex" mt="2rem" alignItems="center">
                     <FormLabel htmlFor="detailsSellSwitch" mb="0">
                       Disponible para vender
                     </FormLabel>
-                    <Switch {...register("isForSale")} id="detailsSellSwitch" />
+                    <Switch
+                      defaultChecked={property.isForSale}
+                      {...register("isForSale")}
+                      id="detailsSellSwitch"
+                    />
                   </FormControl>
                   <Box>
                     <FormLabel textAlign="center" htmlFor="detailsSellPrice">
@@ -116,7 +127,11 @@ const PropertyDetails = (props) => {
                     <FormLabel htmlFor="detailsRentSwitch" mb="0">
                       Disponible para alquilar
                     </FormLabel>
-                    <Switch {...register("isForRent")} id="detailsRentSwitch" />
+                    <Switch
+                      defaultChecked={property.isForRent}
+                      {...register("isForRent")}
+                      id="detailsRentSwitch"
+                    />
                   </FormControl>
                   <Box>
                     <FormLabel textAlign="center" htmlFor="detailsRentPrice">
@@ -210,31 +225,28 @@ const PropertyDetails = (props) => {
                     <PostList full="yes" property={property} />
                   </Box>
                   <Box>
-                    <FormLabel htmlFor="propertyComments">
+                    <FormLabel htmlFor="propertyInventories">
                       Inventarios
                     </FormLabel>
-                    <Input></Input>
+                    <InventoriesList full="yes" property={property} />
                   </Box>
                 </Stack>
-                <Button
-                  visibility="hidden"
-                  type="submit"
-                  id="submitButtonCreateProperty"
-                ></Button>
               </SimpleGrid>
             </form>
           </DrawerBody>
           <DrawerFooter borderTopWidth="1px">
-            <ConfirmDeleteProperty
-              handleDeleteProperty={handleDeleteProperty}
+            <ConfirmDelete
+              text="¿Estás seguro de que deseas eliminar esta propiedad?"
+              name="propiedad"
+              functionToExecute={handleDeleteProperty}
+              element={property}
             />
             <Button variant="cancel-action" mr={3} onClick={onClose}>
               Cancelar
             </Button>
             <Button
-              form="formPropertyDetails"
-              type="submit"
               variant="confirm-add-button"
+              onClick={handleSubmit(submitPropertyDetails)}
             >
               Confirmar
             </Button>

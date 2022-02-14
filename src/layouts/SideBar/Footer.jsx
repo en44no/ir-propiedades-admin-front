@@ -7,16 +7,23 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Divider,
 } from "@chakra-ui/react";
 import { IoSettingsOutline, IoLogOutOutline } from "react-icons/io5";
-import AuthContext from "../../context/AuthContext";
+import AuthContext from "../../context/Auth/AuthContext";
 
 const Footer = () => {
   const { logOut } = useContext(AuthContext);
 
   return (
     <>
-      <Box alignSelf="flex-end">
+      <Box
+        w="100%"
+        pt="2"
+        borderTop="2px solid #e3e3e3"
+        display="flex"
+        justifyContent="end"
+      >
         <Menu>
           <MenuButton
             as={IconButton}

@@ -1,10 +1,19 @@
 import React from "react";
-import { Badge, Box, Button, HStack, Image } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  HStack,
+  Image,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
 import PropertyDetails from "../PropertyDetails";
 import BadgePropertyCard from "./BadgePropertyCard";
 import { BsHouseDoorFill } from "react-icons/bs";
 import { FaWarehouse } from "react-icons/fa";
 import { MdApartment, MdCheck, MdClose, MdLocationPin } from "react-icons/md";
+import CopyInternalCode from "../../CopyInternalCode";
 
 const PropertyCard = (props) => {
   const { property } = props;
@@ -24,7 +33,6 @@ const PropertyCard = (props) => {
       <Box
         minW="270px"
         maxW="270px"
-        h="17.5rem"
         border="2px solid #e3e3e3"
         borderRadius="lg"
         overflow="hidden"
@@ -50,22 +58,65 @@ const PropertyCard = (props) => {
             display="flex"
             alignItems="center"
           >
-            <Box mr="1" fontSize="0.9rem" ml="-1">
+            <Box mr="1" fontSize="0.9rem" ml="-0.5" mt="-1px">
               <MdLocationPin />
             </Box>
-            {property.address.neighborhood} , {property.address.city}
+            {property.address.neighborhood.length > 15 ? (
+              <Tooltip
+                hasArrow
+                label={property.address.neighborhood}
+                bg="defaultColor.500"
+              >
+                <Text>
+                  {property.address.neighborhood.slice(0, 15).concat("...")}
+                </Text>
+              </Tooltip>
+            ) : (
+              <Text>{property.address.neighborhood}</Text>
+            )}
+            {","}
+            {property.address.city.length > 15 ? (
+              <Tooltip
+                hasArrow
+                label={property.address.city}
+                bg="defaultColor.500"
+              >
+                <Text>{property.address.city.slice(0, 15).concat("...")}</Text>
+              </Tooltip>
+            ) : (
+              <Text ml="1">{property.address.city}</Text>
+            )}
           </Box>
-          <Box
-            mt="1"
-            mb="2.5"
-            fontWeight="semibold"
-            as="h4"
-            lineHeight="tight"
-            isTruncated
-          >
-            {property.description}
+          <Box mt="1" mb="2.5" fontWeight="semibold" as="h4" lineHeight="tight">
+            {property.description.length > 27 ? (
+              <Tooltip
+                hasArrow
+                label={property.description}
+                bg="defaultColor.500"
+              >
+                <Text>{property.description.slice(0, 27).concat("...")}</Text>
+              </Tooltip>
+            ) : (
+              <Text>{property.description}</Text>
+            )}
           </Box>
           <HStack spacing="10px" mt="2">
+            <Badge
+              borderRadius="7px"
+              alignItems="center"
+              display="flex"
+              px="2"
+              py="0.5"
+              bg="defaultColor.400"
+              color="#fff"
+            >
+              <CopyInternalCode
+                internalCode={
+                  property.internalCode ? property.internalCode : "CÓDIGO"
+                }
+                noMarginLeft="true"
+              />
+            </Badge>
             {property.isForSale ? (
               <Badge
                 borderRadius="7px"

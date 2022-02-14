@@ -10,6 +10,7 @@ const AuthState = (props) => {
         if (res.data.token) {
           sessionStorage.setItem("token", res.data.token);
           data.isAuthenticated = true;
+          getUser(data.username);
         } else {
           data.isAuthenticated = false;
         }
@@ -17,8 +18,19 @@ const AuthState = (props) => {
       .catch((error) => {});
   };
 
+  const getUser = async (username) => {
+    await axios
+      .get(`http://localhost:4000/users/`)
+      .then((res) => {
+        const user = res.data.find((user) => user.username === username);
+        sessionStorage.setItem("name", user.name.split(" ")[0]);
+      })
+      .catch((error) => {});
+  };
+
   const logOut = () => {
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("name");
   };
 
   return (
@@ -26,6 +38,7 @@ const AuthState = (props) => {
       value={{
         authenticateUser,
         logOut,
+        getUser,
       }}
     >
       {props.children}

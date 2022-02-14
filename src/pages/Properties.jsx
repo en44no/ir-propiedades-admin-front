@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Box } from "@chakra-ui/react";
-import PropertiesContext from "../context/PropertiesContext";
+import PropertiesContext from "../context/Properties/PropertiesContext";
 import Loader from "../components/Other/Loader/Loader";
 import CreateProperty from "../components/Properties/Property/CreateProperty";
 import PropertyCard from "../components/Properties/Property/Card/PropertyCard";

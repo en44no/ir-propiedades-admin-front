@@ -94,6 +94,12 @@ const theme = extendTheme({
         },
       },
     },
+    Tooltip: {
+      baseStyle: {
+        borderRadius: "5px",
+        fontSize: "13px",
+      },
+    },
   },
 });
 
