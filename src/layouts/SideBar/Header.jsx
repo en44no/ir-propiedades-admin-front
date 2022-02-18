@@ -20,12 +20,12 @@ const Header = () => {
             h="80px"
             objectFit="contain"
           />
-          <Text fontSize="21px" display="flex" placeContent="center" mt="1">
+          <Box fontSize="21px" display="flex" placeContent="center" mt="1">
             Hola,
             <Text fontSize="21px" fontWeight="500" ml="1">
               {name ? name : "Usuario"}
             </Text>
-          </Text>
+          </Box>
 
           <Tag
             fontSize="12px"

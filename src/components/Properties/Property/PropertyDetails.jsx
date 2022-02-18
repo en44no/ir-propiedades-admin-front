@@ -36,7 +36,7 @@ import ConfirmDelete from "../../Other/ConfirmDelete";
 const PropertyDetails = (props) => {
   const { deleteProperty, addDetailsToProperty } =
     useContext(PropertiesContext);
-  const { propertyName, property } = props;
+  const { property } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
@@ -152,7 +152,8 @@ const PropertyDetails = (props) => {
                     <Select
                       {...register("type", { required: "Tipo es requerido." })}
                       id="propertyType"
-                      defaultValue={property.type}
+                      multiple={false}
+                      defaultChecked={property.type}
                       placeholder="Ingresa el tipo"
                     >
                       <option value="House">Casa</option>

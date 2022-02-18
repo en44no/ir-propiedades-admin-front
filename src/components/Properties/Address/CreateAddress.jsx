@@ -17,7 +17,6 @@ import {
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
-import { HiPlus } from "react-icons/hi";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import { useForm } from "react-hook-form";
 import { MdLocationPin } from "react-icons/md";
@@ -72,8 +71,8 @@ const CreateAddress = (props) => {
                       required: " País es requerido.",
                     })}
                     id="addressCountry"
-                    defaultValue="argentina"
-                    placeholder="Ingresa el país"
+                    multiple={false}
+                    defaultChecked="argentina"
                   >
                     <option value="argentina">Argentina</option>
                   </Select>

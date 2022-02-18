@@ -6,7 +6,6 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Divider,
   Text,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
@@ -16,7 +15,7 @@ const Content = () => {
     <>
       <Box px={0} flexGrow="1">
         <Accordion allowMultiple border="transparent">
-          <AccordionItem pt="0" borderBottom="2px solid #e3e3e3" pb="1">
+          <AccordionItem pt="0" borderBottom="2px solid #cacaca" pb="1">
             <h2>
               <AccordionButton
                 _hover={{
@@ -56,7 +55,7 @@ const Content = () => {
               Inventarios
             </AccordionPanel>
           </AccordionItem>
-          <AccordionItem pt="1" borderBottom="2px solid #e3e3e3" pb="1">
+          <AccordionItem pt="1" borderBottom="2px solid #cacaca" pb="1">
             <h2>
               <AccordionButton
                 _hover={{
@@ -87,7 +86,7 @@ const Content = () => {
           </AccordionItem>
           <AccordionItem
             pt="1"
-            borderBottom="2px solid #e3e3e3"
+            borderBottom="2px solid #cacaca"
             pb="1"
             borderBottomWidth="2px !important"
           >

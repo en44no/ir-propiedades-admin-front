@@ -25,12 +25,8 @@ import EditPost from "./EditPost";
 
 const PostList = (props) => {
   const { full, property } = props;
-  const {
-    getPostsByProperty,
-    propertyPosts,
-    deletePost,
-    showConfirmDeletePopover,
-  } = useContext(PropertiesContext);
+  const { getPostsByProperty, propertyPosts, deletePost } =
+    useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const parsePostState = (post) => {
@@ -107,9 +103,8 @@ const PostList = (props) => {
               ) : (
                 propertyPosts.map((post) => (
                   <>
-                    <Box position="relative">
+                    <Box key={post._id} position="relative">
                       <Box
-                        key={post._id}
                         display="flex"
                         bg="defaultColor.300"
                         p="3"

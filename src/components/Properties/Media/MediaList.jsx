@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   useDisclosure,
@@ -12,13 +12,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { BsImages } from "react-icons/bs";
-import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import CreateMedia from "./CreateMedia";
 import CopyInternalCode from "../CopyInternalCode";
 
 const MediaList = (props) => {
   const { full, property } = props;
-  const { getPostsByProperty, propertyPosts } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {

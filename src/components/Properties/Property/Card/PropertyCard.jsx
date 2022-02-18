@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Badge,
-  Box,
-  Button,
-  HStack,
-  Image,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Badge, Box, HStack, Image, Text, Tooltip } from "@chakra-ui/react";
 import PropertyDetails from "../PropertyDetails";
 import BadgePropertyCard from "./BadgePropertyCard";
 import { BsHouseDoorFill } from "react-icons/bs";
@@ -33,7 +25,7 @@ const PropertyCard = (props) => {
       <Box
         minW="270px"
         maxW="270px"
-        border="2px solid #e3e3e3"
+        border="2px solid #cacaca"
         borderRadius="lg"
         overflow="hidden"
         mb="4"

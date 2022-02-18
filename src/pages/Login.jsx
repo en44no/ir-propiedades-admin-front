@@ -35,7 +35,6 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm();
 
   const handleLogin = async (data) => {
@@ -51,7 +50,7 @@ const Login = () => {
     <>
       <Box h="100vh" display="flex" justifyContent="center" alignItems="center">
         <Box
-          border="2px solid #e3e3e3 !important"
+          border="2px solid #cacaca !important"
           p="4"
           maxW="md"
           borderWidth="1px"
@@ -73,12 +72,12 @@ const Login = () => {
                 <Input
                   onKeyUp={() => setShowCredentialError(false)}
                   id="username"
-                  autocomplete="username"
+                  autoComplete="username"
                   {...register("username", {
                     required: " El nombre de usuario es requerido.",
                   })}
                   autoFocus
-                  border="2px solid #e3e3e3"
+                  border="2px solid #cacaca"
                   placeholder="Ingresa tu nombre de usuario"
                 />
                 {errors.username && (
@@ -92,11 +91,11 @@ const Login = () => {
                   <Input
                     onKeyUp={() => setShowCredentialError(false)}
                     id="current-password"
-                    autocomplete="current-password"
+                    autoComplete="current-password"
                     {...register("password", {
                       required: "La contraseña es requerida.",
                     })}
-                    border="2px solid #e3e3e3"
+                    border="2px solid #cacaca"
                     placeholder="Ingresa tu contraseña"
                     type={showPassword ? "text" : "password"}
                   />

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   useDisclosure,
@@ -15,16 +15,14 @@ import {
   Divider,
   Tooltip,
 } from "@chakra-ui/react";
-import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import CreateInventory from "./CreateInventory";
 import BadgeInventoryStatus from "./BadgeInventoryStatus";
-import { BsImages } from "react-icons/bs";
 import { FaBoxes } from "react-icons/fa";
 import CopyInternalCode from "../CopyInternalCode";
+import InventoryItems from "./InventoryItems";
 
 const InventoriesList = (props) => {
   const { full, property } = props;
-  const {} = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const inventories = [
@@ -99,130 +97,92 @@ const InventoriesList = (props) => {
                 </Text>
               ) : (
                 inventories.map((inventory) => (
-                  <Box position="relative">
-                    <Box
-                      key={inventory._id}
-                      display="flex"
-                      bg="defaultColor.300"
-                      p="3"
-                      borderRadius="7px"
-                      alignItems="center"
-                      mb="5"
-                    >
-                      <HStack w="100%" spacing="13px" height="25px">
-                        <>
-                          <Box p="0" minW="10%" maxW="10%">
-                            {parseInventoryStatus(inventory)}
-                          </Box>
-                          <Divider orientation="vertical" />
-                          <Box
-                            w="60%"
-                            justifyContent="center"
-                            textAlign="center"
-                          >
-                            {inventory.description.length > 24 ? (
-                              <Tooltip
-                                hasArrow
-                                label={inventory.description}
-                                bg="defaultColor.500"
-                              >
-                                <Text>
-                                  {inventory.description
-                                    .slice(0, 24)
-                                    .concat("...")}
-                                </Text>
-                              </Tooltip>
-                            ) : (
-                              <Text>{inventory.description}</Text>
-                            )}
-                          </Box>
-                          <Divider orientation="vertical" />
-                          <Box
-                            w="20%"
-                            justifyContent="center"
-                            textAlign="center"
-                          >
-                            <Text>{formatDate(inventory.date)}</Text>
-                          </Box>
-                          <Divider orientation="vertical" />
-                          <HStack spacing="10px">
-                            <Tooltip
-                              hasArrow
-                              label="Ver imágenes"
-                              bg="defaultColor.500"
+                  <>
+                    <Box key={inventory._id} position="relative">
+                      <Box
+                        display="flex"
+                        bg="defaultColor.300"
+                        p="3"
+                        borderRadius="7px"
+                        alignItems="center"
+                        mb="5"
+                      >
+                        <HStack w="100%" spacing="13px" height="25px">
+                          <>
+                            <Box p="0" minW="10%" maxW="10%">
+                              {parseInventoryStatus(inventory)}
+                            </Box>
+                            <Divider orientation="vertical" />
+                            <Box
+                              w="60%"
+                              justifyContent="center"
+                              textAlign="center"
                             >
-                              <HStack
-                                cursor="pointer"
-                                px="3"
-                                py="1.5"
-                                bg="defaultColor.400"
-                                borderRadius="7px"
-                                alignItems="center"
-                              >
-                                <Text fontSize="0.8rem" fontWeight="500">
-                                  150
-                                </Text>
-                                <BsImages fontSize="1.2rem" />
-                              </HStack>
-                            </Tooltip>
-                            <Tooltip
-                              hasArrow
-                              label="Ver objetos"
-                              bg="defaultColor.500"
+                              {inventory.description.length > 24 ? (
+                                <Tooltip
+                                  hasArrow
+                                  label={inventory.description}
+                                  bg="defaultColor.500"
+                                >
+                                  <Text>
+                                    {inventory.description
+                                      .slice(0, 24)
+                                      .concat("...")}
+                                  </Text>
+                                </Tooltip>
+                              ) : (
+                                <Text>{inventory.description}</Text>
+                              )}
+                            </Box>
+                            <Divider orientation="vertical" />
+                            <Box
+                              w="20%"
+                              justifyContent="center"
+                              textAlign="center"
                             >
-                              <HStack
-                                cursor="pointer"
-                                px="3"
-                                py="1.5"
-                                bg="defaultColor.400"
-                                borderRadius="7px"
-                                alignItems="center"
-                              >
-                                <Text fontSize="0.8rem" fontWeight="500">
-                                  150
-                                </Text>
-                                <FaBoxes fontSize="1.2rem" />
-                              </HStack>
-                            </Tooltip>
-                          </HStack>
-                        </>
+                              <Text>{formatDate(inventory.date)}</Text>
+                            </Box>
+                            <Divider orientation="vertical" />
+                            <InventoryItems property={property} />
+                          </>
+                        </HStack>
+                      </Box>
+                      <HStack
+                        position="absolute"
+                        bottom="-5px"
+                        w="100%"
+                        zIndex="-1"
+                        borderRadius="5px"
+                      >
+                        <Box
+                          cursor="pointer"
+                          pt="1rem"
+                          position="relative"
+                          _hover={{ top: "20px" }}
+                          bg="#cc5e5d"
+                          w="50%"
+                          borderRadius="5px"
+                        >
+                          <Text pb="0.2rem" textAlign="center" fontWeight="500">
+                            Borrar
+                          </Text>
+                        </Box>
+                        <Box
+                          cursor="pointer"
+                          pt="1rem"
+                          position="relative"
+                          _hover={{ top: "20px" }}
+                          bg="#F0B955"
+                          w="50%"
+                          borderRadius="5px"
+                        >
+                          <Text pb="0.2rem" textAlign="center" fontWeight="500">
+                            Editar
+                          </Text>
+                        </Box>
                       </HStack>
                     </Box>
-                    <HStack
-                      position="absolute"
-                      bottom="-5px"
-                      w="100%"
-                      zIndex="-1"
-                      borderRadius="5px"
-                    >
-                      <Box
-                        cursor="pointer"
-                        pt="1rem"
-                        position="relative"
-                        _hover={{ top: "20px" }}
-                        bg="#cc5e5d"
-                        w="50%"
-                        borderRadius="5px"
-                      >
-                        <Text pb="0.2rem" textAlign="center" fontWeight="500">
-                          Borrar
-                        </Text>
-                      </Box>
-                      <Box
-                        cursor="pointer"
-                        pt="1rem"
-                        position="relative"
-                        _hover={{ top: "20px" }}
-                        bg="#F0B955"
-                        w="50%"
-                        borderRadius="5px"
-                      >
-                        <Text pb="0.2rem" textAlign="center" fontWeight="500">
-                          Editar
-                        </Text>
-                      </Box>
-                    </HStack>
-                  </Box>
+                  </>
                 ))
               )}
             </DrawerBody>

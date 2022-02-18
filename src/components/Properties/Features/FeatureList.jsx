@@ -95,9 +95,8 @@ const FeatureList = (props) => {
                 </Text>
               ) : (
                 featuresProperty.map((feature) => (
-                  <Box position="relative">
+                  <Box key={feature._id} position="relative">
                     <Box
-                      key={feature._id}
                       display="flex"
                       bg="defaultColor.300"
                       p="3"

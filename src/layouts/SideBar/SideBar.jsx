@@ -7,7 +7,7 @@ import Footer from "./Footer";
 const SideBar = () => (
   <>
     <Box
-      border="2px solid #e3e3e3"
+      border="2px solid #cacaca"
       p={5}
       h="96vh"
       margin={3}

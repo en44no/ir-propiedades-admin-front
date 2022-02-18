@@ -46,10 +46,6 @@ const CreateProperty = () => {
     }
   };
 
-  const removeSelectedAddresss = () => {
-    setAddressToAdd(null);
-  };
-
   return (
     <>
       <Button
@@ -93,6 +89,7 @@ const CreateProperty = () => {
                   <Select
                     {...register("type", { required: "Tipo es requerido." })}
                     id="propertyTypes"
+                    multiple={false}
                     placeholder="Ingresa el tipo"
                   >
                     <option value="House">Casa</option>

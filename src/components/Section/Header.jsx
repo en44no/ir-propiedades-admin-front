@@ -6,7 +6,7 @@ const Header = (props) => {
 
   return (
     <>
-      <Box p={5} margin={3} borderRadius="9px" border="2px solid #e3e3e3">
+      <Box p={5} margin={3} borderRadius="9px" border="2px solid #cacaca">
         <Text
           fontWeight="bold"
           textTransform="uppercase"

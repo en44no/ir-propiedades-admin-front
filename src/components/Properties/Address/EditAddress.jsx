@@ -74,6 +74,7 @@ const EditAddress = (props) => {
                     {...register("country", {
                       required: " País es requerido.",
                     })}
+                    multiple={false}
                     id="addressCountry"
                     placeholder="Ingresa el país"
                     defaultValue={address.country}

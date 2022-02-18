@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Badge,
   Box,
@@ -19,15 +20,12 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
-import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import SocialList from "../../Social/SocialList";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "../../Other/DatePicker/DatePicker";
 
 const EditPost = (props) => {
   const { post } = props;
-  const { addPost } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isForRentDisabled, setIsForRentDisabled] = useState(true);
   const [isForSaleDisabled, setIsForSaleDisabled] = useState(true);
@@ -201,7 +199,8 @@ const EditPost = (props) => {
                       {...register("status", {
                         required: "Estado es requerido.",
                       })}
-                      defaultValue={post.status}
+                      multiple={false}
+                      defaultChecked={post.status}
                       id="propertyTypes"
                       placeholder="Ingresa el estado"
                     >

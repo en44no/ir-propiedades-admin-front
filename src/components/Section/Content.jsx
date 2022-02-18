@@ -11,7 +11,7 @@ const Content = (props) => {
         p={5}
         marginX={3}
         borderRadius="9px"
-        border="2px solid #e3e3e3"
+        border="2px solid #cacaca"
       >
         {children}
       </Box>

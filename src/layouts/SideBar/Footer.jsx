@@ -7,7 +7,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Divider,
 } from "@chakra-ui/react";
 import { IoSettingsOutline, IoLogOutOutline } from "react-icons/io5";
 import AuthContext from "../../context/Auth/AuthContext";
@@ -20,7 +19,7 @@ const Footer = () => {
       <Box
         w="100%"
         pt="2"
-        borderTop="2px solid #e3e3e3"
+        borderTop="2px solid #cacaca"
         display="flex"
         justifyContent="end"
       >

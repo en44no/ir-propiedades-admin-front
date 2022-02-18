@@ -105,6 +105,7 @@ const CreateInventory = (props) => {
                     {...register("status", {
                       required: "Estado es requerido.",
                     })}
+                    multiple={false}
                     id="createInventoryState"
                     placeholder="Ingresa el estado"
                   >

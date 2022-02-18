@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   FormLabel,
   Input,
@@ -79,7 +79,7 @@ function CreateUser() {
                   <Select
                     {...register("type", { required: "Tipo es requerido." })}
                     id="propertyTypes"
-                    defaultValue="option1"
+                    defaultChecked="option1"
                     placeholder="Ingresa el tipo"
                   >
                     <option value="House">Casa</option>

@@ -14,6 +14,7 @@ import {
   Input,
   Select,
   Stack,
+  Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import { HiPlus } from "react-icons/hi";
@@ -31,7 +32,6 @@ const CreateMedia = (props) => {
     handleSubmit,
     formState: { errors },
     reset,
-    control,
   } = useForm();
 
   const submitMedia = (data) => {
@@ -56,7 +56,7 @@ const CreateMedia = (props) => {
         >
           {normalAddButton ? "Subir" : " Subir imagen"}
         </Button>
-        <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+        <Drawer isOpen={isOpen} size="sm" placement="left" onClose={onClose}>
           <DrawerOverlay />
           <DrawerContent bg="defaultColor.400">
             <DrawerCloseButton color="#fff" mt="2" />
@@ -83,11 +83,11 @@ const CreateMedia = (props) => {
                     <FormLabel htmlFor="createMediaDescription">
                       Descripción
                     </FormLabel>
-                    <Input
+                    <Textarea
                       {...register("description")}
                       id="createMediaDescription"
                       placeholder="Ingresa la descripción"
-                    ></Input>
+                    ></Textarea>
                   </Box>
                   <Box>
                     <FormLabel htmlFor="createMediaType">Tipo</FormLabel>
@@ -95,6 +95,7 @@ const CreateMedia = (props) => {
                       {...register("type", {
                         required: "Tipo es requerido.",
                       })}
+                      multiple={false}
                       id="createMediaType"
                       placeholder="Ingresa el tipo"
                     >
