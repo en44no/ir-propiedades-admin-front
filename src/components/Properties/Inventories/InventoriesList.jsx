@@ -25,30 +25,22 @@ const InventoriesList = (props) => {
   const { full, property } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const inventories = [
-    {
-      id: 1,
-      status: "Closed",
-      date: new Date(),
-      description: "Un inventario",
-    },
-  ];
-
   const formatDate = (date) => {
     const newDate = new Date(date);
     return newDate.toLocaleDateString("en-GB");
   };
 
   useEffect(() => {
+    console.log(property.inventories);
     if (isOpen) {
       //getFeaturesByProperty(property._id);
     }
   }, [isOpen]);
 
   const parseInventoryStatus = (inventory) => {
-    if (inventory.status === "Open") {
+    if (inventory.status[0] === "Open") {
       return <BadgeInventoryStatus bgColor="#00b894" text="Abierto" />;
-    } else if (inventory.status === "Closed") {
+    } else if (inventory.status[0] === "Closed") {
       return <BadgeInventoryStatus bgColor="#d63031" text="Cerrado" />;
     }
   };
@@ -83,7 +75,7 @@ const InventoriesList = (props) => {
               </Text>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
-              {inventories.length === 0 ? (
+              {property.inventories.length === 0 ? (
                 <Text
                   fontSize="xl"
                   color="#EAE9ED"
@@ -96,7 +88,7 @@ const InventoriesList = (props) => {
                   Esta propiedad aún no cuenta con inventarios.
                 </Text>
               ) : (
-                inventories.map((inventory) => (
+                property.inventories.map((inventory) => (
                   <>
                     <Box key={inventory._id} position="relative">
                       <Box
@@ -118,20 +110,20 @@ const InventoriesList = (props) => {
                               justifyContent="center"
                               textAlign="center"
                             >
-                              {inventory.description.length > 24 ? (
+                              {inventory.comments.length > 24 ? (
                                 <Tooltip
                                   hasArrow
-                                  label={inventory.description}
+                                  label={inventory.comments}
                                   bg="defaultColor.500"
                                 >
                                   <Text>
-                                    {inventory.description
+                                    {inventory.comments
                                       .slice(0, 24)
                                       .concat("...")}
                                   </Text>
                                 </Tooltip>
                               ) : (
-                                <Text>{inventory.description}</Text>
+                                <Text>{inventory.comments}</Text>
                               )}
                             </Box>
                             <Divider orientation="vertical" />
@@ -143,7 +135,11 @@ const InventoriesList = (props) => {
                               <Text>{formatDate(inventory.date)}</Text>
                             </Box>
                             <Divider orientation="vertical" />
-                            <InventoryItems property={property} />
+                            <InventoryItems
+                              property={property}
+                              inventory={inventory}
+                              itemsQuantity={inventory.items.length}
+                            />
                           </>
                         </HStack>
                       </Box>
@@ -153,49 +149,13 @@ const InventoriesList = (props) => {
                         w="100%"
                         zIndex="-1"
                         borderRadius="5px"
-                      >
-                        <Box
-                          cursor="pointer"
-                          pt="1rem"
-                          position="relative"
-                          _hover={{ top: "20px" }}
-                          bg="#cc5e5d"
-                          w="50%"
-                          borderRadius="5px"
-                        >
-                          <Text pb="0.2rem" textAlign="center" fontWeight="500">
-                            Borrar
-                          </Text>
-                        </Box>
-                        <Box
-                          cursor="pointer"
-                          pt="1rem"
-                          position="relative"
-                          _hover={{ top: "20px" }}
-                          bg="#F0B955"
-                          w="50%"
-                          borderRadius="5px"
-                        >
-                          <Text pb="0.2rem" textAlign="center" fontWeight="500">
-                            Editar
-                          </Text>
-                        </Box>
-                      </HStack>
+                      ></HStack>
                     </Box>
                   </>
                 ))
               )}
             </DrawerBody>
-            <DrawerFooter borderTopWidth="1px">
-              <Button variant="cancel-action" mr={3} onClick={onClose}>
-                Cerrar
-              </Button>
-              <CreateInventory
-                property={property}
-                normalAddButton="yes"
-                noRightMargin
-              />
-            </DrawerFooter>
+            <DrawerFooter borderTopWidth="1px"></DrawerFooter>
           </DrawerContent>
         </Drawer>
       </>

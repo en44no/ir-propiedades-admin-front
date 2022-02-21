@@ -153,7 +153,7 @@ const PropertyDetails = (props) => {
                       {...register("type", { required: "Tipo es requerido." })}
                       id="propertyType"
                       multiple={false}
-                      defaultChecked={property.type}
+                      defaultValue={property.type}
                       placeholder="Ingresa el tipo"
                     >
                       <option value="House">Casa</option>

@@ -55,6 +55,7 @@ const PostList = (props) => {
     if (isOpen) {
       getPostsByProperty(property._id);
     }
+    console.log(propertyPosts);
   }, [isOpen]);
 
   return (
@@ -70,7 +71,7 @@ const PostList = (props) => {
           borderRadius="9px"
           variant="add-button-clear"
         >
-          Ver publicaciones
+          Gestionar publicaciones
         </Button>
         <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
@@ -220,7 +221,7 @@ const PostList = (props) => {
                           borderRadius="5px"
                         >
                           <Text pb="0rem" textAlign="center" fontWeight="500">
-                            <EditPost post={post} />
+                            <EditPost property={property} post={post} />
                           </Text>
                         </Box>
                       </HStack>

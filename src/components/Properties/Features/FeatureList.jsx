@@ -25,15 +25,9 @@ import EditFeature from "./EditFeature";
 
 const FeatureList = (props) => {
   const { full, property } = props;
-  const { getFeaturesByProperty, featuresProperty, deleteFeature } =
+  const { properties, featuresProperty, deleteFeature } =
     useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  useEffect(() => {
-    if (isOpen) {
-      getFeaturesByProperty(property._id);
-    }
-  }, [isOpen]);
 
   const parseFeatureType = (feature) => {
     if (feature.type[0] === "Bathroom") {
@@ -51,6 +45,8 @@ const FeatureList = (props) => {
     }
   };
 
+  console.log(`featuresss ${properties.features}`);
+
   return (
     <>
       <>
@@ -64,7 +60,7 @@ const FeatureList = (props) => {
           borderRadius="9px"
           variant="add-button-clear"
         >
-          Ver características
+          Gestionar características
         </Button>
         <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
@@ -81,7 +77,7 @@ const FeatureList = (props) => {
               </Text>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
-              {featuresProperty.length === 0 ? (
+              {property.features.length === 0 ? (
                 <Text
                   fontSize="xl"
                   color="#EAE9ED"
@@ -94,7 +90,7 @@ const FeatureList = (props) => {
                   Esta propiedad aún no cuenta con características.
                 </Text>
               ) : (
-                featuresProperty.map((feature) => (
+                property.features.map((feature) => (
                   <Box key={feature._id} position="relative">
                     <Box
                       display="flex"

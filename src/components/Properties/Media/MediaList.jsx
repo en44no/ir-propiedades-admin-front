@@ -10,16 +10,21 @@ import {
   DrawerBody,
   DrawerFooter,
   Text,
+  Box,
+  Image,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { BsImages } from "react-icons/bs";
 import CreateMedia from "./CreateMedia";
 import CopyInternalCode from "../CopyInternalCode";
+import FullscreenImageModal from "../../Other/FullscreenImageModal";
 
 const MediaList = (props) => {
   const { full, property } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
+    console.log(property.media);
     if (isOpen) {
       //getPostsByProperty(property._id);
     }
@@ -38,7 +43,7 @@ const MediaList = (props) => {
           borderRadius="9px"
           variant="add-button-clear"
         >
-          Ver imágenes
+          Gestionar imágenes
         </Button>
         <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
@@ -68,7 +73,33 @@ const MediaList = (props) => {
                   Esta propiedad aún no cuenta con imágenes.
                 </Text>
               ) : (
-                <Text>Aca van las imagenes</Text>
+                <SimpleGrid columns={[2, null, 3]} spacing="40px">
+                  {property.media.map((image) => (
+                    <Box
+                      key={image._id}
+                      minW="270px"
+                      maxW="270px"
+                      outline="2px solid #cacaca"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      mb="-0.7rem"
+                      position="relative"
+                      _hover={{
+                        transition: "transform .2s",
+                        transform: "scale(0.98)",
+                      }}
+                    >
+                      <FullscreenImageModal
+                        minWidth="270px"
+                        maxWidth="270px"
+                        src={image.url}
+                        alt={image.description}
+                        hover="yes"
+                        text={`Imagen de la propiedad "${image.description}"`}
+                      />
+                    </Box>
+                  ))}
+                </SimpleGrid>
               )}
             </DrawerBody>
             <DrawerFooter borderTopWidth="1px">

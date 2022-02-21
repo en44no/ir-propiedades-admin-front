@@ -72,7 +72,7 @@ const CreateAddress = (props) => {
                     })}
                     id="addressCountry"
                     multiple={false}
-                    defaultChecked="argentina"
+                    defaultValue="argentina"
                   >
                     <option value="argentina">Argentina</option>
                   </Select>

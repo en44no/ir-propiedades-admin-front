@@ -18,7 +18,7 @@ const PropertiesState = (props) => {
 
   const fetchProperties = async () => {
     await axios
-      .get("http://localhost:4000/properties")
+      .get("http://192.168.0.150:4000/properties")
       .then((res) => {
         setProperties(res.data);
       })
@@ -28,7 +28,7 @@ const PropertiesState = (props) => {
   const addProperty = async (data, address) => {
     data.address = address;
     await axios
-      .post("http://localhost:4000/properties", data)
+      .post("http://192.168.0.150:4000/properties", data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -58,7 +58,7 @@ const PropertiesState = (props) => {
       return addAddress(data);
     }
     await axios
-      .put(`http://localhost:4000/addresses/${addressId}`, data)
+      .put(`http://192.168.0.150:4000/addresses/${addressId}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -89,7 +89,7 @@ const PropertiesState = (props) => {
 
   const deleteProperty = async (data) => {
     await axios
-      .delete(`http://localhost:4000/properties/${data._id}`)
+      .delete(`http://192.168.0.150:4000/properties/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(
@@ -114,7 +114,7 @@ const PropertiesState = (props) => {
 
   const addAddress = async (data) => {
     await axios
-      .post("http://localhost:4000/addresses", data)
+      .post("http://192.168.0.150:4000/addresses", data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -137,7 +137,7 @@ const PropertiesState = (props) => {
 
   const addDetailsToProperty = async (data, property) => {
     await axios
-      .put(`http://localhost:4000/properties/${property._id}`, data)
+      .put(`http://192.168.0.150:4000/properties/${property._id}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -167,7 +167,7 @@ const PropertiesState = (props) => {
   const addPost = async (data, propertyId) => {
     data.property = propertyId;
     await axios
-      .post("http://localhost:4000/posts", data)
+      .post("http://192.168.0.150:4000/posts", data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -189,17 +189,58 @@ const PropertiesState = (props) => {
   };
 
   const getPostsByProperty = async (propertyId) => {
+    debugger;
     await axios
-      .get(`http://localhost:4000/posts/byPropertyId/${propertyId}`)
+      .get(`http://192.168.0.150:4000/posts/byPropertyId/${propertyId}`)
       .then((res) => {
         setPropertyPosts(res.data);
+        console.log(res.data);
+        console.log(propertyPosts);
       })
       .catch((error) => {});
   };
 
+  const editPost = async (data, postId, propertyId) => {
+    let status = [];
+    status.push(data.status);
+    data.status = status;
+    console.log(data);
+    let property = properties.find((property) => property._id === propertyId);
+    await axios
+      .put(`http://192.168.0.150:4000/posts/${postId}`, data)
+      .then((res) => {
+        if (res.status === 200) {
+          Notification(
+            "Publicación editada correctamente",
+            "Has editado una publicación",
+            "success"
+          );
+          setPropertyPosts([
+            ...propertyPosts.filter((post) => post._id !== postId),
+            res.data,
+          ]);
+          const newProperties = properties.map((prop) => {
+            if (prop._id === propertyId) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          setProperties(newProperties);
+        }
+      })
+      .catch((error) => {
+        Notification(
+          "Error al editar la publicación",
+          "Ocurrió un error intentado editar la publicación",
+          "error"
+        );
+      });
+  };
+
   const deletePost = async (data) => {
     await axios
-      .delete(`http://localhost:4000/posts/${data._id}`)
+      .delete(`http://192.168.0.150:4000/posts/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(
@@ -225,7 +266,7 @@ const PropertiesState = (props) => {
   const addFeature = async (data, propertyId) => {
     data.property = propertyId;
     await axios
-      .post("http://localhost:4000/features", data)
+      .post("http://192.168.0.150:4000/features", data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -249,7 +290,7 @@ const PropertiesState = (props) => {
   const editFeature = async (data, featureId, propertyId) => {
     let property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`http://localhost:4000/features/${featureId}`, data)
+      .put(`http://192.168.0.150:4000/features/${featureId}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -282,7 +323,7 @@ const PropertiesState = (props) => {
 
   const deleteFeature = async (data) => {
     await axios
-      .delete(`http://localhost:4000/features/${data._id}`)
+      .delete(`http://192.168.0.150:4000/features/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(
@@ -310,7 +351,7 @@ const PropertiesState = (props) => {
   const addFeatureToProperty = async (featureId, propertyId) => {
     const property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`http://localhost:4000/properties/${propertyId}`, {
+      .put(`http://192.168.0.150:4000/properties/${propertyId}`, {
         features: [...property.features, featureId],
       })
       .then((res) => {
@@ -333,26 +374,50 @@ const PropertiesState = (props) => {
     const property = properties.find((property) => property._id === propertyId);
     const features = property.features;
     await axios
-      .post("http://localhost:4000/features/many", features)
+      .post("http://192.168.0.150:4000/features/many", features)
       .then((res) => {
         setFeaturesProperty(res.data);
       })
       .catch((error) => {});
   };
 
-  const addMedia = async (data, property) => {
+  const addMediatoProperty = async (data, property) => {
     let images = [];
-    images.push(data.image);
-    console.log(images);
+    images.push(data._id);
     await axios
-      .post("http://localhost:4000/uploads", images)
+      .put(
+        `http://192.168.0.150:4000/properties/${property._id}/addMedia`,
+        images
+      )
+      .then((resMedia) => {});
+  };
+
+  const addMedia = async (data, property) => {
+    let formData = new FormData();
+    formData.append("images", data.image);
+    await axios
+      .post(`http://192.168.0.150:4000/uploads/${property._id}`, formData)
       .then(async (res) => {
-        let url = "http://localhost:4000/static/" + res.filename;
-        data.url = url;
+        data.url = res.data.files[0].url;
+        delete data.image;
         await axios
-          .post("http://localhost:4000/media", data)
-          .then((res) => {
-            property.media = res.data;
+          .post("http://192.168.0.150:4000/media", data)
+          .then((resMedia) => {
+            if (resMedia.status === 201) {
+              Notification(
+                "Imagen agregada correctamente",
+                "Has agregado una nueva imagen",
+                "success"
+              );
+            } else {
+              Notification(
+                "Error al agregar la imagen",
+                "Ocurrió un error intentado agregar la imagen",
+                "error"
+              );
+            }
+            addMediatoProperty(resMedia.data, property);
+            property.media = resMedia.data;
             const newProperties = properties.map((prop) => {
               if (prop._id === property._id) {
                 return property;
@@ -361,21 +426,8 @@ const PropertiesState = (props) => {
               }
             });
             setProperties(newProperties);
-            if (res.status === 201) {
-              Notification(
-                "Imagen agregada correctamente",
-                "Has agregado una nueva imagen",
-                "success"
-              );
-            }
           })
-          .catch((error) => {
-            Notification(
-              "Error al agregar la imagen",
-              "Ocurrió un error intentado agregar la imagen",
-              "error"
-            );
-          })
+          .catch((error) => {})
           .catch((error) => {});
       });
   };
@@ -403,6 +455,7 @@ const PropertiesState = (props) => {
         addDetailsToProperty,
         deleteFeature,
         editFeature,
+        editPost,
       }}
     >
       {props.children}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Badge,
   Box,
@@ -23,9 +23,12 @@ import {
 import SocialList from "../../Social/SocialList";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "../../Other/DatePicker/DatePicker";
+import moment from "moment";
+import PropertiesContext from "../../../context/Properties/PropertiesContext";
 
 const EditPost = (props) => {
-  const { post } = props;
+  const { post, property } = props;
+  const { editPost } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isForRentDisabled, setIsForRentDisabled] = useState(true);
   const [isForSaleDisabled, setIsForSaleDisabled] = useState(true);
@@ -39,7 +42,7 @@ const EditPost = (props) => {
   } = useForm();
 
   const submitPost = (data) => {
-    //addPost(data, property._id);
+    editPost(data, property._id);
     reset();
     onClose();
   };
@@ -146,7 +149,7 @@ const EditPost = (props) => {
                           rules={{ required: "Fecha de inicio es requerida." }}
                           render={({ field }) => (
                             <DatePicker
-                              defaultSelected={post.startDate}
+                              defaultSelected={moment(post.startDate).toDate()}
                               field={field}
                               placeholderText={"Ingresa la fecha de inicio"}
                               id={"createPostStartDate"}
@@ -171,7 +174,7 @@ const EditPost = (props) => {
                           rules={{ required: "Fecha de fin es requerida." }}
                           render={({ field }) => (
                             <DatePicker
-                              selected={post.endDate}
+                              defaultSelected={moment(post.endDate).toDate()}
                               field={field}
                               placeholderText={"Ingresa la fecha de fin"}
                               id={"createPostEndDate"}
@@ -200,7 +203,7 @@ const EditPost = (props) => {
                         required: "Estado es requerido.",
                       })}
                       multiple={false}
-                      defaultChecked={post.status}
+                      defaultValue={post.status}
                       id="propertyTypes"
                       placeholder="Ingresa el estado"
                     >

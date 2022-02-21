@@ -36,7 +36,7 @@ const CreateMedia = (props) => {
 
   const submitMedia = (data) => {
     data.image = selectedImage;
-    addMedia(data, property._id);
+    addMedia(data, property);
     reset();
     onClose();
   };
@@ -69,14 +69,14 @@ const CreateMedia = (props) => {
                   <Box>
                     <FormLabel htmlFor="createMediaImage">Imagen</FormLabel>
                     <Input
-                      pt="0.5rem"
+                      pt="0.3rem"
                       type="file"
                       onChange={(e) => {
                         setSelectedImage(e.target.files[0]);
                       }}
                       id="createMediaImage"
                       w="100%"
-                      fontSize="0.80rem"
+                      fontSize="1rem"
                     ></Input>
                   </Box>
                   <Box>

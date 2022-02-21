@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Badge, Box, HStack, Image, Text, Tooltip } from "@chakra-ui/react";
 import PropertyDetails from "../PropertyDetails";
 import BadgePropertyCard from "./BadgePropertyCard";
@@ -20,12 +20,17 @@ const PropertyCard = (props) => {
     }
   };
 
+  useEffect(() => {
+    console.log(property);
+  }, []);
+
   return (
     <>
       <Box
         minW="270px"
         maxW="270px"
-        border="2px solid #cacaca"
+        outline="2px solid #cacaca"
+        mt="2px"
         borderRadius="lg"
         overflow="hidden"
         mb="4"
@@ -36,6 +41,7 @@ const PropertyCard = (props) => {
         <Image
           src="https://images7.alphacoders.com/344/thumb-1920-344344.jpg"
           alt={property.imageAlt}
+          loading="lazy"
         />
         <Box py="3" px="3">
           <Box position="absolute" p="0" left="2" top="2">
