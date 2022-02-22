@@ -18,7 +18,7 @@ const PropertiesState = (props) => {
 
   const fetchProperties = async () => {
     await axios
-      .get("http://192.168.0.150:4000/properties")
+      .get(`${process.env.REACT_APP_API_BASE_URL}/properties`)
       .then((res) => {
         setProperties(res.data);
       })
@@ -28,7 +28,7 @@ const PropertiesState = (props) => {
   const addProperty = async (data, address) => {
     data.address = address;
     await axios
-      .post("http://192.168.0.150:4000/properties", data)
+      .post(`${process.env.REACT_APP_API_BASE_URL}/properties`, data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -58,7 +58,7 @@ const PropertiesState = (props) => {
       return addAddress(data);
     }
     await axios
-      .put(`http://192.168.0.150:4000/addresses/${addressId}`, data)
+      .put(`${process.env.REACT_APP_API_BASE_URL}/addresses/${addressId}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -89,7 +89,7 @@ const PropertiesState = (props) => {
 
   const deleteProperty = async (data) => {
     await axios
-      .delete(`http://192.168.0.150:4000/properties/${data._id}`)
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/properties/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(
@@ -114,7 +114,7 @@ const PropertiesState = (props) => {
 
   const addAddress = async (data) => {
     await axios
-      .post("http://192.168.0.150:4000/addresses", data)
+      .post(`${process.env.REACT_APP_API_BASE_URL}/addresses`, data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -137,7 +137,10 @@ const PropertiesState = (props) => {
 
   const addDetailsToProperty = async (data, property) => {
     await axios
-      .put(`http://192.168.0.150:4000/properties/${property._id}`, data)
+      .put(
+        `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}`,
+        data
+      )
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -167,7 +170,7 @@ const PropertiesState = (props) => {
   const addPost = async (data, propertyId) => {
     data.property = propertyId;
     await axios
-      .post("http://192.168.0.150:4000/posts", data)
+      .post(`${process.env.REACT_APP_API_BASE_URL}/posts`, data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -191,7 +194,9 @@ const PropertiesState = (props) => {
   const getPostsByProperty = async (propertyId) => {
     debugger;
     await axios
-      .get(`http://192.168.0.150:4000/posts/byPropertyId/${propertyId}`)
+      .get(
+        `${process.env.REACT_APP_API_BASE_URL}/posts/byPropertyId/${propertyId}`
+      )
       .then((res) => {
         setPropertyPosts(res.data);
         console.log(res.data);
@@ -207,7 +212,7 @@ const PropertiesState = (props) => {
     console.log(data);
     let property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`http://192.168.0.150:4000/posts/${postId}`, data)
+      .put(`${process.env.REACT_APP_API_BASE_URL}/posts/${postId}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -240,7 +245,7 @@ const PropertiesState = (props) => {
 
   const deletePost = async (data) => {
     await axios
-      .delete(`http://192.168.0.150:4000/posts/${data._id}`)
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/posts/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(
@@ -266,7 +271,7 @@ const PropertiesState = (props) => {
   const addFeature = async (data, propertyId) => {
     data.property = propertyId;
     await axios
-      .post("http://192.168.0.150:4000/features", data)
+      .post(`${process.env.REACT_APP_API_BASE_URL}/features`, data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -290,7 +295,7 @@ const PropertiesState = (props) => {
   const editFeature = async (data, featureId, propertyId) => {
     let property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`http://192.168.0.150:4000/features/${featureId}`, data)
+      .put(`${process.env.REACT_APP_API_BASE_URL}/features/${featureId}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -323,7 +328,7 @@ const PropertiesState = (props) => {
 
   const deleteFeature = async (data) => {
     await axios
-      .delete(`http://192.168.0.150:4000/features/${data._id}`)
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/features/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(
@@ -351,7 +356,7 @@ const PropertiesState = (props) => {
   const addFeatureToProperty = async (featureId, propertyId) => {
     const property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`http://192.168.0.150:4000/properties/${propertyId}`, {
+      .put(`${process.env.REACT_APP_API_BASE_URL}/properties/${propertyId}`, {
         features: [...property.features, featureId],
       })
       .then((res) => {
@@ -374,7 +379,7 @@ const PropertiesState = (props) => {
     const property = properties.find((property) => property._id === propertyId);
     const features = property.features;
     await axios
-      .post("http://192.168.0.150:4000/features/many", features)
+      .post(`${process.env.REACT_APP_API_BASE_URL}/features/many`, features)
       .then((res) => {
         setFeaturesProperty(res.data);
       })
@@ -386,7 +391,7 @@ const PropertiesState = (props) => {
     images.push(data._id);
     await axios
       .put(
-        `http://192.168.0.150:4000/properties/${property._id}/addMedia`,
+        `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}/addMedia`,
         images
       )
       .then((resMedia) => {});
@@ -396,12 +401,15 @@ const PropertiesState = (props) => {
     let formData = new FormData();
     formData.append("images", data.image);
     await axios
-      .post(`http://192.168.0.150:4000/uploads/${property._id}`, formData)
+      .post(
+        `${process.env.REACT_APP_API_BASE_URL}/uploads/${property._id}`,
+        formData
+      )
       .then(async (res) => {
         data.url = res.data.files[0].url;
         delete data.image;
         await axios
-          .post("http://192.168.0.150:4000/media", data)
+          .post(`${process.env.REACT_APP_API_BASE_URL}/media`, data)
           .then((resMedia) => {
             if (resMedia.status === 201) {
               Notification(

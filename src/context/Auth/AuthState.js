@@ -5,7 +5,7 @@ import AuthContext from "./AuthContext";
 const AuthState = (props) => {
   const authenticateUser = async (data) => {
     await axios
-      .post("http://localhost:4000/auth/signin", data)
+      .post(`${process.env.REACT_APP_API_BASE_URL}/auth//signin`, data)
       .then((res) => {
         if (res.data.token) {
           sessionStorage.setItem("token", res.data.token);
@@ -20,7 +20,7 @@ const AuthState = (props) => {
 
   const getUser = async (username) => {
     await axios
-      .get(`http://localhost:4000/users/`)
+      .get(`${process.env.REACT_APP_API_BASE_URL}/users/`)
       .then((res) => {
         const user = res.data.find((user) => user.username === username);
         sessionStorage.setItem("name", user.name.split(" ")[0]);
