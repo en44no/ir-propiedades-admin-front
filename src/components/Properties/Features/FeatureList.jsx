@@ -45,7 +45,7 @@ const FeatureList = (props) => {
     }
   };
 
-  console.log(`featuresss ${properties.features}`);
+  useEffect(() => {});
 
   return (
     <>
@@ -183,6 +183,7 @@ const FeatureList = (props) => {
                             onlyText="yes"
                             functionToExecute={deleteFeature}
                             element={feature}
+                            anotherElement={property}
                           />
                         </Text>
                       </Box>

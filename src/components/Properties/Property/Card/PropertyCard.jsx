@@ -20,9 +20,7 @@ const PropertyCard = (props) => {
     }
   };
 
-  useEffect(() => {
-    console.log(property);
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>

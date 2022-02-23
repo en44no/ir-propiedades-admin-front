@@ -71,10 +71,10 @@ const CreateAddress = (props) => {
                       required: " País es requerido.",
                     })}
                     id="addressCountry"
-                    multiple={false}
-                    defaultValue="argentina"
                   >
-                    <option value="argentina">Argentina</option>
+                    <option selected value="argentina">
+                      Argentina
+                    </option>
                   </Select>
                   {errors.country && (
                     <Badge variant="required-error">

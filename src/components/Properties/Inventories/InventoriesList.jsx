@@ -31,7 +31,6 @@ const InventoriesList = (props) => {
   };
 
   useEffect(() => {
-    console.log(property.inventories);
     if (isOpen) {
       //getFeaturesByProperty(property._id);
     }

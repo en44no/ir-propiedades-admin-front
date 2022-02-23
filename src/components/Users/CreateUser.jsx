@@ -79,7 +79,7 @@ function CreateUser() {
                   <Select
                     {...register("type", { required: "Tipo es requerido." })}
                     id="propertyTypes"
-                    defaultValuea="option1"
+                    multiple="false"
                     placeholder="Ingresa el tipo"
                   >
                     <option value="House">Casa</option>

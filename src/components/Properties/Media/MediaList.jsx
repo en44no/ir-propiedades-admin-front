@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
   useDisclosure,
@@ -18,13 +18,15 @@ import { BsImages } from "react-icons/bs";
 import CreateMedia from "./CreateMedia";
 import CopyInternalCode from "../CopyInternalCode";
 import FullscreenImageModal from "../../Other/FullscreenImageModal";
+import ConfirmDelete from "../../Other/ConfirmDelete";
+import PropertiesContext from "../../../context/Properties/PropertiesContext";
 
 const MediaList = (props) => {
   const { full, property } = props;
+  const { deleteMedia } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    console.log(property.media);
     if (isOpen) {
       //getPostsByProperty(property._id);
     }
@@ -89,6 +91,31 @@ const MediaList = (props) => {
                         transform: "scale(0.98)",
                       }}
                     >
+                      <Box
+                        bg="defaultColor.400"
+                        borderRadius="50%"
+                        position="absolute"
+                        p="0"
+                        minW="1.7rem"
+                        minH="1.7rem"
+                        h="1.7rem"
+                        w="1.7rem"
+                        top="2"
+                        right="2"
+                        cursor="pointer"
+                        _hover={{
+                          transition: "transform .2s",
+                          transform: "scale(0.96)",
+                        }}
+                      >
+                        <ConfirmDelete
+                          text="¿Estás seguro de que deseas eliminar esta imagen?"
+                          name="imagen"
+                          functionToExecute={deleteMedia}
+                          element={property}
+                          onlyIcon="true"
+                        />
+                      </Box>
                       <FullscreenImageModal
                         minWidth="270px"
                         maxWidth="270px"

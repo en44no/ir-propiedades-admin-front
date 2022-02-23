@@ -69,9 +69,7 @@ const CreateFeature = (props) => {
                     {...register("type", {
                       required: "Tipo es requerido.",
                     })}
-                    multiple={false}
                     id="createFeatureType"
-                    defaultChecked="option1"
                     placeholder="Ingresa el tipo"
                   >
                     <option value="Bathroom">Baño</option>

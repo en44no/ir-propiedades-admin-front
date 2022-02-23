@@ -74,12 +74,12 @@ const EditAddress = (props) => {
                     {...register("country", {
                       required: " País es requerido.",
                     })}
-                    multiple={false}
                     id="addressCountry"
                     placeholder="Ingresa el país"
-                    defaultValue={address.country}
                   >
-                    <option value="argentina">Argentina</option>
+                    <option selected value="argentina">
+                      Argentina
+                    </option>
                   </Select>
                   {errors.country && (
                     <Badge variant="required-error">

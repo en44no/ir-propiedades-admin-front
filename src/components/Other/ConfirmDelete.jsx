@@ -9,21 +9,35 @@ import {
   Button,
   Text,
   useDisclosure,
+  Box,
 } from "@chakra-ui/react";
+import { FaTrashAlt } from "react-icons/fa";
 import React from "react";
 
 const ConfirmDelete = (props) => {
-  const { functionToExecute, text, element, name, onlyText } = props;
+  const {
+    functionToExecute,
+    text,
+    element,
+    name,
+    onlyText,
+    anotherElement,
+    onlyIcon,
+  } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const execute = () => {
     onClose();
-    functionToExecute(element);
+    functionToExecute(element, anotherElement);
   };
 
   return (
     <>
-      {onlyText ? (
+      {onlyIcon ? (
+        <Box onClick={onOpen} mt="5px" ml="5px">
+          <FaTrashAlt />
+        </Box>
+      ) : onlyText ? (
         <Button
           w="100%"
           bg="none"

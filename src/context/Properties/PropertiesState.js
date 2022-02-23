@@ -8,7 +8,6 @@ const PropertiesState = (props) => {
   const [addressToAdd, setAddressToAdd] = useState(null);
   const [posts, setPosts] = useState([]);
   const [addresses, setAddresses] = useState([]);
-  const [propertyPosts, setPropertyPosts] = useState([]);
   const [features, setFeatures] = useState([]);
   const [featuresProperty, setFeaturesProperty] = useState([]);
 
@@ -192,25 +191,17 @@ const PropertiesState = (props) => {
   };
 
   const getPostsByProperty = async (propertyId) => {
-    debugger;
     await axios
       .get(
         `${process.env.REACT_APP_API_BASE_URL}/posts/byPropertyId/${propertyId}`
       )
       .then((res) => {
-        setPropertyPosts(res.data);
-        console.log(res.data);
-        console.log(propertyPosts);
+        setPosts(res.data);
       })
       .catch((error) => {});
   };
 
-  const editPost = async (data, postId, propertyId) => {
-    let status = [];
-    status.push(data.status);
-    data.status = status;
-    console.log(data);
-    let property = properties.find((property) => property._id === propertyId);
+  const editPost = async (data, postId) => {
     await axios
       .put(`${process.env.REACT_APP_API_BASE_URL}/posts/${postId}`, data)
       .then((res) => {
@@ -220,18 +211,7 @@ const PropertiesState = (props) => {
             "Has editado una publicación",
             "success"
           );
-          setPropertyPosts([
-            ...propertyPosts.filter((post) => post._id !== postId),
-            res.data,
-          ]);
-          const newProperties = properties.map((prop) => {
-            if (prop._id === propertyId) {
-              return property;
-            } else {
-              return prop;
-            }
-          });
-          setProperties(newProperties);
+          setPosts([...posts.filter((post) => post._id !== postId), res.data]);
         }
       })
       .catch((error) => {
@@ -253,10 +233,7 @@ const PropertiesState = (props) => {
               "Has eliminado una publicación",
               "success"
             ),
-            setPosts(posts.filter((post) => post._id !== res.data._id)),
-            setPropertyPosts(
-              propertyPosts.filter((post) => post._id !== res.data._id)
-            ))
+            setPosts(posts.filter((post) => post._id !== res.data._id)))
           : null
       )
       .catch((err) => {
@@ -269,20 +246,29 @@ const PropertiesState = (props) => {
   };
 
   const addFeature = async (data, propertyId) => {
+    let property = properties.find((property) => property._id === propertyId);
     data.property = propertyId;
     await axios
       .post(`${process.env.REACT_APP_API_BASE_URL}/features`, data)
-      .then((res) =>
-        res.status === 201
-          ? (Notification(
-              "Característica agregada correctamente",
-              "Has agregado una nueva característica",
-              "success"
-            ),
-            setFeatures([...features, res.data]),
-            addFeatureToProperty(res.data._id, propertyId))
-          : null
-      )
+      .then((res) => {
+        if (res.status === 201) {
+          Notification(
+            "Característica agregada correctamente",
+            "Has agregado una nueva característica",
+            "success"
+          );
+          const newProperties = properties.map((prop) => {
+            if (prop._id === propertyId) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          property.features = [...property.features, res.data];
+          setProperties(newProperties);
+          addFeatureToProperty(res.data, propertyId);
+        }
+      })
       .catch((error) => {
         Notification(
           "Error al agregar la característica",
@@ -303,10 +289,10 @@ const PropertiesState = (props) => {
             "Has editado una característica",
             "success"
           );
-          setFeaturesProperty([
-            ...featuresProperty.filter((feature) => feature._id !== featureId),
+          property.features = [
+            ...property.features.filter((feature) => feature._id !== featureId),
             res.data,
-          ]);
+          ];
           const newProperties = properties.map((prop) => {
             if (prop._id === propertyId) {
               return property;
@@ -315,6 +301,7 @@ const PropertiesState = (props) => {
             }
           });
           setProperties(newProperties);
+          addFeatureToProperty(res.data, propertyId);
         }
       })
       .catch((error) => {
@@ -326,24 +313,30 @@ const PropertiesState = (props) => {
       });
   };
 
-  const deleteFeature = async (data) => {
+  const deleteFeature = async (feature, property) => {
     await axios
-      .delete(`${process.env.REACT_APP_API_BASE_URL}/features/${data._id}`)
-      .then((res) =>
-        res.status === 200
-          ? (Notification(
-              "Característica eliminada correctamente",
-              "Has eliminado una característica",
-              "success"
-            ),
-            setFeatures(
-              features.filter((feature) => feature._id !== res.data._id)
-            ),
-            setFeaturesProperty(
-              featuresProperty.filter((feature) => feature._id !== res.data._id)
-            ))
-          : null
-      )
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/features/${feature._id}`)
+      .then((res) => {
+        if (res.status === 200) {
+          Notification(
+            "Característica eliminada correctamente",
+            "Has eliminado una característica",
+            "success"
+          );
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          property.features = property.features.filter(
+            (feat) => feat._id !== feature._id
+          );
+          setProperties(newProperties);
+          addFeatureToProperty(res.data, property._id);
+        }
+      })
       .catch((err) => {
         Notification(
           "Error al eliminar la característica",
@@ -353,15 +346,17 @@ const PropertiesState = (props) => {
       });
   };
 
-  const addFeatureToProperty = async (featureId, propertyId) => {
+  const addFeatureToProperty = async (feature, propertyId) => {
     const property = properties.find((property) => property._id === propertyId);
+    const features = property.features.map((feature) => {
+      return feature._id;
+    });
     await axios
       .put(`${process.env.REACT_APP_API_BASE_URL}/properties/${propertyId}`, {
-        features: [...property.features, featureId],
+        features: [...features],
       })
       .then((res) => {
         if (res.status === 200) {
-          property.address = res.data;
           const newProperties = properties.map((prop) => {
             if (prop._id === property._id) {
               return property;
@@ -384,17 +379,6 @@ const PropertiesState = (props) => {
         setFeaturesProperty(res.data);
       })
       .catch((error) => {});
-  };
-
-  const addMediatoProperty = async (data, property) => {
-    let images = [];
-    images.push(data._id);
-    await axios
-      .put(
-        `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}/addMedia`,
-        images
-      )
-      .then((resMedia) => {});
   };
 
   const addMedia = async (data, property) => {
@@ -424,8 +408,6 @@ const PropertiesState = (props) => {
                 "error"
               );
             }
-            addMediatoProperty(resMedia.data, property);
-            property.media = resMedia.data;
             const newProperties = properties.map((prop) => {
               if (prop._id === property._id) {
                 return property;
@@ -433,11 +415,67 @@ const PropertiesState = (props) => {
                 return prop;
               }
             });
+            property.media = resMedia.data;
             setProperties(newProperties);
+            addMediatoProperty(resMedia.data, property);
           })
           .catch((error) => {})
           .catch((error) => {});
       });
+  };
+
+  const deleteMedia = async (data, property) => {
+    let formData = new FormData();
+    formData.delete("images", data.image);
+    await axios
+      .post(
+        `${process.env.REACT_APP_API_BASE_URL}/uploads/${property._id}`,
+        formData
+      )
+      .then(async (res) => {
+        data.url = res.data.files[0].url;
+        delete data.image;
+        await axios
+          .post(`${process.env.REACT_APP_API_BASE_URL}/media`, data)
+          .then((resMedia) => {
+            if (resMedia.status === 201) {
+              Notification(
+                "Imagen eliminada correctamente",
+                "Has eliminado una nueva imagen",
+                "success"
+              );
+            } else {
+              Notification(
+                "Error al eliminar la imagen",
+                "Ocurrió un error intentado eliminar la imagen",
+                "error"
+              );
+            }
+            const newProperties = properties.map((prop) => {
+              if (prop._id === property._id) {
+                return property;
+              } else {
+                return prop;
+              }
+            });
+            property.media = resMedia.data;
+            setProperties(newProperties);
+            addMediatoProperty(resMedia.data, property);
+          })
+          .catch((error) => {})
+          .catch((error) => {});
+      });
+  };
+
+  const addMediatoProperty = async (data, property) => {
+    let images = [];
+    images.push(data._id);
+    await axios
+      .put(
+        `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}/addMedia`,
+        images
+      )
+      .then((resMedia) => {});
   };
 
   return (
@@ -453,7 +491,7 @@ const PropertiesState = (props) => {
         deletePost,
         addPost,
         getPostsByProperty,
-        propertyPosts,
+        posts,
         editAddress,
         addresses,
         addFeature,
@@ -464,6 +502,7 @@ const PropertiesState = (props) => {
         deleteFeature,
         editFeature,
         editPost,
+        deleteMedia,
       }}
     >
       {props.children}

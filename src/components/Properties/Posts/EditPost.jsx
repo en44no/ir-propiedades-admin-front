@@ -202,7 +202,6 @@ const EditPost = (props) => {
                       {...register("status", {
                         required: "Estado es requerido.",
                       })}
-                      multiple={false}
                       defaultValue={post.status}
                       id="propertyTypes"
                       placeholder="Ingresa el estado"

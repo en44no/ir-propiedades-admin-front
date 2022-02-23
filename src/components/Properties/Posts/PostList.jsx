@@ -25,7 +25,7 @@ import EditPost from "./EditPost";
 
 const PostList = (props) => {
   const { full, property } = props;
-  const { getPostsByProperty, propertyPosts, deletePost } =
+  const { getPostsByProperty, posts, deletePost } =
     useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -55,7 +55,6 @@ const PostList = (props) => {
     if (isOpen) {
       getPostsByProperty(property._id);
     }
-    console.log(propertyPosts);
   }, [isOpen]);
 
   return (
@@ -88,7 +87,7 @@ const PostList = (props) => {
               </Text>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
-              {propertyPosts.length === 0 ? (
+              {posts.length === 0 ? (
                 <Text
                   fontSize="xl"
                   color="#EAE9ED"
@@ -102,9 +101,9 @@ const PostList = (props) => {
                   Esta propiedad aún no cuenta con publicaciones.
                 </Text>
               ) : (
-                propertyPosts.map((post) => (
-                  <>
-                    <Box key={post._id} position="relative">
+                posts.map((post) => (
+                  <Box key={post._id}>
+                    <Box position="relative">
                       <Box
                         display="flex"
                         bg="defaultColor.300"
@@ -209,6 +208,7 @@ const PostList = (props) => {
                               onlyText="yes"
                               functionToExecute={deletePost}
                               element={post}
+                              anotherElement={property}
                             />
                           </Text>
                         </Box>
@@ -226,7 +226,7 @@ const PostList = (props) => {
                         </Box>
                       </HStack>
                     </Box>
-                  </>
+                  </Box>
                 ))
               )}
             </DrawerBody>

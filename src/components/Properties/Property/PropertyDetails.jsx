@@ -152,7 +152,6 @@ const PropertyDetails = (props) => {
                     <Select
                       {...register("type", { required: "Tipo es requerido." })}
                       id="propertyType"
-                      multiple={false}
                       defaultValue={property.type}
                       placeholder="Ingresa el tipo"
                     >

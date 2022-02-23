@@ -68,7 +68,6 @@ const EditFeature = (props) => {
                     {...register("type", {
                       required: "Tipo es requerido.",
                     })}
-                    multiple={false}
                     id="createFeatureType"
                     defaultValue={feature.type}
                     placeholder="Ingresa el tipo"

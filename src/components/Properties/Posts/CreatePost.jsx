@@ -202,8 +202,6 @@ const CreatePost = (props) => {
                       {...register("status", {
                         required: "Estado es requerido.",
                       })}
-                      multiple={false}
-                      s
                       id="propertyTypes"
                       placeholder="Ingresa el estado"
                     >

@@ -95,7 +95,6 @@ const CreateMedia = (props) => {
                       {...register("type", {
                         required: "Tipo es requerido.",
                       })}
-                      multiple={false}
                       id="createMediaType"
                       placeholder="Ingresa el tipo"
                     >

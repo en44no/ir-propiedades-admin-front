@@ -5,7 +5,7 @@ import AuthContext from "./AuthContext";
 const AuthState = (props) => {
   const authenticateUser = async (data) => {
     await axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/auth//signin`, data)
+      .post(`${process.env.REACT_APP_API_BASE_URL}/auth/signin`, data)
       .then((res) => {
         if (res.data.token) {
           sessionStorage.setItem("token", res.data.token);
