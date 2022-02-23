@@ -5,6 +5,7 @@ import Section from "./components/Section/Section";
 import PropertiesPage from "./pages/Properties";
 import Login from "./pages/Login";
 import PrivateRoute from "./PrivateRoute";
+import CustomersPage from "./pages/Customers";
 
 function App() {
   return (
@@ -43,6 +44,18 @@ function App() {
                 component={
                   <Section title="Manejo de Propiedades">
                     <PropertiesPage />
+                  </Section>
+                }
+              />
+            }
+          />
+          <Route
+            path="/customers"
+            element={
+              <PrivateRoute
+                component={
+                  <Section title="Manejo de Clientes">
+                    <CustomersPage />
                   </Section>
                 }
               />
