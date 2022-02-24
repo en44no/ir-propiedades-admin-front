@@ -48,6 +48,18 @@ function App() {
               />
             }
           />
+          <Route
+            path="/customers"
+            element={
+              <PrivateRoute
+                component={
+                  <Section title="Manejo de Clientes">
+                    <PropertiesPage />
+                  </Section>
+                }
+              />
+            }
+          />
         </Routes>
       </Router>
     </>
