@@ -53,7 +53,7 @@ const CreateInventory = (props) => {
         borderRadius="9px"
         variant={normalAddButton ? "add-button-dark" : "add-button-clear"}
       >
-        <Text mt="-1">Agregar</Text>
+        <Text mt="-0.5">Agregar</Text>
       </Button>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />

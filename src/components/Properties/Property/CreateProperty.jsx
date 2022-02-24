@@ -59,7 +59,7 @@ const CreateProperty = () => {
         borderRadius="9px"
         variant="add-button"
       >
-        <Text mt="-1">Agregar</Text>
+        <Text mt="-0.5">Agregar</Text>
       </Button>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />

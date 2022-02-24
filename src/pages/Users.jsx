@@ -89,7 +89,7 @@ const UsersPage = () => {
                   <MenuButton
                     as={IconButton}
                     aria-label="Options"
-                    icon={<IoSettingsOutline fontSize="1.5rem" />}
+                    icon={<IoSettingsOutline fontSize="1.3rem" />}
                     bg="transparent"
                   />
                   <MenuList bg="dark" p={2} boxShadow="base" border="none">

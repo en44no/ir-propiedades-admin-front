@@ -34,7 +34,7 @@ const ConfirmDelete = (props) => {
   return (
     <>
       {onlyIcon ? (
-        <Box onClick={onOpen} mt="5px" ml="5px">
+        <Box onClick={onOpen} mt="6px" ml="6px">
           <FaTrashAlt />
         </Box>
       ) : onlyText ? (

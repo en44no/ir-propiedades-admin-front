@@ -467,7 +467,6 @@ const PropertiesState = (props) => {
   };
 
   const deleteMediaToProperty = async (property, image) => {
-    console.log(image._id);
     await axios
       .put(
         `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}/removeMedia`,
