@@ -431,7 +431,7 @@ const PropertiesState = (props) => {
         if (resMedia.status === 200) {
           Notification(
             "Imagen eliminada correctamente",
-            "Has eliminado una nueva imagen",
+            "Has eliminado una imagen",
             "success"
           );
         } else {

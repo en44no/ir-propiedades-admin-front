@@ -103,8 +103,7 @@ const MediaList = (props) => {
                         right="2"
                         cursor="pointer"
                         _hover={{
-                          transition: "transform .2s",
-                          transform: "scale(0.96)",
+                          bg: "defaultColor.500",
                         }}
                       >
                         <ConfirmDelete

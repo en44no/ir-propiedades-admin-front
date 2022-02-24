@@ -20,6 +20,17 @@
   border-radius: 10px;
 }
 
+.accordionSideBar::-webkit-scrollbar-thumb {
+  background: #4f6193;
+  border-radius: 10px;
+}
+
+.accordionSideBar::-webkit-scrollbar-track {
+  background: #fff;
+  margin-left: 2px;
+  border-radius: 10px;
+}
+
 option {
   color: initial;
 }

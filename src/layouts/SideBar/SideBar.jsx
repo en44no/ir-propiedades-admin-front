@@ -8,7 +8,7 @@ const SideBar = () => (
   <>
     <Box
       border="2px solid #cacaca"
-      p={5}
+      p={3}
       h="96vh"
       margin={3}
       position="relative"
@@ -18,7 +18,9 @@ const SideBar = () => (
     >
       <Header />
       <Content />
-      <Footer />
+      <Box m={5} mb="0">
+        <Footer />
+      </Box>
     </Box>
   </>
 );

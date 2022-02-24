@@ -14,8 +14,14 @@ const Content = () => {
   return (
     <>
       <Box px={0} flexGrow="1">
-        <Accordion allowMultiple border="transparent">
-          <AccordionItem pt="0" borderBottom="2px solid #cacaca" pb="1">
+        <Accordion
+          className="accordionSideBar"
+          allowMultiple
+          border="transparent"
+          maxH="24rem"
+          overflowY="auto"
+        >
+          <AccordionItem pt="0" m="3" borderBottom="2px solid #cacaca" pb="1">
             <h2>
               <AccordionButton
                 _hover={{
@@ -38,6 +44,10 @@ const Content = () => {
                 borderRadius: "9px",
                 bg: "defaultColor.50",
               }}
+              _focusWithin={{
+                boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)",
+                borderRadius: "9px",
+              }}
             >
               <Link to="/properties">
                 <Text fontSize="0.95rem">Manejo de propiedades</Text>
@@ -47,15 +57,21 @@ const Content = () => {
               mt="1"
               cursor="pointer"
               pb={2}
+              _focusWithin={{
+                boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)",
+                borderRadius: "9px",
+              }}
               _hover={{
                 borderRadius: "9px",
                 bg: "defaultColor.50",
               }}
             >
-              <Text fontSize="0.95rem">Inventarios</Text>
+              <Link to="/">
+                <Text fontSize="0.95rem">Inventarios</Text>
+              </Link>
             </AccordionPanel>
           </AccordionItem>
-          <AccordionItem pt="1" borderBottom="2px solid #cacaca" pb="1">
+          <AccordionItem m="3" pt="1" borderBottom="2px solid #cacaca" pb="1">
             <h2>
               <AccordionButton
                 _hover={{
@@ -74,6 +90,10 @@ const Content = () => {
               mt="1"
               cursor="pointer"
               pb={2}
+              _focusWithin={{
+                boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)",
+                borderRadius: "9px",
+              }}
               _hover={{
                 borderRadius: "9px",
                 bg: "defaultColor.50",
@@ -84,7 +104,7 @@ const Content = () => {
               </Link>
             </AccordionPanel>
           </AccordionItem>
-          <AccordionItem pt="1" borderBottom="2px solid #cacaca" pb="1">
+          <AccordionItem m="3" pt="1" borderBottom="2px solid #cacaca" pb="1">
             <h2>
               <AccordionButton
                 _hover={{
@@ -103,6 +123,10 @@ const Content = () => {
               mt="1"
               cursor="pointer"
               pb={2}
+              _focusWithin={{
+                boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)",
+                borderRadius: "9px",
+              }}
               _hover={{
                 borderRadius: "9px",
                 bg: "defaultColor.50",
@@ -114,6 +138,7 @@ const Content = () => {
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem
+            m="3"
             pt="1"
             borderBottom="2px solid #cacaca"
             pb="1"
@@ -137,12 +162,18 @@ const Content = () => {
               mt="1"
               cursor="pointer"
               pb={2}
+              _focusWithin={{
+                boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)",
+                borderRadius: "9px",
+              }}
               _hover={{
                 borderRadius: "9px",
                 bg: "defaultColor.50",
               }}
             >
-              <Text fontSize="0.95rem">Alquileres por año</Text>
+              <Link to="/">
+                <Text fontSize="0.95rem">Alquileres por año</Text>
+              </Link>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
