@@ -37,10 +37,18 @@ const InventoriesList = (props) => {
   }, [isOpen]);
 
   const parseInventoryStatus = (inventory) => {
-    if (inventory.status[0] === "Open") {
+    if (inventory.status[0] === "open" || inventory.status[0] === "Open") {
       return <BadgeInventoryStatus bgColor="#00b894" text="Abierto" />;
-    } else if (inventory.status[0] === "Closed") {
+    } else if (
+      inventory.status[0] === "closed" ||
+      inventory.status[0] === "Closed"
+    ) {
       return <BadgeInventoryStatus bgColor="#d63031" text="Cerrado" />;
+    } else if (
+      inventory.status[0] === "base" ||
+      inventory.status[0] === "Base"
+    ) {
+      return <BadgeInventoryStatus bgColor="#cacaca" text="Base" />;
     }
   };
 
@@ -109,7 +117,7 @@ const InventoriesList = (props) => {
                               justifyContent="center"
                               textAlign="center"
                             >
-                              {inventory.comments.length > 24 ? (
+                              {inventory.comments.length > 40 ? (
                                 <Tooltip
                                   hasArrow
                                   label={inventory.comments}
@@ -117,7 +125,7 @@ const InventoriesList = (props) => {
                                 >
                                   <Text>
                                     {inventory.comments
-                                      .slice(0, 24)
+                                      .slice(0, 40)
                                       .concat("...")}
                                   </Text>
                                 </Tooltip>

@@ -424,47 +424,35 @@ const PropertiesState = (props) => {
       });
   };
 
-  const deleteMedia = async (data, property) => {
-    let formData = new FormData();
-    formData.delete("images", data.image);
+  const deleteMedia = async (property, image) => {
     await axios
-      .post(
-        `${process.env.REACT_APP_API_BASE_URL}/uploads/${property._id}`,
-        formData
-      )
-      .then(async (res) => {
-        data.url = res.data.files[0].url;
-        delete data.image;
-        await axios
-          .post(`${process.env.REACT_APP_API_BASE_URL}/media`, data)
-          .then((resMedia) => {
-            if (resMedia.status === 201) {
-              Notification(
-                "Imagen eliminada correctamente",
-                "Has eliminado una nueva imagen",
-                "success"
-              );
-            } else {
-              Notification(
-                "Error al eliminar la imagen",
-                "Ocurrió un error intentado eliminar la imagen",
-                "error"
-              );
-            }
-            const newProperties = properties.map((prop) => {
-              if (prop._id === property._id) {
-                return property;
-              } else {
-                return prop;
-              }
-            });
-            property.media = resMedia.data;
-            setProperties(newProperties);
-            addMediatoProperty(resMedia.data, property);
-          })
-          .catch((error) => {})
-          .catch((error) => {});
-      });
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/media/${image._id}`)
+      .then((resMedia) => {
+        if (resMedia.status === 200) {
+          Notification(
+            "Imagen eliminada correctamente",
+            "Has eliminado una nueva imagen",
+            "success"
+          );
+        } else {
+          Notification(
+            "Error al eliminar la imagen",
+            "Ocurrió un error intentado eliminar la imagen",
+            "error"
+          );
+        }
+        const newProperties = properties.map((prop) => {
+          if (prop._id === property._id) {
+            return property;
+          } else {
+            return prop;
+          }
+        });
+        property.media = property.media.filter((m) => m._id !== image._id);
+        setProperties(newProperties);
+        deleteMediaToProperty(property, image);
+      })
+      .catch((error) => {});
   };
 
   const addMediatoProperty = async (data, property) => {
@@ -474,6 +462,16 @@ const PropertiesState = (props) => {
       .put(
         `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}/addMedia`,
         images
+      )
+      .then((resMedia) => {});
+  };
+
+  const deleteMediaToProperty = async (property, image) => {
+    console.log(image._id);
+    await axios
+      .put(
+        `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}/removeMedia`,
+        image._id
       )
       .then((resMedia) => {});
   };

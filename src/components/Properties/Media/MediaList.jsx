@@ -11,7 +11,6 @@ import {
   DrawerFooter,
   Text,
   Box,
-  Image,
   SimpleGrid,
 } from "@chakra-ui/react";
 import { BsImages } from "react-icons/bs";
@@ -113,6 +112,7 @@ const MediaList = (props) => {
                           name="imagen"
                           functionToExecute={deleteMedia}
                           element={property}
+                          anotherElement={image}
                           onlyIcon="true"
                         />
                       </Box>

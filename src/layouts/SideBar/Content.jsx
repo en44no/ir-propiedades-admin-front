@@ -52,7 +52,7 @@ const Content = () => {
                 bg: "defaultColor.50",
               }}
             >
-              Inventarios
+              <Text fontSize="0.95rem">Inventarios</Text>
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem pt="1" borderBottom="2px solid #cacaca" pb="1">

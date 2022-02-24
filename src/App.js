@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Users from "./pages/Users";
 import Section from "./components/Section/Section";
 import PropertiesPage from "./pages/Properties";
 import Login from "./pages/Login";
 import PrivateRoute from "./PrivateRoute";
+import UsersPage from "./pages/Users";
 
 function App() {
   return (
@@ -30,7 +30,7 @@ function App() {
               <PrivateRoute
                 component={
                   <Section title="Manejo de Usuarios">
-                    <Users />
+                    <UsersPage />
                   </Section>
                 }
               />

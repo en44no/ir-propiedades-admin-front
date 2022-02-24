@@ -2,7 +2,7 @@ import { Badge, Text } from "@chakra-ui/react";
 import React from "react";
 
 const BadgeInventoryStatus = (props) => {
-  const { bgColor, textColor, text } = props;
+  const { bgColor, textColor, text, marginTop } = props;
 
   return (
     <>
@@ -13,6 +13,7 @@ const BadgeInventoryStatus = (props) => {
           borderRadius="7px"
           px="0"
           py="0.5"
+          mt={marginTop ? marginTop : null}
           fontSize="11px"
           bgColor="defaultColor.400"
           border={bgColor ? `2px solid ${bgColor}` : "defaultColor.400"}

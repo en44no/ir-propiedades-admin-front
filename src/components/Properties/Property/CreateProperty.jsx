@@ -14,6 +14,7 @@ import {
   Input,
   Select,
   Stack,
+  Text,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -58,7 +59,7 @@ const CreateProperty = () => {
         borderRadius="9px"
         variant="add-button"
       >
-        Agregar
+        <Text mt="-1">Agregar</Text>
       </Button>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />

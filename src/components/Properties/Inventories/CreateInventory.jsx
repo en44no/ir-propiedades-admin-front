@@ -13,6 +13,7 @@ import {
   FormLabel,
   Select,
   Stack,
+  Text,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -45,14 +46,14 @@ const CreateInventory = (props) => {
   return (
     <>
       <Button
-        w="7rem"
+        w="8rem"
         onClick={onOpen}
         fontSize="15px"
         leftIcon={<HiPlus fontSize="1.2rem" />}
         borderRadius="9px"
         variant={normalAddButton ? "add-button-dark" : "add-button-clear"}
       >
-        Agregar
+        <Text mt="-1">Agregar</Text>
       </Button>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />

@@ -16,6 +16,7 @@ import {
   Badge,
   Textarea,
   DrawerFooter,
+  Text,
 } from "@chakra-ui/react";
 import { HiPlus } from "react-icons/hi";
 import { useForm } from "react-hook-form";
@@ -44,7 +45,7 @@ function CreateUser() {
   return (
     <>
       <Button
-        w="7rem"
+        w="8rem"
         onClick={onOpen}
         fontSize="15px"
         leftIcon={<HiPlus fontSize="1.2rem" />}
@@ -53,7 +54,7 @@ function CreateUser() {
         borderRadius="9px"
         variant="add-button"
       >
-        Agregar
+        <Text mt="-1">Agregar</Text>
       </Button>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
