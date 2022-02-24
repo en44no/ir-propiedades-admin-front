@@ -5,6 +5,7 @@ import PropertiesPage from "./pages/Properties";
 import Login from "./pages/Login";
 import PrivateRoute from "./PrivateRoute";
 import UsersPage from "./pages/Users";
+import CustomerPages from "./pages/Customers";
 
 function App() {
   return (
@@ -54,7 +55,7 @@ function App() {
               <PrivateRoute
                 component={
                   <Section title="Manejo de Clientes">
-                    <PropertiesPage />
+                    <CustomerPages />
                   </Section>
                 }
               />
