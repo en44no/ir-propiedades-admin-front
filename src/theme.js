@@ -80,6 +80,16 @@ const theme = extendTheme({
           bg: "#9E6A72",
           color: "#fff",
         },
+        "required-warning": {
+          rounded: "md",
+          px: "3",
+          py: "0.5",
+          w: "100%",
+          mt: "1.5",
+          textAlign: "center",
+          bg: "#e17055",
+          color: "#fff",
+        },
       },
     },
     Link: {
