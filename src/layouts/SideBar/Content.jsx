@@ -13,14 +13,14 @@ import { Link } from "react-router-dom";
 const Content = () => {
   return (
     <>
-      <Box px={0} flexGrow="1">
-        <Accordion
-          className="accordionSideBar"
-          allowMultiple
-          border="transparent"
-          maxH="24rem"
-          overflowY="auto"
-        >
+      <Box
+        px={0}
+        flexGrow="1"
+        h="65%"
+        overflowY="auto"
+        className="accordionSideBar"
+      >
+        <Accordion allowMultiple border="transparent">
           <AccordionItem pt="0" m="3" borderBottom="2px solid #cacaca" pb="1">
             <h2>
               <AccordionButton

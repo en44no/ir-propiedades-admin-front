@@ -7,7 +7,7 @@ const Header = () => {
 
   return (
     <>
-      <Box mb="2" display="flex" justifyContent="space-between">
+      <Box h="25%" mb="2" display="flex" justifyContent="space-between">
         <Box p={4} w="100%" align="center">
           <Image
             _hover={{

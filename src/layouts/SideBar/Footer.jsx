@@ -21,6 +21,7 @@ const Footer = () => {
         pt="2"
         borderTop="2px solid #cacaca"
         display="flex"
+        h="10%"
         justifyContent="end"
       >
         <Menu>
