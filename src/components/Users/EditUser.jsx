@@ -14,21 +14,21 @@ import {
   Stack,
   Badge,
   DrawerFooter,
-  Text,
   FormControl,
   SimpleGrid,
   Switch,
-  InputGroup,
   InputRightElement,
+  InputGroup,
 } from "@chakra-ui/react";
-import { HiPlus } from "react-icons/hi";
 import { useForm } from "react-hook-form";
+import { FaUserEdit } from "react-icons/fa";
 import UsersContext from "../../context/Users/UsersContext";
 import { ImEye, ImEyeBlocked } from "react-icons/im";
 
-function CreateUser() {
+function EditUser(props) {
+  const { user } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { addUser } = useContext(UsersContext);
+  const { editUser } = useContext(UsersContext);
   const [showPassword, setShowPassword] = useState(false);
   const handleClick = () => setShowPassword(!showPassword);
 
@@ -39,8 +39,8 @@ function CreateUser() {
     reset,
   } = useForm();
 
-  const handleSubmitCreateUser = async (data) => {
-    await addUser(data);
+  const handleSubmitEditUser = async (data) => {
+    editUser(data, user._id);
     reset();
     onClose();
   };
@@ -62,29 +62,18 @@ function CreateUser() {
 
   return (
     <>
-      <Button
-        w="8rem"
-        onClick={onOpen}
-        fontSize="15px"
-        leftIcon={<HiPlus fontSize="1.2rem" />}
-        mr={5}
-        mb={5}
-        borderRadius="9px"
-        variant="add-button"
-      >
-        <Text mt="-0.5">Agregar</Text>
-      </Button>
+      <FaUserEdit onClick={onOpen} cursor="pointer" fontSize="1.3rem" />
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent bg="defaultColor.400">
           <DrawerCloseButton color="#fff" mt="2" />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
-            Agregar usuario
+            Editar usuario
           </DrawerHeader>
           <DrawerBody color="#fff">
             <form
               id="createUserForm"
-              onSubmit={handleSubmit(handleSubmitCreateUser)}
+              onSubmit={handleSubmit(handleSubmitEditUser)}
             >
               <Stack spacing="14px">
                 <Box>
@@ -92,8 +81,9 @@ function CreateUser() {
                   <Input
                     {...register("name", { required: "Nombre es requerido." })}
                     id="userName"
-                    placeholder="Ingresa el nombre"
+                    placeholder="Ingresa el nuevo nombre"
                     autoComplete="off"
+                    defaultValue={user.name}
                   />
                   {errors.name && (
                     <Badge variant="required-error">
@@ -110,8 +100,9 @@ function CreateUser() {
                       required: "Nombre de usuario es requerido.",
                     })}
                     id="userUserName"
-                    placeholder="Ingresa el nombre de usuario"
+                    placeholder="Ingresa el nuevo nombre de usuario"
                     autoComplete="off"
+                    defaultValue={user.username}
                   />
                   {errors.username && (
                     <Badge variant="required-error">
@@ -151,11 +142,9 @@ function CreateUser() {
                     <Input
                       id="userPassword"
                       autoComplete="current-password"
-                      {...register("password", {
-                        required: "La contraseña es requerida.",
-                      })}
+                      {...register("password")}
                       border="2px solid #cacaca"
-                      placeholder="Ingresa tu contraseña"
+                      placeholder="Ingresa la nueva contraseña"
                       type={showPassword ? "text" : "password"}
                     />
                     <InputRightElement width="4.5rem">
@@ -176,11 +165,9 @@ function CreateUser() {
                       </Button>
                     </InputRightElement>
                   </InputGroup>
-                  {errors.password && (
-                    <Badge variant="required-error">
-                      {errors.password.message}
-                    </Badge>
-                  )}
+                  <Badge variant="required-warning">
+                    Vacío para no cambiar la contraseña
+                  </Badge>
                 </Box>
               </Stack>
             </form>
@@ -208,4 +195,4 @@ function CreateUser() {
   );
 }
 
-export default CreateUser;
+export default EditUser;

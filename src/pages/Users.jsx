@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import {
   Table,
   Thead,
@@ -6,27 +6,17 @@ import {
   Tr,
   Th,
   Td,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
+  HStack,
   Box,
   Text,
-  HStack,
   Badge,
 } from "@chakra-ui/react";
-import { IoSettingsOutline } from "react-icons/io5";
-import { AiOutlineUserSwitch, AiOutlineUserDelete } from "react-icons/ai";
 import CreateUser from "../components/Users/CreateUser";
 import UsersContext from "../context/Users/UsersContext";
+import EditUser from "../components/Users/EditUser";
 
 const UsersPage = () => {
   const { users } = useContext(UsersContext);
-
-  useEffect(() => {
-    console.log(users);
-  });
 
   return (
     <>
@@ -85,29 +75,9 @@ const UsersPage = () => {
                 )}
               </Td>
               <Td textAlign="center" isTruncated maxWidth="50px">
-                <Menu>
-                  <MenuButton
-                    as={IconButton}
-                    aria-label="Options"
-                    icon={<IoSettingsOutline fontSize="1.3rem" />}
-                    bg="transparent"
-                  />
-                  <MenuList bg="dark" p={2} boxShadow="base" border="none">
-                    <MenuItem
-                      icon={<AiOutlineUserSwitch fontSize="1.3rem" />}
-                      _focus={{ bgColor: "transparent" }}
-                    >
-                      <h1>Cambiar rol</h1>
-                    </MenuItem>
-                    <MenuItem
-                      icon={<AiOutlineUserDelete fontSize="1.3rem" />}
-                      _hover={{ borderRadius: "9px" }}
-                      _focus={{ bgColor: "transparent" }}
-                    >
-                      <h1>Borrar usuario</h1>
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
+                <HStack justifyContent="center">
+                  <EditUser user={user} />
+                </HStack>
               </Td>
             </Tr>
           ))}
