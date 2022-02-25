@@ -6,9 +6,10 @@ import { BsHouseDoorFill } from "react-icons/bs";
 import { FaWarehouse } from "react-icons/fa";
 import { MdApartment, MdCheck, MdClose, MdLocationPin } from "react-icons/md";
 import CopyInternalCode from "../../CopyInternalCode";
+import NoImage from "../../../../assets/no-image.jpg";
 
 const PropertyCard = (props) => {
-  const { property } = props;
+  const { property, image } = props;
 
   const parsePropertyType = () => {
     if (property.type[0] === "House") {
@@ -19,8 +20,6 @@ const PropertyCard = (props) => {
       return <BadgePropertyCard title="Depósito" icon={<FaWarehouse />} />;
     }
   };
-
-  useEffect(() => {}, []);
 
   return (
     <>
@@ -37,7 +36,11 @@ const PropertyCard = (props) => {
       >
         <PropertyDetails propertyName={property.name} property={property} />
         <Image
-          src="https://images7.alphacoders.com/344/thumb-1920-344344.jpg"
+          minW="270px"
+          maxW="270px"
+          minH="200px"
+          maxH="200px"
+          src={image ? image.url : NoImage}
           alt={property.imageAlt}
           loading="lazy"
         />
