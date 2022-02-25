@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Box } from "@chakra-ui/react";
 import PropertiesContext from "../context/Properties/PropertiesContext";
 import Loader from "../components/Other/Loader/Loader";
@@ -25,7 +25,7 @@ const PropertiesPage = () => {
         {properties.length > 0 ? (
           properties.map((property) => (
             <Box key={property._id}>
-              <PropertyCard property={property} />
+              <PropertyCard property={property} image={property.media[0]} />
             </Box>
           ))
         ) : (

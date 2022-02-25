@@ -83,18 +83,17 @@ const InventoryItems = (props) => {
                       <HStack w="100%" spacing="13px" height="25px">
                         <>
                           <Box w="20%" alignItems="center" textAlign="center">
-                            {item.name.length > 18 ? (
+                            {item.name.length > 8 ? (
                               <Tooltip
                                 hasArrow
                                 label={item.name}
                                 bg="defaultColor.500"
                               >
-                                {/* <Text>
-                                    {inventory.description
-                                      .slice(0, 24)
-                                      .concat("...")}
-                                  </Text> */}
-                                <Text>{item.name}</Text>
+                                {
+                                  <Text>
+                                    {item.name.slice(0, 8).concat("...")}
+                                  </Text>
+                                }
                               </Tooltip>
                             ) : (
                               <Text>{item.name}</Text>
