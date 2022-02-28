@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, Tag, Image, Box } from "@chakra-ui/react";
+import { Tag, Image, Box } from "@chakra-ui/react";
 import photo from "../../assets/ir-logo.png";
 
 const Header = () => {
@@ -22,9 +22,9 @@ const Header = () => {
           />
           <Box fontSize="21px" display="flex" placeContent="center" mt="1">
             Hola,
-            <Text fontSize="21px" fontWeight="500" ml="1">
+            <Box fontSize="21px" fontWeight="500" ml="1">
               {name ? name : "Usuario"}
-            </Text>
+            </Box>
           </Box>
 
           <Tag

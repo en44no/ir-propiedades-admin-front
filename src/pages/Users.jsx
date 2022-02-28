@@ -14,9 +14,11 @@ import {
 import CreateUser from "../components/Users/CreateUser";
 import UsersContext from "../context/Users/UsersContext";
 import EditUser from "../components/Users/EditUser";
+import ConfirmDelete from "../components/Other/ConfirmDelete";
+import RolesInfoModal from "../components/Users/Roles/RolesInfoModal";
 
 const UsersPage = () => {
-  const { users } = useContext(UsersContext);
+  const { users, deleteUser } = useContext(UsersContext);
 
   return (
     <>
@@ -34,7 +36,10 @@ const UsersPage = () => {
               Nombre de Usuario
             </Th>
             <Th fontSize="14px" textAlign="center" maxWidth="50px">
-              Roles
+              <Box display="flex" gap="10px" justifyContent="center">
+                Roles
+                <RolesInfoModal />
+              </Box>
             </Th>
             <Th fontSize="14px" textAlign="center" maxWidth="50px">
               Opciones
@@ -77,6 +82,14 @@ const UsersPage = () => {
               <Td textAlign="center" isTruncated maxWidth="50px">
                 <HStack justifyContent="center">
                   <EditUser user={user} />
+                  <ConfirmDelete
+                    text="¿Estás seguro de que deseas eliminar este usuario?"
+                    name="usuario"
+                    onlyIcon="yes"
+                    icon="userIcon"
+                    functionToExecute={deleteUser}
+                    element={user._id}
+                  />
                 </HStack>
               </Td>
             </Tr>

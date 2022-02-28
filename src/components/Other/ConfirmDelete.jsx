@@ -11,7 +11,7 @@ import {
   useDisclosure,
   Box,
 } from "@chakra-ui/react";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt, FaUserMinus } from "react-icons/fa";
 import React from "react";
 
 const ConfirmDelete = (props) => {
@@ -23,6 +23,7 @@ const ConfirmDelete = (props) => {
     onlyText,
     anotherElement,
     onlyIcon,
+    icon,
   } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -35,7 +36,11 @@ const ConfirmDelete = (props) => {
     <>
       {onlyIcon ? (
         <Box onClick={onOpen} mt="6px" ml="6px">
-          <FaTrashAlt />
+          {icon === "userIcon" ? (
+            <FaUserMinus fontSize="1.3rem" cursor="pointer" />
+          ) : (
+            <FaTrashAlt />
+          )}
         </Box>
       ) : onlyText ? (
         <Button

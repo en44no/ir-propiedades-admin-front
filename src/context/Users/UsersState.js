@@ -5,9 +5,11 @@ import UsersContext from "./UsersContext";
 
 const UsersState = (props) => {
   const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
     fetchUsers();
+    fetchRoles();
   }, []);
 
   const fetchUsers = async () => {
@@ -20,6 +22,9 @@ const UsersState = (props) => {
   };
 
   const addUser = async (data) => {
+    if (data.roles === false) {
+      data.roles = [];
+    }
     await axios
       .post(`${process.env.REACT_APP_API_BASE_URL}/users`, data)
       .then((res) => {
@@ -30,6 +35,7 @@ const UsersState = (props) => {
             "success"
           );
           setUsers([...users, res.data]);
+          fetchUsers();
         }
       })
       .catch((err) => {
@@ -42,7 +48,10 @@ const UsersState = (props) => {
   };
 
   const editUser = async (data, userId) => {
-    if (data.password.trim() === undefined || data.password.trim() === "") {
+    if (data.roles === false) {
+      data.roles = [];
+    }
+    if (data.editPassword === false) {
       delete data.password;
     }
     await axios
@@ -55,6 +64,7 @@ const UsersState = (props) => {
             "success"
           );
           setUsers([...users.filter((user) => user._id !== userId), res.data]);
+          fetchUsers();
         }
       })
       .catch((error) => {
@@ -66,12 +76,46 @@ const UsersState = (props) => {
       });
   };
 
+  const deleteUser = async (userId) => {
+    await axios
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/users/${userId}`)
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          Notification(
+            "Usuario eliminado correctamente",
+            "Has eliminado un usuario",
+            "success"
+          );
+          setUsers(users.filter((user) => user._id !== res.data._id));
+        }
+      })
+      .catch((err) => {
+        Notification(
+          "Error al eliminar el usuario",
+          "Ocurrió un error intentado eliminar el usuario",
+          "error"
+        );
+      });
+  };
+
+  const fetchRoles = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/roles`)
+      .then((res) => {
+        setRoles(res.data);
+      })
+      .catch((error) => {});
+  };
+
   return (
     <UsersContext.Provider
       value={{
+        fetchUsers,
         users,
         addUser,
         editUser,
+        deleteUser,
+        roles,
       }}
     >
       {props.children}

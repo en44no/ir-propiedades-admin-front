@@ -27,10 +27,23 @@ import { ImEye, ImEyeBlocked } from "react-icons/im";
 
 function EditUser(props) {
   const { user } = props;
+  const { editUser, roles } = useContext(UsersContext);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { editUser } = useContext(UsersContext);
+
   const [showPassword, setShowPassword] = useState(false);
-  const handleClick = () => setShowPassword(!showPassword);
+  const [showEditPassword, setShowEditPassword] = useState(false);
+  const [showPasswordErrorMessage, setShowPasswordErrorMessage] =
+    useState(false);
+  const handleShowPassword = () => setShowPassword(!showPassword);
+  const handleShowEditPassword = () => {
+    if (showEditPassword) {
+      setShowEditPassword(false);
+      setShowPasswordErrorMessage(false);
+    } else {
+      setShowEditPassword(true);
+    }
+  };
 
   const {
     register,
@@ -40,25 +53,20 @@ function EditUser(props) {
   } = useForm();
 
   const handleSubmitEditUser = async (data) => {
-    editUser(data, user._id);
-    reset();
-    onClose();
+    if (data.editPassword === false) {
+      editUser(data, user._id);
+      reset();
+      onClose();
+    } else {
+      if (data.password === undefined || data.password?.trim() === "") {
+        setShowPasswordErrorMessage(true);
+      } else {
+        editUser(data, user._id);
+        reset();
+        onClose();
+      }
+    }
   };
-
-  const roles = [
-    {
-      id: 1,
-      name: "Administrador1",
-    },
-    {
-      id: 2,
-      name: "Administrador2",
-    },
-    {
-      id: 3,
-      name: "Administrador3",
-    },
-  ];
 
   return (
     <>
@@ -124,20 +132,40 @@ function EditUser(props) {
                   >
                     {roles.map((role) => (
                       <Box
-                        key={role.id}
+                        key={role._id}
                         display="flex"
                         w="100%"
                         justifyContent="center"
                         justifyItems="center"
                       >
-                        <FormLabel htmlFor={role.name}>{role.name}</FormLabel>
-                        <Switch id={role.name} />
+                        <FormLabel mt="-3px" htmlFor={role.name}>
+                          {role.name}
+                        </FormLabel>
+                        <Switch
+                          value={role._id}
+                          {...register("roles")}
+                          id={role.name}
+                          defaultChecked={user.roles
+                            .map((role) => role._id)
+                            .includes(role._id)}
+                        />
                       </Box>
                     ))}
                   </FormControl>
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="userPassword">Contraseña</FormLabel>
+                  <Box display="flex">
+                    <FormLabel htmlFor="editPasswordSwitch">
+                      Editar contraseña
+                    </FormLabel>
+                    <Switch
+                      mt="2px"
+                      value={true}
+                      {...register("editPassword")}
+                      id="editPasswordSwitch"
+                      onChange={handleShowEditPassword}
+                    />
+                  </Box>
                   <InputGroup size="md">
                     <Input
                       id="userPassword"
@@ -146,6 +174,8 @@ function EditUser(props) {
                       border="2px solid #cacaca"
                       placeholder="Ingresa la nueva contraseña"
                       type={showPassword ? "text" : "password"}
+                      disabled={showEditPassword ? false : true}
+                      value={!showEditPassword ? "" : null}
                     />
                     <InputRightElement width="4.5rem">
                       <Button
@@ -155,7 +185,7 @@ function EditUser(props) {
                         bg="none"
                         color="#fff"
                         size="sm"
-                        onClick={handleClick}
+                        onClick={handleShowPassword}
                       >
                         {showPassword ? (
                           <ImEyeBlocked fontSize="18px" />
@@ -165,8 +195,13 @@ function EditUser(props) {
                       </Button>
                     </InputRightElement>
                   </InputGroup>
-                  <Badge variant="required-warning">
-                    Vacío para no cambiar la contraseña
+                  <Badge
+                    display={
+                      showPasswordErrorMessage === true ? "block" : "none"
+                    }
+                    variant="required-error"
+                  >
+                    La contraseña es requerida.
                   </Badge>
                 </Box>
               </Stack>

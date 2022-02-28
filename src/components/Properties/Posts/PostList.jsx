@@ -30,13 +30,13 @@ const PostList = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const parsePostState = (post) => {
-    if (post.status[0] === "Active") {
+    if (post.status[0] === "Activa") {
       return <BadgePostState bgColor="#00b894" text="Activa" />;
-    } else if (post.status[0] === "Paused") {
+    } else if (post.status[0] === "Pausada") {
       return <BadgePostState bgColor="#FFB835" text="Pausada" />;
-    } else if (post.status[0] === "Pending") {
+    } else if (post.status[0] === "Pendiente") {
       return <BadgePostState bgColor="#0984e3" text="Pendiente" />;
-    } else if (post.status[0] === "Finished") {
+    } else if (post.status[0] === "Finalizada") {
       return <BadgePostState bgColor="#d63031" text="Finalizada" />;
     }
   };
@@ -129,7 +129,7 @@ const PostList = (props) => {
                                 <>
                                   <Text>Venta</Text>
                                   <Text>-</Text>
-                                  <Text>
+                                  <Box>
                                     {formatToUSD
                                       .format(post.forSalePrice)
                                       .slice(0, 10)
@@ -138,7 +138,7 @@ const PostList = (props) => {
                                           ? "..."
                                           : ""
                                       )}
-                                  </Text>
+                                  </Box>
                                 </>
                               ) : null}
                             </HStack>
@@ -169,7 +169,7 @@ const PostList = (props) => {
                               justifyContent="center"
                               textAlign="center"
                             >
-                              <Text>Desde {formatDate(post.startDate)}</Text>
+                              <Box>Desde {formatDate(post.startDate)}</Box>
                             </Box>
                             <Divider orientation="vertical" />
                             <Box
@@ -177,7 +177,7 @@ const PostList = (props) => {
                               justifyContent="center"
                               textAlign="center"
                             >
-                              <Text>Hasta {formatDate(post.endDate)}</Text>
+                              <Box>Hasta {formatDate(post.endDate)}</Box>
                             </Box>
                             <Divider orientation="vertical" />
                             <HStack minW="8%" maxW="8%" justifyContent="center">
@@ -220,9 +220,9 @@ const PostList = (props) => {
                           w="50%"
                           borderRadius="5px"
                         >
-                          <Text pb="0rem" textAlign="center" fontWeight="500">
+                          <Box pb="0rem" textAlign="center" fontWeight="500">
                             <EditPost property={property} post={post} />
-                          </Text>
+                          </Box>
                         </Box>
                       </HStack>
                     </Box>

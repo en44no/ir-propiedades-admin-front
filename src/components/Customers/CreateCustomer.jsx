@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import {
-  Badge,
   Box,
   Button,
   Drawer,
@@ -12,20 +11,17 @@ import {
   DrawerOverlay,
   FormLabel,
   Input,
-  Select,
   Stack,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import CustomersContext from "../../context/Customers/CustomersContext";
 import { useForm } from "react-hook-form";
-import { MdLocationPin } from "react-icons/md";
 import { HiPlus } from "react-icons/hi";
 
 const CreateCustomer = (props) => {
   const { addCustomer } = useContext(CustomersContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { full } = props;
 
   const {
     register,
@@ -63,7 +59,7 @@ const CreateCustomer = (props) => {
             Agregar Cliente
           </DrawerHeader>
           <DrawerBody color="#fff">
-          <form id="CustomerForm" onSubmit={handleSubmit(submitCustomer)}>
+            <form id="CustomerForm" onSubmit={handleSubmit(submitCustomer)}>
               <Stack spacing="14px">
                 <Box>
                   <FormLabel htmlFor="CustomerName">Nombre</FormLabel>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Box } from "@chakra-ui/react";
 import PropertiesContext from "../context/Properties/PropertiesContext";
 import Loader from "../components/Other/Loader/Loader";

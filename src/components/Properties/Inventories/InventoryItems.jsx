@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import {
-  Button,
   useDisclosure,
   Drawer,
   DrawerOverlay,
@@ -15,12 +14,10 @@ import {
   Divider,
   Tooltip,
 } from "@chakra-ui/react";
-import CreateInventory from "./CreateInventory";
 import { FaBoxes } from "react-icons/fa";
-import FullscreenImageModal from "../../Other/FullscreenImageModal";
 
 const InventoryItems = (props) => {
-  const { property, itemsQuantity, inventory } = props;
+  const { itemsQuantity, inventory } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -42,9 +39,9 @@ const InventoryItems = (props) => {
             alignItems="center"
             onClick={onOpen}
           >
-            <Text fontSize="0.8rem" fontWeight="500">
+            <Box fontSize="0.8rem" fontWeight="500">
               {itemsQuantity}
-            </Text>
+            </Box>
             <FaBoxes fontSize="1.2rem" />
           </HStack>
         </Tooltip>
@@ -90,13 +87,13 @@ const InventoryItems = (props) => {
                                 bg="defaultColor.500"
                               >
                                 {
-                                  <Text>
+                                  <Box>
                                     {item.name.slice(0, 8).concat("...")}
-                                  </Text>
+                                  </Box>
                                 }
                               </Tooltip>
                             ) : (
-                              <Text>{item.name}</Text>
+                              <Box>{item.name}</Box>
                             )}
                           </Box>
                           <Divider orientation="vertical" />
@@ -116,10 +113,10 @@ const InventoryItems = (props) => {
                                     .slice(0, 24)
                                     .concat("...")}
                                 </Text> */}
-                                <Text>{item.description}</Text>
+                                <Box>{item.description}</Box>
                               </Tooltip>
                             ) : (
-                              <Text>{item.description}</Text>
+                              <Box>{item.description}</Box>
                               /*{ <Text>{inventory.description}</Text> }*/
                             )}
                           </Box>
@@ -129,7 +126,7 @@ const InventoryItems = (props) => {
                             justifyContent="center"
                             textAlign="center"
                           >
-                            <Text>x{item.quantity}</Text>
+                            <Box>x{item.quantity}</Box>
                           </HStack>
                         </>
                       </HStack>

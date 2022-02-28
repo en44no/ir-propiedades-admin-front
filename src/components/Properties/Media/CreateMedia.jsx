@@ -98,7 +98,7 @@ const CreateMedia = (props) => {
                       id="createMediaType"
                       placeholder="Ingresa el tipo"
                     >
-                      <option value="Image">Imagen</option>
+                      <option value="Imagen">Imagen</option>
                       <option value="360">Imagen 360</option>
                     </Select>
                     {errors.status && (

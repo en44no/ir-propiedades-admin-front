@@ -28,7 +28,7 @@ import { ImEye, ImEyeBlocked } from "react-icons/im";
 
 function CreateUser() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { addUser } = useContext(UsersContext);
+  const { addUser, roles } = useContext(UsersContext);
   const [showPassword, setShowPassword] = useState(false);
   const handleClick = () => setShowPassword(!showPassword);
 
@@ -44,22 +44,6 @@ function CreateUser() {
     reset();
     onClose();
   };
-
-  const roles = [
-    {
-      id: 1,
-      name: "Administrador1",
-    },
-    {
-      id: 2,
-      name: "Administrador2",
-    },
-    {
-      id: 3,
-      name: "Administrador3",
-    },
-  ];
-
   return (
     <>
       <Button
@@ -133,14 +117,20 @@ function CreateUser() {
                   >
                     {roles.map((role) => (
                       <Box
-                        key={role.id}
+                        key={role._id}
                         display="flex"
                         w="100%"
                         justifyContent="center"
                         justifyItems="center"
                       >
-                        <FormLabel htmlFor={role.name}>{role.name}</FormLabel>
-                        <Switch id={role.name} />
+                        <FormLabel mt="-3px" htmlFor={role.name}>
+                          {role.name}
+                        </FormLabel>
+                        <Switch
+                          value={role._id}
+                          {...register("roles")}
+                          id={role.name}
+                        />
                       </Box>
                     ))}
                   </FormControl>

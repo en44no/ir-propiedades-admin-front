@@ -15,7 +15,6 @@ import {
   Divider,
   Tooltip,
 } from "@chakra-ui/react";
-import CreateInventory from "./CreateInventory";
 import BadgeInventoryStatus from "./BadgeInventoryStatus";
 import { FaBoxes } from "react-icons/fa";
 import CopyInternalCode from "../CopyInternalCode";
@@ -37,17 +36,11 @@ const InventoriesList = (props) => {
   }, [isOpen]);
 
   const parseInventoryStatus = (inventory) => {
-    if (inventory.status[0] === "open" || inventory.status[0] === "Open") {
+    if (inventory.status[0] === "Abierto") {
       return <BadgeInventoryStatus bgColor="#00b894" text="Abierto" />;
-    } else if (
-      inventory.status[0] === "closed" ||
-      inventory.status[0] === "Closed"
-    ) {
+    } else if (inventory.status[0] === "Cerrado") {
       return <BadgeInventoryStatus bgColor="#d63031" text="Cerrado" />;
-    } else if (
-      inventory.status[0] === "base" ||
-      inventory.status[0] === "Base"
-    ) {
+    } else if (inventory.status[0] === "Base") {
       return <BadgeInventoryStatus bgColor="#cacaca" text="Base" />;
     }
   };
@@ -96,69 +89,67 @@ const InventoriesList = (props) => {
                 </Text>
               ) : (
                 property.inventories.map((inventory) => (
-                  <>
-                    <Box key={inventory._id} position="relative">
-                      <Box
-                        display="flex"
-                        bg="defaultColor.300"
-                        p="3"
-                        borderRadius="7px"
-                        alignItems="center"
-                        mb="5"
-                      >
-                        <HStack w="100%" spacing="13px" height="25px">
-                          <>
-                            <Box p="0" minW="10%" maxW="10%">
-                              {parseInventoryStatus(inventory)}
-                            </Box>
-                            <Divider orientation="vertical" />
-                            <Box
-                              w="60%"
-                              justifyContent="center"
-                              textAlign="center"
-                            >
-                              {inventory.comments.length > 40 ? (
-                                <Tooltip
-                                  hasArrow
-                                  label={inventory.comments}
-                                  bg="defaultColor.500"
-                                >
-                                  <Text>
-                                    {inventory.comments
-                                      .slice(0, 40)
-                                      .concat("...")}
-                                  </Text>
-                                </Tooltip>
-                              ) : (
-                                <Text>{inventory.comments}</Text>
-                              )}
-                            </Box>
-                            <Divider orientation="vertical" />
-                            <Box
-                              w="20%"
-                              justifyContent="center"
-                              textAlign="center"
-                            >
-                              <Text>{formatDate(inventory.date)}</Text>
-                            </Box>
-                            <Divider orientation="vertical" />
-                            <InventoryItems
-                              property={property}
-                              inventory={inventory}
-                              itemsQuantity={inventory.items.length}
-                            />
-                          </>
-                        </HStack>
-                      </Box>
-                      <HStack
-                        position="absolute"
-                        bottom="-5px"
-                        w="100%"
-                        zIndex="-1"
-                        borderRadius="5px"
-                      ></HStack>
+                  <Box key={inventory._id} position="relative">
+                    <Box
+                      display="flex"
+                      bg="defaultColor.300"
+                      p="3"
+                      borderRadius="7px"
+                      alignItems="center"
+                      mb="5"
+                    >
+                      <HStack w="100%" spacing="13px" height="25px">
+                        <>
+                          <Box p="0" minW="10%" maxW="10%">
+                            {parseInventoryStatus(inventory)}
+                          </Box>
+                          <Divider orientation="vertical" />
+                          <Box
+                            w="60%"
+                            justifyContent="center"
+                            textAlign="center"
+                          >
+                            {inventory.comments.length > 40 ? (
+                              <Tooltip
+                                hasArrow
+                                label={inventory.comments}
+                                bg="defaultColor.500"
+                              >
+                                <Box>
+                                  {inventory.comments
+                                    .slice(0, 40)
+                                    .concat("...")}
+                                </Box>
+                              </Tooltip>
+                            ) : (
+                              <Box>{inventory.comments}</Box>
+                            )}
+                          </Box>
+                          <Divider orientation="vertical" />
+                          <Box
+                            w="20%"
+                            justifyContent="center"
+                            textAlign="center"
+                          >
+                            <Box>{formatDate(inventory.date)}</Box>
+                          </Box>
+                          <Divider orientation="vertical" />
+                          <InventoryItems
+                            property={property}
+                            inventory={inventory}
+                            itemsQuantity={inventory.items.length}
+                          />
+                        </>
+                      </HStack>
                     </Box>
-                  </>
+                    <HStack
+                      position="absolute"
+                      bottom="-5px"
+                      w="100%"
+                      zIndex="-1"
+                      borderRadius="5px"
+                    ></HStack>
+                  </Box>
                 ))
               )}
             </DrawerBody>

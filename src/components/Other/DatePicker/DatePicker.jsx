@@ -4,7 +4,6 @@ import DatePickerReact from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import es from "date-fns/locale/es";
-import moment from "moment";
 
 registerLocale("es", es);
 setDefaultLocale("es");

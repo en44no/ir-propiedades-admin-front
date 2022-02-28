@@ -25,8 +25,7 @@ import EditFeature from "./EditFeature";
 
 const FeatureList = (props) => {
   const { full, property } = props;
-  const { properties, featuresProperty, deleteFeature } =
-    useContext(PropertiesContext);
+  const { deleteFeature } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const parseFeatureType = (feature) => {
@@ -112,9 +111,9 @@ const FeatureList = (props) => {
                             border="2px solid #fff"
                             color="#fff"
                           >
-                            <Text textAlign="center">
+                            <Box textAlign="center">
                               {parseFeatureType(feature)}
-                            </Text>
+                            </Box>
                           </Badge>
                           <Divider orientation="vertical" />
                           <Box
@@ -128,12 +127,12 @@ const FeatureList = (props) => {
                                 label={feature.title}
                                 bg="defaultColor.500"
                               >
-                                <Text>
+                                <Box>
                                   {feature.title.slice(0, 24).concat("...")}
-                                </Text>
+                                </Box>
                               </Tooltip>
                             ) : (
-                              <Text>{feature.title}</Text>
+                              <Box>{feature.title}</Box>
                             )}
                           </Box>
                           <Divider orientation="vertical" />
@@ -148,14 +147,14 @@ const FeatureList = (props) => {
                                 label={feature.description}
                                 bg="defaultColor.500"
                               >
-                                <Text>
+                                <Box>
                                   {feature.description
                                     .slice(0, 50)
                                     .concat("...")}
-                                </Text>
+                                </Box>
                               </Tooltip>
                             ) : (
-                              <Text>{feature.description}</Text>
+                              <Box>{feature.description}</Box>
                             )}
                           </Box>
                         </>
@@ -176,7 +175,7 @@ const FeatureList = (props) => {
                         w="50%"
                         borderRadius="5px"
                       >
-                        <Text pb="0rem" textAlign="center" fontWeight="500">
+                        <Box pb="0rem" textAlign="center" fontWeight="500">
                           <ConfirmDelete
                             text="¿Estás seguro de que deseas eliminar esta característica?"
                             name="característica"
@@ -185,7 +184,7 @@ const FeatureList = (props) => {
                             element={feature}
                             anotherElement={property}
                           />
-                        </Text>
+                        </Box>
                       </Box>
                       <Box
                         cursor="pointer"
@@ -195,9 +194,9 @@ const FeatureList = (props) => {
                         w="50%"
                         borderRadius="5px"
                       >
-                        <Text pb="0rem" textAlign="center" fontWeight="500">
+                        <Box pb="0rem" textAlign="center" fontWeight="500">
                           <EditFeature feature={feature} property={property} />
-                        </Text>
+                        </Box>
                       </Box>
                     </HStack>
                   </Box>

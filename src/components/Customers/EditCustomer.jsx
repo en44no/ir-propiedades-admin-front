@@ -68,7 +68,7 @@ const EditCustomer = (props) => {
           <DrawerBody color="#fff">
             <form id="customerForm" onSubmit={handleSubmit(submitCustomer)}>
               <Stack spacing="14px">
-              <Box>
+                <Box>
                   <FormLabel htmlFor="CustomerName">Nombre</FormLabel>
                   <Input
                     {...register("name")}
@@ -131,4 +131,4 @@ const EditCustomer = (props) => {
   );
 };
 
-export default EditAddress;
+export default EditCustomer;

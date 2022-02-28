@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 
 const FullscreenImageModal = (props) => {
-  const { src, alt, width, height, minWidth, maxWidth, hover, text } = props;
+  const { src, alt, width, height, minWidth, maxWidth, text } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -52,6 +52,7 @@ const FullscreenImageModal = (props) => {
               src={src}
               alt={alt}
               loading="lazy"
+              objectFit="cover"
             />
           </ModalBody>
         </ModalContent>

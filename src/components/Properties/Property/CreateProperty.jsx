@@ -26,8 +26,7 @@ import EditAddress from "../Address/EditAddress";
 
 const CreateProperty = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { addProperty, addressToAdd, setAddressToAdd } =
-    useContext(PropertiesContext);
+  const { addProperty, addressToAdd } = useContext(PropertiesContext);
   const [showAddressError, setShowAddressError] = useState(false);
 
   const {
@@ -92,9 +91,9 @@ const CreateProperty = () => {
                     id="propertyTypes"
                     placeholder="Ingresa el tipo"
                   >
-                    <option value="House">Casa</option>
-                    <option value="Deposit">Depósito</option>
-                    <option value="Apartment">Apartamento</option>
+                    <option value="Casa">Casa</option>
+                    <option value="Depósito">Depósito</option>
+                    <option value="Apartamento">Apartamento</option>
                   </Select>
                   {errors.type && (
                     <Badge variant="required-error">

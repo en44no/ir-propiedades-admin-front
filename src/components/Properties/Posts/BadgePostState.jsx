@@ -1,4 +1,4 @@
-import { Badge, Text } from "@chakra-ui/react";
+import { Badge, Box } from "@chakra-ui/react";
 import React from "react";
 
 const BadgePostState = (props) => {
@@ -17,7 +17,7 @@ const BadgePostState = (props) => {
         border={bgColor ? `2px solid ${bgColor}` : "defaultColor.400"}
         color={textColor ? textColor : "#fff"}
       >
-        <Text textAlign="center">{text}</Text>
+        <Box textAlign="center">{text}</Box>
       </Badge>
     </>
   );

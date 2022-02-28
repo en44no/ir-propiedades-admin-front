@@ -8,7 +8,6 @@ const PropertiesState = (props) => {
   const [addressToAdd, setAddressToAdd] = useState(null);
   const [posts, setPosts] = useState([]);
   const [addresses, setAddresses] = useState([]);
-  const [features, setFeatures] = useState([]);
   const [featuresProperty, setFeaturesProperty] = useState([]);
 
   useEffect(() => {
@@ -415,9 +414,9 @@ const PropertiesState = (props) => {
                 return prop;
               }
             });
-            property.media = resMedia.data;
-            setProperties(newProperties);
+            property.media = [...property.media, resMedia.data];
             addMediatoProperty(resMedia.data, property);
+            setProperties(newProperties);
           })
           .catch((error) => {})
           .catch((error) => {});
@@ -467,10 +466,11 @@ const PropertiesState = (props) => {
   };
 
   const deleteMediaToProperty = async (property, image) => {
+    console.log(image._id);
     await axios
       .put(
         `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}/removeMedia`,
-        image._id
+        { id: image._id }
       )
       .then((resMedia) => {});
   };

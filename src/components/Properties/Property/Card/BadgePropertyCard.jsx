@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Text, Badge } from "@chakra-ui/react";
+import { Box, Badge } from "@chakra-ui/react";
 
 const BadgePropertyCard = (props) => {
   const { title, icon } = props;
@@ -20,7 +20,7 @@ const BadgePropertyCard = (props) => {
       <Box mr="1" fontSize="0.9rem">
         {icon}
       </Box>
-      <Text>{title}</Text>
+      <Box>{title}</Box>
     </Badge>
   );
 };

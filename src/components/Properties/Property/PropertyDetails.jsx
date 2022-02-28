@@ -17,7 +17,6 @@ import {
   SimpleGrid,
   Stack,
   Switch,
-  Text,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -88,14 +87,14 @@ const PropertyDetails = (props) => {
         <DrawerContent bg="defaultColor.400">
           <DrawerCloseButton color="#fff" mt="2" />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
-            <Text display="flex">
+            <Box display="flex">
               Detalles de la propiedad{" "}
               <CopyInternalCode
                 internalCode={
                   property.internalCode ? property.internalCode : "CÓDIGO"
                 }
               />
-            </Text>
+            </Box>
           </DrawerHeader>
           <DrawerBody color="#fff">
             <form>
@@ -155,9 +154,9 @@ const PropertyDetails = (props) => {
                       defaultValue={property.type}
                       placeholder="Ingresa el tipo"
                     >
-                      <option value="House">Casa</option>
-                      <option value="Deposit">Depósito</option>
-                      <option value="Apartment">Apartamento</option>
+                      <option value="Casa">Casa</option>
+                      <option value="Depósito">Depósito</option>
+                      <option value="Apartamento">Apartamento</option>
                     </Select>
                     {errors.type && (
                       <Badge variant="required-error">

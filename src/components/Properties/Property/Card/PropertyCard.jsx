@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Badge, Box, HStack, Image, Text, Tooltip } from "@chakra-ui/react";
+import React from "react";
+import { Badge, Box, HStack, Image, Tooltip } from "@chakra-ui/react";
 import PropertyDetails from "../PropertyDetails";
 import BadgePropertyCard from "./BadgePropertyCard";
 import { BsHouseDoorFill } from "react-icons/bs";
@@ -12,11 +12,11 @@ const PropertyCard = (props) => {
   const { property, image } = props;
 
   const parsePropertyType = () => {
-    if (property.type[0] === "House") {
+    if (property.type[0] === "Casa") {
       return <BadgePropertyCard title="Casa" icon={<BsHouseDoorFill />} />;
-    } else if (property.type[0] === "Apartment") {
+    } else if (property.type[0] === "Apartamento") {
       return <BadgePropertyCard title="Apartamento" icon={<MdApartment />} />;
-    } else if (property.type[0] === "Deposit") {
+    } else if (property.type[0] === "Depósito") {
       return <BadgePropertyCard title="Depósito" icon={<FaWarehouse />} />;
     }
   };
@@ -38,11 +38,12 @@ const PropertyCard = (props) => {
         <Image
           minW="270px"
           maxW="270px"
-          minH="200px"
-          maxH="200px"
+          minH="170px"
+          maxH="170px"
           src={image ? image.url : NoImage}
           alt={property.imageAlt}
           loading="lazy"
+          objectFit="cover"
         />
         <Box py="3" px="3">
           <Box position="absolute" p="0" left="2" top="2">
@@ -66,12 +67,12 @@ const PropertyCard = (props) => {
                 label={property.address.neighborhood}
                 bg="defaultColor.500"
               >
-                <Text>
+                <Box>
                   {property.address.neighborhood.slice(0, 15).concat("...")}
-                </Text>
+                </Box>
               </Tooltip>
             ) : (
-              <Text>{property.address.neighborhood}</Text>
+              <Box>{property.address.neighborhood}</Box>
             )}
             {","}
             {property.address.city.length > 15 ? (
@@ -80,10 +81,10 @@ const PropertyCard = (props) => {
                 label={property.address.city}
                 bg="defaultColor.500"
               >
-                <Text>{property.address.city.slice(0, 15).concat("...")}</Text>
+                <Box>{property.address.city.slice(0, 15).concat("...")}</Box>
               </Tooltip>
             ) : (
-              <Text ml="1">{property.address.city}</Text>
+              <Box ml="1">{property.address.city}</Box>
             )}
           </Box>
           <Box mt="1" mb="2.5" fontWeight="semibold" as="h4" lineHeight="tight">
@@ -93,10 +94,10 @@ const PropertyCard = (props) => {
                 label={property.description}
                 bg="defaultColor.500"
               >
-                <Text>{property.description.slice(0, 27).concat("...")}</Text>
+                <Box>{property.description.slice(0, 27).concat("...")}</Box>
               </Tooltip>
             ) : (
-              <Text>{property.description}</Text>
+              <Box>{property.description}</Box>
             )}
           </Box>
           <HStack spacing="10px" mt="2">

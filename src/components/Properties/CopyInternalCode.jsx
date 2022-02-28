@@ -1,4 +1,4 @@
-import { Text, useToast } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import React from "react";
 
 const CopyInternalCode = (props) => {
@@ -23,7 +23,7 @@ const CopyInternalCode = (props) => {
 
   return (
     <>
-      <Text
+      <Box
         ml={noMarginLeft ? 0 : 1.5}
         cursor="pointer"
         onClick={() => {
@@ -31,7 +31,7 @@ const CopyInternalCode = (props) => {
         }}
       >
         {internalCode}
-      </Text>
+      </Box>
     </>
   );
 };

@@ -12,10 +12,12 @@ import {
   MenuList,
   MenuItem,
   Box,
+  HStack,
 } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { AiOutlineUserSwitch, AiOutlineUserDelete } from "react-icons/ai";
 import CreateCustomer from "../components/Customers/CreateCustomer";
+import { FaUserEdit, FaUserMinus } from "react-icons/fa";
 
 const customers = [
   {
@@ -48,6 +50,9 @@ const CustomersPage = () => {
             <Th fontSize="14px" textAlign="center" maxWidth="50px">
               Descripcion
             </Th>
+            <Th fontSize="14px" textAlign="center" maxWidth="50px">
+              Opciones
+            </Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -66,29 +71,10 @@ const CustomersPage = () => {
                 {customer.description}
               </Td>
               <Td textAlign="center" isTruncated maxWidth="50px">
-                <Menu>
-                  <MenuButton
-                    as={IconButton}
-                    aria-label="Options"
-                    icon={<IoSettingsOutline fontSize="1.3rem" />}
-                    bg="transparent"
-                  />
-                  <MenuList bg="dark" p={2} boxShadow="base" border="none">
-                    <MenuItem
-                      icon={<AiOutlineUserSwitch fontSize="1.3rem" />}
-                      _focus={{ bgColor: "transparent" }}
-                    >
-                      <h1>Editar</h1>
-                    </MenuItem>
-                    <MenuItem
-                      icon={<AiOutlineUserDelete fontSize="1.3rem" />}
-                      _hover={{ borderRadius: "9px" }}
-                      _focus={{ bgColor: "transparent" }}
-                    >
-                      <h1>Borrar cliente</h1>
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
+                <HStack justifyContent="center">
+                  <FaUserEdit cursor="pointer" fontSize="1.3rem" />
+                  <FaUserMinus fontSize="1.3rem" cursor="pointer" />
+                </HStack>
               </Td>
             </Tr>
           ))}
