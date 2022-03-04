@@ -13,8 +13,10 @@ import {
   Box,
   Divider,
   Tooltip,
+  Button,
 } from "@chakra-ui/react";
 import { FaBoxes } from "react-icons/fa";
+import CopyInternalCode from "../CopyInternalCode";
 
 const InventoryItems = (props) => {
   const { itemsQuantity, inventory } = props;
@@ -45,14 +47,57 @@ const InventoryItems = (props) => {
             <FaBoxes fontSize="1.2rem" />
           </HStack>
         </Tooltip>
-        <Drawer size="md" isOpen={isOpen} placement="left" onClose={onClose}>
+        <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
-          <DrawerContent bg="defaultColor.400">
+          <DrawerContent
+            borderLeft="1px white solid"
+            borderStartStartRadius="7px"
+            borderEndStartRadius="7px"
+            bg="defaultColor.400"
+          >
             <DrawerCloseButton color="#fff" mt="2" />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
-              <Text display="flex">Objetos del inventario</Text>
+              <Text display="flex">
+                Objetos del inventario{" "}
+                <CopyInternalCode
+                  text="inventario"
+                  internalCode={
+                    inventory.internalCode ? inventory.internalCode : "CÓDIGO"
+                  }
+                />{" "}
+              </Text>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
+              <Box position="relative">
+                <Box
+                  display="flex"
+                  bg="defaultColor.500"
+                  p="3"
+                  borderRadius="7px"
+                  alignItems="center"
+                  mb="5"
+                >
+                  <HStack w="100%" spacing="13px" height="25px">
+                    <>
+                      <Box w="30%" alignItems="center" textAlign="center">
+                        <Text fontWeight="500">Nombre</Text>
+                      </Box>
+                      <Divider orientation="vertical" />
+                      <Box w="50%" justifyContent="center" textAlign="center">
+                        <Text fontWeight="500">Descripción</Text>
+                      </Box>
+                      <Divider orientation="vertical" />
+                      <HStack
+                        w="15%"
+                        justifyContent="center"
+                        textAlign="center"
+                      >
+                        <Text fontWeight="500">Cantidad</Text>
+                      </HStack>
+                    </>
+                  </HStack>
+                </Box>
+              </Box>
               {inventory.items.length === 0 ? (
                 <Text
                   fontSize="xl"
@@ -79,8 +124,8 @@ const InventoryItems = (props) => {
                     >
                       <HStack w="100%" spacing="13px" height="25px">
                         <>
-                          <Box w="20%" alignItems="center" textAlign="center">
-                            {item.name.length > 8 ? (
+                          <Box w="30%" alignItems="center" textAlign="center">
+                            {item.name.length > 15 ? (
                               <Tooltip
                                 hasArrow
                                 label={item.name}
@@ -88,7 +133,7 @@ const InventoryItems = (props) => {
                               >
                                 {
                                   <Box>
-                                    {item.name.slice(0, 8).concat("...")}
+                                    {item.name.slice(0, 15).concat("...")}
                                   </Box>
                                 }
                               </Tooltip>
@@ -98,7 +143,7 @@ const InventoryItems = (props) => {
                           </Box>
                           <Divider orientation="vertical" />
                           <Box
-                            w="60%"
+                            w="50%"
                             justifyContent="center"
                             textAlign="center"
                           >
@@ -135,7 +180,11 @@ const InventoryItems = (props) => {
                 ))
               )}
             </DrawerBody>
-            <DrawerFooter borderTopWidth="1px"></DrawerFooter>
+            <DrawerFooter borderTopWidth="1px">
+              <Button variant="cancel-action" mr={0} onClick={onClose}>
+                Cerrar
+              </Button>
+            </DrawerFooter>
           </DrawerContent>
         </Drawer>
       </>
