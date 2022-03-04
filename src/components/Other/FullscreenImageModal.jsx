@@ -12,20 +12,28 @@ import {
 } from "@chakra-ui/react";
 
 const FullscreenImageModal = (props) => {
-  const { src, alt, width, height, minWidth, maxWidth, text } = props;
+  const {
+    src,
+    alt,
+    width,
+    height,
+    minWidth,
+    maxWidth,
+    text,
+    description,
+    borderRadius,
+  } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
       <Box onClick={onOpen} w="15%" textAlign="-webkit-center">
         <Image
-          // w="3rem"
-          // h="2rem"
           w={width ? width : null}
           h={height ? height : null}
           minW={minWidth ? minWidth : null}
           maxW={maxWidth ? maxWidth : null}
-          borderRadius="7px"
+          borderRadius={borderRadius ? "7px" : null}
           src={src}
           cursor="pointer"
           alt={alt}
@@ -41,7 +49,10 @@ const FullscreenImageModal = (props) => {
         <ModalOverlay alignItems="center" h="100vh !important" />
         <ModalContent bg="defaultColor.400" color="#fff">
           <ModalHeader fontSize="1.1rem" mb="0" pb="0" pt="0.7rem">
-            {text}
+            <Box>
+              <Box>{text}</Box>
+              <Box fontSize="1rem">"{description}"</Box>
+            </Box>
           </ModalHeader>
           <ModalCloseButton _focus={{ boxShadow: "none" }} onClick={onClose} />
           <ModalBody pb="1.5rem">
