@@ -1,21 +1,5 @@
 import React from "react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Box,
-  HStack,
-} from "@chakra-ui/react";
-import { IoSettingsOutline } from "react-icons/io5";
-import { AiOutlineUserSwitch, AiOutlineUserDelete } from "react-icons/ai";
+import { Table, Thead, Tbody, Tr, Th, Td, Box, HStack } from "@chakra-ui/react";
 import CreateCustomer from "../components/Customers/CreateCustomer";
 import { FaUserEdit, FaUserMinus } from "react-icons/fa";
 
