@@ -2,7 +2,7 @@ import { Box, useToast } from "@chakra-ui/react";
 import React from "react";
 
 const CopyInternalCode = (props) => {
-  const { internalCode, noMarginLeft } = props;
+  const { internalCode, noMarginLeft, text } = props;
   const notification = useToast();
   const toastId = "email-toast";
 
@@ -10,7 +10,7 @@ const CopyInternalCode = (props) => {
     if (!notification.isActive(toastId)) {
       notification({
         id: toastId,
-        title: "Código de propiedad copiado al portapapeles",
+        title: `Código de ${text}  copiado al portapapeles`,
         description: `Has copiado el código ${internalCode}`,
         status: "success",
         duration: 4000,
