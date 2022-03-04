@@ -63,12 +63,18 @@ const FeatureList = (props) => {
         </Button>
         <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
-          <DrawerContent bg="defaultColor.400">
+          <DrawerContent
+            borderLeft="1px white solid"
+            borderStartStartRadius="7px"
+            borderEndStartRadius="7px"
+            bg="defaultColor.400"
+          >
             <DrawerCloseButton color="#fff" mt="2" />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
               <Text display="flex">
                 Características de la propiedad{" "}
                 <CopyInternalCode
+                  text="propiedad"
                   internalCode={
                     property.internalCode ? property.internalCode : "CÓDIGO"
                   }
@@ -76,6 +82,32 @@ const FeatureList = (props) => {
               </Text>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
+              <Box position="relative">
+                <Box
+                  display="flex"
+                  bg="defaultColor.500"
+                  p="3"
+                  borderRadius="7px"
+                  alignItems="center"
+                  mb="4"
+                >
+                  <HStack w="100%" spacing="13px" height="25px">
+                    <>
+                      <Box w="25%" px="1rem" py="0.5" textAlign="center">
+                        <Text fontWeight="500">Tipo</Text>
+                      </Box>
+                      <Divider orientation="vertical" />
+                      <Box w="50%" justifyContent="center" textAlign="center">
+                        <Text fontWeight="500">Nombre</Text>
+                      </Box>
+                      <Divider orientation="vertical" />
+                      <Box w="100%" justifyContent="center" textAlign="center">
+                        <Text fontWeight="500">Descripción</Text>
+                      </Box>
+                    </>
+                  </HStack>
+                </Box>
+              </Box>
               {property.features.length === 0 ? (
                 <Text
                   fontSize="xl"
