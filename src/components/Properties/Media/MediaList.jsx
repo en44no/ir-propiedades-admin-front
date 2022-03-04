@@ -21,7 +21,15 @@ import ConfirmDelete from "../../Other/ConfirmDelete";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 
 const MediaList = (props) => {
-  const { full, property } = props;
+  const {
+    full,
+    property,
+    text,
+    width,
+    buttonWithoutIcon,
+    drawerSize,
+    columns,
+  } = props;
   const { deleteMedia } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -36,24 +44,35 @@ const MediaList = (props) => {
       <>
         <Button
           id="viewImages"
-          w={full === "yes" ? "100%" : "7rem"}
+          w={width ? width : "7rem"}
           onClick={onOpen}
           fontSize="15px"
-          leftIcon={<BsImages fontSize="20px" />}
+          leftIcon={buttonWithoutIcon ? null : <BsImages fontSize="20px" />}
           mr={5}
           borderRadius="9px"
           variant="add-button-clear"
         >
-          Gestionar imágenes
+          {text ? text : "Gestionar imágenes"}
         </Button>
-        <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
+        <Drawer
+          size={drawerSize ? drawerSize : "xl"}
+          isOpen={isOpen}
+          placement="right"
+          onClose={onClose}
+        >
           <DrawerOverlay />
-          <DrawerContent bg="defaultColor.400">
+          <DrawerContent
+            borderLeft="1px white solid"
+            borderStartStartRadius="7px"
+            borderEndStartRadius="7px"
+            bg="defaultColor.400"
+          >
             <DrawerCloseButton color="#fff" mt="2" />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
               <Text display="flex">
                 Imágenes de la propiedad{" "}
                 <CopyInternalCode
+                  text="propiedad"
                   internalCode={
                     property.internalCode ? property.internalCode : "CÓDIGO"
                   }
@@ -74,12 +93,13 @@ const MediaList = (props) => {
                   Esta propiedad aún no cuenta con imágenes.
                 </Text>
               ) : (
-                <SimpleGrid columns={[2, null, 3]} spacing="40px">
+                <SimpleGrid columns={columns ? columns : 3} spacing="40px">
                   {property.media.map((image) => (
                     <Box
                       key={image._id}
                       minW="270px"
                       maxW="270px"
+                      h="150px"
                       outline="2px solid #cacaca"
                       borderRadius="lg"
                       overflow="hidden"
@@ -108,7 +128,7 @@ const MediaList = (props) => {
                       >
                         <ConfirmDelete
                           text="¿Estás seguro de que deseas eliminar esta imagen?"
-                          name="imagen"
+                          name={`imagen "${image.description}"`}
                           functionToExecute={deleteMedia}
                           element={property}
                           anotherElement={image}
@@ -121,7 +141,8 @@ const MediaList = (props) => {
                         src={image.url}
                         alt={image.description}
                         hover="yes"
-                        text={`Imagen de la propiedad "${image.description}"`}
+                        text={`Imagen de la propiedad ${property.internalCode}`}
+                        description={image.description}
                       />
                     </Box>
                   ))}
