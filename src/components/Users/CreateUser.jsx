@@ -144,7 +144,7 @@ function CreateUser() {
                       {...register("password", {
                         required: "La contraseña es requerida.",
                       })}
-                      border="2px solid #cacaca"
+                      border="1px solid #cacaca"
                       placeholder="Ingresa tu contraseña"
                       type={showPassword ? "text" : "password"}
                     />

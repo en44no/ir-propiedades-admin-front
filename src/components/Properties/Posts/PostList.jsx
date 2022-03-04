@@ -74,12 +74,18 @@ const PostList = (props) => {
         </Button>
         <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
-          <DrawerContent bg="defaultColor.400">
+          <DrawerContent
+            borderLeft="1px white solid"
+            borderStartStartRadius="7px"
+            borderEndStartRadius="7px"
+            bg="defaultColor.400"
+          >
             <DrawerCloseButton color="#fff" mt="2" />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
               <Text display="flex">
                 Publicaciones de la propiedad{" "}
                 <CopyInternalCode
+                  text="propiedad"
                   internalCode={
                     property.internalCode ? property.internalCode : "CÓDIGO"
                   }
@@ -87,6 +93,77 @@ const PostList = (props) => {
               </Text>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
+              <Box position="relative">
+                <Box
+                  display="flex"
+                  bg="defaultColor.500"
+                  p="3"
+                  borderRadius="7px"
+                  alignItems="center"
+                  mb="5"
+                >
+                  <HStack w="100%" spacing="13px" height="25px">
+                    <>
+                      <Box
+                        p="0"
+                        minW="10%"
+                        maxW="10%"
+                        justifyContent="center"
+                        textAlign="center"
+                      >
+                        <Text>Estado</Text>
+                      </Box>
+                      <Divider orientation="vertical" />
+                      <Box
+                        p="0"
+                        minW="15%"
+                        maxW="15%"
+                        justifyContent="center"
+                        textAlign="center"
+                      >
+                        <Text>Venta</Text>
+                      </Box>
+                      <Divider orientation="vertical" />
+                      <Box
+                        p="0"
+                        minW="15%"
+                        maxW="15%"
+                        justifyContent="center"
+                        textAlign="center"
+                      >
+                        <Text>Alquiler</Text>
+                      </Box>
+                      <Divider orientation="vertical" />
+                      <Box
+                        minW="15%"
+                        maxW="15%"
+                        justifyContent="center"
+                        textAlign="center"
+                      >
+                        <Text>Fecha desde</Text>
+                      </Box>
+                      <Divider orientation="vertical" />
+                      <Box
+                        minW="15%"
+                        maxW="15%"
+                        justifyContent="center"
+                        textAlign="center"
+                      >
+                        <Text>Fecha hasta</Text>
+                      </Box>
+                      <Divider orientation="vertical" />
+                      <HStack
+                        minW="15%"
+                        maxW="15%"
+                        justifyContent="center"
+                        textAlign="center"
+                      >
+                        <Text ml="-4">Compartido en</Text>
+                      </HStack>
+                    </>
+                  </HStack>
+                </Box>
+              </Box>
               {posts.length === 0 ? (
                 <Text
                   fontSize="xl"
@@ -119,16 +196,14 @@ const PostList = (props) => {
                             </Box>
                             <Divider orientation="vertical" />
                             <HStack
-                              spacing="3px"
-                              minW="17%"
-                              maxW="17%"
+                              p="0"
+                              minW="15%"
+                              maxW="15%"
                               justifyContent="center"
                               textAlign="center"
                             >
                               {post.isForSale ? (
                                 <>
-                                  <Text>Venta</Text>
-                                  <Text>-</Text>
                                   <Box>
                                     {formatToUSD
                                       .format(post.forSalePrice)
@@ -144,16 +219,14 @@ const PostList = (props) => {
                             </HStack>
                             <Divider orientation="vertical" />
                             <HStack
-                              spacing="3px"
-                              minW="17%"
-                              maxW="17%"
+                              p="0"
+                              minW="15%"
+                              maxW="15%"
                               justifyContent="center"
                               textAlign="center"
                             >
                               {post.isForRent ? (
                                 <>
-                                  <Text>Alquiler</Text>
-                                  <Text>-</Text>
                                   <Text>
                                     {formatToUSD
                                       .format(post.forRentPrice)
@@ -165,22 +238,28 @@ const PostList = (props) => {
                             </HStack>
                             <Divider orientation="vertical" />
                             <Box
-                              w="17%"
+                              minW="15%"
+                              maxW="15%"
                               justifyContent="center"
                               textAlign="center"
                             >
-                              <Box>Desde {formatDate(post.startDate)}</Box>
+                              <Box>{formatDate(post.startDate)}</Box>
                             </Box>
                             <Divider orientation="vertical" />
                             <Box
-                              w="17%"
+                              minW="15%"
+                              maxW="15%"
                               justifyContent="center"
                               textAlign="center"
                             >
-                              <Box>Hasta {formatDate(post.endDate)}</Box>
+                              <Box>{formatDate(post.endDate)}</Box>
                             </Box>
                             <Divider orientation="vertical" />
-                            <HStack minW="8%" maxW="8%" justifyContent="center">
+                            <HStack
+                              minW="14%"
+                              maxW="14%"
+                              justifyContent="center"
+                            >
                               <SocialList onlyIcons="true" />
                             </HStack>
                           </>

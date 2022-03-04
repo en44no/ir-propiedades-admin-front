@@ -171,7 +171,7 @@ function EditUser(props) {
                       id="userPassword"
                       autoComplete="current-password"
                       {...register("password")}
-                      border="2px solid #cacaca"
+                      border="1px solid #cacaca"
                       placeholder="Ingresa la nueva contraseña"
                       type={showPassword ? "text" : "password"}
                       disabled={showEditPassword ? false : true}

@@ -111,6 +111,7 @@ const PropertyCard = (props) => {
               color="#fff"
             >
               <CopyInternalCode
+                text="propiedad"
                 internalCode={
                   property.internalCode ? property.internalCode : "CÓDIGO"
                 }

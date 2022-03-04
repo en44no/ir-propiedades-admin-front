@@ -18,7 +18,7 @@ const SideBar = () => (
     >
       <Header />
       <Content />
-      <Box m={5} mb="0">
+      <Box m={3} mb="0">
         <Footer />
       </Box>
     </Box>

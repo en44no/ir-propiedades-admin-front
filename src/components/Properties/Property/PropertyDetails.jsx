@@ -31,6 +31,7 @@ import MediaList from "../Media/MediaList";
 import InventoriesList from "../Inventories/InventoriesList";
 import CopyInternalCode from "../CopyInternalCode";
 import ConfirmDelete from "../../Other/ConfirmDelete";
+import VirtualToursList from "../VirtualTours/VirtualToursList";
 
 const PropertyDetails = (props) => {
   const { deleteProperty, addDetailsToProperty } =
@@ -84,12 +85,18 @@ const PropertyDetails = (props) => {
       </Button>
       <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent bg="defaultColor.400">
+        <DrawerContent
+          borderLeft="1px white solid"
+          bg="defaultColor.400"
+          borderStartStartRadius="7px"
+          borderEndStartRadius="7px"
+        >
           <DrawerCloseButton color="#fff" mt="2" />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
             <Box display="flex">
               Detalles de la propiedad{" "}
               <CopyInternalCode
+                text="propiedad"
                 internalCode={
                   property.internalCode ? property.internalCode : "CÓDIGO"
                 }
@@ -147,23 +154,16 @@ const PropertyDetails = (props) => {
               <SimpleGrid columns={2} spacing={10}>
                 <Stack spacing="14px" id="leftColumn">
                   <Box>
-                    <FormLabel htmlFor="propertyTypes">Tipo</FormLabel>
-                    <Select
-                      {...register("type", { required: "Tipo es requerido." })}
-                      id="propertyType"
-                      defaultValue={property.type}
-                      placeholder="Ingresa el tipo"
-                    >
-                      <option value="Casa">Casa</option>
-                      <option value="Depósito">Depósito</option>
-                      <option value="Apartamento">Apartamento</option>
-                    </Select>
-                    {errors.type && (
-                      <Badge variant="required-error">
-                        {errors.type.message}
-                      </Badge>
-                    )}
+                    <FormLabel htmlFor="propertyName">Nombre</FormLabel>
+                    <Input
+                      defaultValue={property.name}
+                      {...register("comment")}
+                      id="propertyName"
+                      placeholder="Ingresa el nombre"
+                    />
+                    {errors.name && <span>wad</span>}
                   </Box>
+
                   <Box>
                     <FormLabel htmlFor="propertyComments">
                       Comentarios
@@ -185,10 +185,14 @@ const PropertyDetails = (props) => {
                     </Box>
                   </Box>
                   <Box>
-                    <FormLabel htmlFor="propertyComments">
-                      Tours virtuales
-                    </FormLabel>
+                    <FormLabel htmlFor="propertyComments">Documentos</FormLabel>
                     <Input></Input>
+                  </Box>
+                  <Box>
+                    <FormLabel htmlFor="propertyComments">
+                      Tour virtual
+                    </FormLabel>
+                    <VirtualToursList full="yes" property={property} />
                   </Box>
                   <Box>
                     <FormLabel htmlFor="propertyAddress">Dirección</FormLabel>
@@ -201,8 +205,22 @@ const PropertyDetails = (props) => {
                 </Stack>
                 <Stack spacing="14px" id="rightColumn">
                   <Box>
-                    <FormLabel htmlFor="propertyComments">Documentos</FormLabel>
-                    <Input></Input>
+                    <FormLabel htmlFor="propertyTypes">Tipo</FormLabel>
+                    <Select
+                      {...register("type", { required: "Tipo es requerido." })}
+                      id="propertyType"
+                      defaultValue={property.type}
+                      placeholder="Ingresa el tipo"
+                    >
+                      <option value="Casa">Casa</option>
+                      <option value="Depósito">Depósito</option>
+                      <option value="Apartamento">Apartamento</option>
+                    </Select>
+                    {errors.type && (
+                      <Badge variant="required-error">
+                        {errors.type.message}
+                      </Badge>
+                    )}
                   </Box>
                   <Box>
                     <FormLabel htmlFor="propertyDescription">
@@ -216,8 +234,8 @@ const PropertyDetails = (props) => {
                     />
                   </Box>
                   <Box>
-                    <FormLabel htmlFor="propertyComments">Media</FormLabel>
-                    <MediaList full="yes" property={property} />
+                    <FormLabel htmlFor="propertyComments">Imágenes</FormLabel>
+                    <MediaList width="100%" property={property} />
                   </Box>
                   <Box>
                     <FormLabel>Publicaciones</FormLabel>
@@ -236,6 +254,7 @@ const PropertyDetails = (props) => {
           <DrawerFooter borderTopWidth="1px">
             <ConfirmDelete
               text="¿Estás seguro de que deseas eliminar esta propiedad?"
+              topText="En caso de que esta propiedad cuente con publicaciones y/o inventarios los mismos serán eliminados. "
               name="propiedad"
               functionToExecute={handleDeleteProperty}
               element={property}
