@@ -56,7 +56,12 @@ const CreateAddress = (props) => {
       </Button>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent bg="defaultColor.400">
+        <DrawerContent
+          borderLeft="1px white solid"
+          bg="defaultColor.400"
+          borderStartStartRadius="7px"
+          borderEndStartRadius="7px"
+        >
           <DrawerCloseButton color="#fff" mt="2" />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
             Agregar dirección
