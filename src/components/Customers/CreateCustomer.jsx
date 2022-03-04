@@ -56,7 +56,7 @@ const CreateCustomer = (props) => {
         <DrawerContent bg="defaultColor.400">
           <DrawerCloseButton color="#fff" mt="2" />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
-            Agregar Cliente
+            Agregar cliente
           </DrawerHeader>
           <DrawerBody color="#fff">
             <form id="CustomerForm" onSubmit={handleSubmit(submitCustomer)}>
@@ -71,7 +71,7 @@ const CreateCustomer = (props) => {
                   />
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="CustomerEmail">email</FormLabel>
+                  <FormLabel htmlFor="CustomerEmail">Email</FormLabel>
                   <Input
                     {...register("name")}
                     id="CustomerEmail"
@@ -80,11 +80,11 @@ const CreateCustomer = (props) => {
                   />
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="CustomerPhone">Telefono</FormLabel>
+                  <FormLabel htmlFor="CustomerPhone">Teléfono</FormLabel>
                   <Input
                     {...register("name")}
                     id="CustomerPhone"
-                    placeholder="Ingresa el telefono"
+                    placeholder="Ingresa el télefono"
                     autoComplete="off"
                   />
                 </Box>
