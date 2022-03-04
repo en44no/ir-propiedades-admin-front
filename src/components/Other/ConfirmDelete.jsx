@@ -18,6 +18,7 @@ const ConfirmDelete = (props) => {
   const {
     functionToExecute,
     text,
+    topText,
     element,
     name,
     onlyText,
@@ -35,11 +36,11 @@ const ConfirmDelete = (props) => {
   return (
     <>
       {onlyIcon ? (
-        <Box onClick={onOpen} mt="6px" ml="6px">
+        <Box onClick={onOpen} mt="7px" ml="6.5px">
           {icon === "userIcon" ? (
             <FaUserMinus fontSize="1.3rem" cursor="pointer" />
           ) : (
-            <FaTrashAlt />
+            <FaTrashAlt fontSize="0.9rem" />
           )}
         </Box>
       ) : onlyText ? (
@@ -54,8 +55,8 @@ const ConfirmDelete = (props) => {
           <Text pt="0.7rem">Eliminar</Text>
         </Button>
       ) : (
-        <Button mr="0.8rem" w="7rem" onClick={onOpen} variant="delete-button">
-          <Text>Eliminar</Text>
+        <Button mr="0.8rem" w="10rem" onClick={onOpen} variant="delete-button">
+          <Text>Eliminar propiedad</Text>
         </Button>
       )}
 
@@ -69,7 +70,12 @@ const ConfirmDelete = (props) => {
         <AlertDialogContent bg="defaultColor.400" color="#fff">
           <AlertDialogHeader>Eliminar {name}</AlertDialogHeader>
           <AlertDialogCloseButton mt="0.5rem" _focus={{ boxShadow: "none" }} />
-          <AlertDialogBody>{text}</AlertDialogBody>
+          <AlertDialogBody>
+            <Box mt="-2" fontWeight="500" fontSize="0.95rem">
+              {topText}
+            </Box>
+            <Box mt="2">{text}</Box>
+          </AlertDialogBody>
           <AlertDialogFooter>
             <Button variant="cancel-action" onClick={onClose}>
               No
