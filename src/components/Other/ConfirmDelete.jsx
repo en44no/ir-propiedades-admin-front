@@ -25,18 +25,19 @@ const ConfirmDelete = (props) => {
     anotherElement,
     onlyIcon,
     icon,
+    noMarginTopInIcon,
   } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const execute = () => {
     onClose();
-    functionToExecute(element, anotherElement);
+    functionToExecute(element, anotherElement ? anotherElement : null);
   };
 
   return (
     <>
       {onlyIcon ? (
-        <Box onClick={onOpen} mt="7px" ml="6.5px">
+        <Box onClick={onOpen} mt={noMarginTopInIcon ? "0" : "7px"} ml="6.5px">
           {icon === "userIcon" ? (
             <FaUserMinus fontSize="1.3rem" cursor="pointer" />
           ) : (

@@ -36,6 +36,7 @@ const FullscreenImageModal = (props) => {
           borderRadius={borderRadius ? "7px" : null}
           src={src}
           cursor="pointer"
+          objectFit="cover"
           alt={alt}
         />
       </Box>
