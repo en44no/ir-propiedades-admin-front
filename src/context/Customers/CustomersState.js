@@ -8,6 +8,7 @@ const CustomersState = (props) => {
 
   useEffect(() => {
     fetchCustomers();
+    console.log(customers);
   }, []);
 
   const fetchCustomers = async () => {
@@ -20,7 +21,6 @@ const CustomersState = (props) => {
   };
 
   const addCustomer = async (data, address) => {
-    data.address = address;
     await axios
       .post(`${process.env.REACT_APP_API_BASE_URL}/customers`, data)
       .then((res) =>
@@ -44,7 +44,10 @@ const CustomersState = (props) => {
 
   const editCustomer = async (data, customerId) => {
     await axios
-      .put(`${process.env.REACT_APP_API_BASE_URL}/customers/${customerId}`, data)
+      .put(
+        `${process.env.REACT_APP_API_BASE_URL}/customers/${customerId}`,
+        data
+      )
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -52,7 +55,10 @@ const CustomersState = (props) => {
             "Has editado un cliente",
             "success"
           );
-          setCustomers([...customers.filter((customer) => customer._id !== customerId), res.data]);
+          setCustomers([
+            ...customers.filter((customer) => customer._id !== customerId),
+            res.data,
+          ]);
         }
       })
       .catch((error) => {
@@ -75,7 +81,7 @@ const CustomersState = (props) => {
               "success"
             ),
             setCustomers(
-                customers.filter((customer) => customer._id !== res.data._id)
+              customers.filter((customer) => customer._id !== res.data._id)
             ))
           : null
       )
@@ -92,6 +98,7 @@ const CustomersState = (props) => {
     <CustomersContext.Provider
       value={{
         setCustomers,
+        customers,
         addCustomer,
         editCustomer,
         deleteCustomer,

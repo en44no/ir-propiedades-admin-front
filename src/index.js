@@ -7,6 +7,7 @@ import theme from "./theme";
 import PropertiesState from "./context/Properties/PropertiesState";
 import AuthState from "./context/Auth/AuthState";
 import UsersState from "./context/Users/UsersState";
+import CustomersState from "./context/Customers/CustomersState";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,7 +15,9 @@ ReactDOM.render(
       <PropertiesState>
         <AuthState>
           <UsersState>
-            <App />
+            <CustomersState>
+              <App />
+            </CustomersState>
           </UsersState>
         </AuthState>
       </PropertiesState>

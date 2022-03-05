@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Badge,
   Box,
@@ -14,17 +14,17 @@ import {
   Input,
   Select,
   Stack,
-  Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import CustomersContext from "../../context/Customers/CustomersContext";
 import { useForm } from "react-hook-form";
-import { MdLocationPin } from "react-icons/md";
+import { FaUserEdit } from "react-icons/fa";
 
 const EditCustomer = (props) => {
   const { editCustomer } = useContext(CustomersContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { full, customer, direction } = props;
+  const { customer, direction } = props;
+  const [customerType, setCustomerType] = useState(customer.type);
 
   const {
     register,
@@ -41,22 +41,10 @@ const EditCustomer = (props) => {
 
   return (
     <>
-      <Button
-        w={full === "yes" ? "100%" : "7rem"}
-        onClick={onOpen}
-        fontSize="15px"
-        leftIcon={<MdLocationPin fontSize="18px" />}
-        mr={5}
-        mb={5}
-        borderRadius="9px"
-        variant="add-button-clear"
-      >
-        Editar cliente
-      </Button>
-
+      <FaUserEdit onClick={onOpen} cursor="pointer" fontSize="1.3rem" />
       <Drawer
         isOpen={isOpen}
-        placement={direction ? direction : "left"}
+        placement={direction ? direction : "right"}
         onClose={onClose}
       >
         <DrawerOverlay />
@@ -66,50 +54,88 @@ const EditCustomer = (props) => {
             Editar cliente
           </DrawerHeader>
           <DrawerBody color="#fff">
-            <form id="customerForm" onSubmit={handleSubmit(submitCustomer)}>
+            <form id="CustomerEditForm" onSubmit={handleSubmit(submitCustomer)}>
               <Stack spacing="14px">
                 <Box>
                   <FormLabel htmlFor="CustomerName">Nombre</FormLabel>
                   <Input
-                    {...register("name")}
+                    {...register("name", { required: "Nombre es requerido." })}
                     id="CustomerName"
                     placeholder="Ingresa el nombre"
                     autoComplete="off"
                     defaultValue={customer.name}
                   />
+                  {errors.name && (
+                    <Badge variant="required-error">
+                      {errors.name.message}
+                    </Badge>
+                  )}
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="CustomerEmail">email</FormLabel>
+                  <FormLabel htmlFor="CustomerEmail">Email</FormLabel>
                   <Input
-                    {...register("name")}
+                    {...register("email", { required: "Email es requerido." })}
                     id="CustomerEmail"
                     placeholder="Ingresa el email"
                     autoComplete="off"
+                    type="email"
                     defaultValue={customer.email}
                   />
+                  {errors.email && (
+                    <Badge variant="required-error">
+                      {errors.email.message}
+                    </Badge>
+                  )}
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="CustomerPhone">Telefono</FormLabel>
+                  <FormLabel htmlFor="CustomerPhone">Teléfono</FormLabel>
                   <Input
-                    {...register("name")}
+                    {...register("phone", {
+                      required: "Teléfono es requerido.",
+                    })}
                     id="CustomerPhone"
-                    placeholder="Ingresa el telefono"
+                    placeholder="Ingresa el télefono"
                     autoComplete="off"
                     defaultValue={customer.phone}
                   />
+                  {errors.phone && (
+                    <Badge variant="required-error">
+                      {errors.phone.message}
+                    </Badge>
+                  )}
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="customerDescription">
-                    Descripción
-                  </FormLabel>
-                  <Textarea
-                    {...register("description")}
-                    id="customerDescription"
-                    placeholder="Ingresa la descripción"
-                    autoComplete="off"
-                    defaultValue={customer.description}
-                  />
+                  <FormLabel htmlFor="CustomerType">Tipo</FormLabel>
+                  <Select
+                    {...register("type", { required: "Tipo es requerido." })}
+                    id="CustomerType"
+                    placeholder="Selecciona el tipo"
+                    defaultValue={customer.type}
+                    onChange={(event) => setCustomerType(event.target.value)}
+                  >
+                    <option value="Dueño">Dueño</option>
+                    <option value="Interesado">Interesado</option>
+                    <option value="Inquilino">Inquilino</option>
+                  </Select>
+                  {errors.type && (
+                    <Badge variant="required-error">
+                      {errors.type.message}
+                    </Badge>
+                  )}
                 </Box>
+                {customerType == "Dueño" || customerType == "Inquilino" ? (
+                  <Box>
+                    <FormLabel htmlFor="CustomerProperty">
+                      Código interno de la propiedad
+                    </FormLabel>
+                    <Input
+                      {...register("property")}
+                      id="CustomerProperty"
+                      placeholder="Ingresa el código"
+                      autoComplete="off"
+                    />
+                  </Box>
+                ) : null}
               </Stack>
             </form>
           </DrawerBody>
@@ -119,7 +145,7 @@ const EditCustomer = (props) => {
             </Button>
             <Button
               type="submit"
-              form="customerForm"
+              form="CustomerEditForm"
               variant="confirm-add-button"
             >
               Confirmar

@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
+  Badge,
   Box,
   Button,
   Drawer,
@@ -11,8 +12,8 @@ import {
   DrawerOverlay,
   FormLabel,
   Input,
+  Select,
   Stack,
-  Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import CustomersContext from "../../context/Customers/CustomersContext";
@@ -22,6 +23,7 @@ import { HiPlus } from "react-icons/hi";
 const CreateCustomer = (props) => {
   const { addCustomer } = useContext(CustomersContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [customerType, setCustomerType] = useState("");
 
   const {
     register,
@@ -32,7 +34,6 @@ const CreateCustomer = (props) => {
 
   const submitCustomer = (data) => {
     addCustomer(data);
-    //document.getElementById("requiredCustomer").style.display = "none";
     reset();
     onClose();
   };
@@ -64,41 +65,79 @@ const CreateCustomer = (props) => {
                 <Box>
                   <FormLabel htmlFor="CustomerName">Nombre</FormLabel>
                   <Input
-                    {...register("name")}
+                    {...register("name", { required: "Nombre es requerido." })}
                     id="CustomerName"
                     placeholder="Ingresa el nombre"
                     autoComplete="off"
                   />
+                  {errors.name && (
+                    <Badge variant="required-error">
+                      {errors.name.message}
+                    </Badge>
+                  )}
                 </Box>
                 <Box>
                   <FormLabel htmlFor="CustomerEmail">Email</FormLabel>
                   <Input
-                    {...register("name")}
+                    {...register("email", { required: "Email es requerido." })}
                     id="CustomerEmail"
                     placeholder="Ingresa el email"
                     autoComplete="off"
+                    type="email"
                   />
+                  {errors.email && (
+                    <Badge variant="required-error">
+                      {errors.email.message}
+                    </Badge>
+                  )}
                 </Box>
                 <Box>
                   <FormLabel htmlFor="CustomerPhone">Teléfono</FormLabel>
                   <Input
-                    {...register("name")}
+                    {...register("phone", {
+                      required: "Teléfono es requerido.",
+                    })}
                     id="CustomerPhone"
                     placeholder="Ingresa el télefono"
                     autoComplete="off"
                   />
+                  {errors.phone && (
+                    <Badge variant="required-error">
+                      {errors.phone.message}
+                    </Badge>
+                  )}
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="customerDescription">
-                    Descripción
-                  </FormLabel>
-                  <Textarea
-                    {...register("description")}
-                    id="customerDescription"
-                    placeholder="Ingresa la descripción"
-                    autoComplete="off"
-                  />
+                  <FormLabel htmlFor="CustomerType">Tipo</FormLabel>
+                  <Select
+                    {...register("type", { required: "Tipo es requerido." })}
+                    id="CustomerType"
+                    placeholder="Selecciona el tipo"
+                    onChange={(event) => setCustomerType(event.target.value)}
+                  >
+                    <option value="Dueño">Dueño</option>
+                    <option value="Interesado">Interesado</option>
+                    <option value="Inquilino">Inquilino</option>
+                  </Select>
+                  {errors.type && (
+                    <Badge variant="required-error">
+                      {errors.type.message}
+                    </Badge>
+                  )}
                 </Box>
+                {customerType == "Dueño" || customerType == "Inquilino" ? (
+                  <Box>
+                    <FormLabel htmlFor="CustomerProperty">
+                      Código interno de la propiedad
+                    </FormLabel>
+                    <Input
+                      {...register("property")}
+                      id="CustomerProperty"
+                      placeholder="Ingresa el código"
+                      autoComplete="off"
+                    />
+                  </Box>
+                ) : null}
               </Stack>
             </form>
           </DrawerBody>
@@ -113,7 +152,7 @@ const CreateCustomer = (props) => {
             </Button>
             <Button
               type="submit"
-              form="customerForm"
+              form="CustomerForm"
               variant="confirm-add-button"
             >
               Confirmar
