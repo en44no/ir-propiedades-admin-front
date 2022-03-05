@@ -94,7 +94,7 @@ const CreateProperty = () => {
                   <Select
                     {...register("type", { required: "Tipo es requerido." })}
                     id="propertyTypes"
-                    placeholder="Ingresa el tipo"
+                    placeholder="Selecciona el tipo"
                   >
                     <option value="Casa">Casa</option>
                     <option value="Depósito">Depósito</option>

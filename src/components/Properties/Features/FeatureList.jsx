@@ -82,32 +82,39 @@ const FeatureList = (props) => {
               </Text>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
-              <Box position="relative">
-                <Box
-                  display="flex"
-                  bg="defaultColor.500"
-                  p="3"
-                  borderRadius="7px"
-                  alignItems="center"
-                  mb="4"
-                >
-                  <HStack w="100%" spacing="13px" height="25px">
-                    <>
-                      <Box w="25%" px="1rem" py="0.5" textAlign="center">
-                        <Text fontWeight="500">Tipo</Text>
-                      </Box>
-                      <Divider orientation="vertical" />
-                      <Box w="50%" justifyContent="center" textAlign="center">
-                        <Text fontWeight="500">Nombre</Text>
-                      </Box>
-                      <Divider orientation="vertical" />
-                      <Box w="100%" justifyContent="center" textAlign="center">
-                        <Text fontWeight="500">Descripción</Text>
-                      </Box>
-                    </>
-                  </HStack>
+              {property.features.length > 0 && (
+                <Box position="relative">
+                  <Box
+                    display="flex"
+                    bg="defaultColor.500"
+                    p="3"
+                    borderRadius="7px"
+                    alignItems="center"
+                    mb="4"
+                  >
+                    <HStack w="100%" spacing="13px" height="25px">
+                      <>
+                        <Box w="25%" px="1rem" py="0.5" textAlign="center">
+                          <Text fontWeight="500">Tipo</Text>
+                        </Box>
+                        <Divider orientation="vertical" />
+                        <Box w="50%" justifyContent="center" textAlign="center">
+                          <Text fontWeight="500">Nombre</Text>
+                        </Box>
+                        <Divider orientation="vertical" />
+                        <Box
+                          w="100%"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <Text fontWeight="500">Descripción</Text>
+                        </Box>
+                      </>
+                    </HStack>
+                  </Box>
                 </Box>
-              </Box>
+              )}
+
               {property.features.length === 0 ? (
                 <Text
                   fontSize="xl"

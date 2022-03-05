@@ -20,6 +20,7 @@ import CopyInternalCode from "../CopyInternalCode";
 import FullscreenImageModal from "../../Other/FullscreenImageModal";
 import { MdOutline360 } from "react-icons/md";
 import MediaList from "../Media/MediaList";
+import Loader from "../../Other/Loader/Loader";
 
 const dragReducer = produce((draft, action) => {
   switch (action.type) {
@@ -91,335 +92,363 @@ const VirtualToursList = (props) => {
             </Text>
           </DrawerHeader>
           <DrawerBody color="#fff" overflow="hidden">
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Box display="flex">
-                <Box
-                  borderRadius="7px"
-                  display="flex"
-                  flexDirection="column"
-                  w="100%"
-                  ml="0.5rem"
-                  p="0.5rem 2rem 2rem 2rem"
-                  bg="defaultColor.500"
-                  position="relative"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Text fontSize="1.3rem" fontWeight="500">
-                    Imágenes disponibles
-                  </Text>
-                  <Droppable droppableId="availableImages" type="PERSON">
-                    {(provided, snapshot) => {
-                      return (
-                        <Box
-                          display="flex"
-                          p="3"
-                          flexDirection="column"
-                          alignItems="center"
-                          overflowY="auto"
-                          h="72vh"
-                          w="75%"
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                        >
-                          {state.availableImages?.map((image, index) => {
-                            return (
-                              <Draggable
-                                key={image._id}
-                                draggableId={image._id}
-                                index={index}
-                              >
-                                {(provided, snapshot) => {
-                                  return (
-                                    <Box
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                    >
-                                      <Box
-                                        display="flex"
-                                        h="110px"
-                                        mb="0.9rem"
-                                        outline="2px solid #cacaca"
-                                        borderRadius="7px"
-                                        _hover={{
-                                          transition: "transform .2s",
-                                          transform: "scale(0.98)",
-                                        }}
-                                      >
+            {property.media ? (
+              <DragDropContext onDragEnd={onDragEnd}>
+                {property.media.length > 0 && (
+                  <Box display="flex">
+                    <Box
+                      borderRadius="7px"
+                      display="flex"
+                      flexDirection="column"
+                      w="100%"
+                      ml="0.5rem"
+                      p="0.5rem 2rem 2rem 2rem"
+                      bg="defaultColor.500"
+                      position="relative"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Text fontSize="1.3rem" fontWeight="500">
+                        Imágenes disponibles
+                      </Text>
+                      <Droppable droppableId="availableImages" type="IMAGES">
+                        {(provided, snapshot) => {
+                          return (
+                            <Box
+                              display="flex"
+                              p="3"
+                              flexDirection="column"
+                              alignItems="center"
+                              overflowY="auto"
+                              h="72vh"
+                              w="75%"
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                            >
+                              {state.availableImages?.map((image, index) => {
+                                return (
+                                  <Draggable
+                                    key={image._id}
+                                    draggableId={image._id}
+                                    index={index}
+                                  >
+                                    {(provided, snapshot) => {
+                                      return (
                                         <Box
-                                          minW="200px"
-                                          maxW="200px"
-                                          h="110px"
-                                          borderStartStartRadius="7px"
-                                          borderEndStartRadius="7px"
-                                          overflow="hidden"
-                                          mb="0.8rem"
-                                          position="relative"
-                                        >
-                                          <Box
-                                            bg="defaultColor.400"
-                                            borderRadius="50%"
-                                            position="absolute"
-                                            p="0"
-                                            h="1.7rem"
-                                            w="1.7rem"
-                                            top="2"
-                                            left="2"
-                                            cursor="pointer"
-                                            _hover={{
-                                              bg: "defaultColor.500",
-                                            }}
-                                          >
-                                            <Box textAlign="center" mt="1px">
-                                              <Text fontWeight="500">
-                                                {index + 1}
-                                              </Text>
-                                            </Box>
-                                          </Box>
-                                          <FullscreenImageModal
-                                            minWidth="200px"
-                                            maxWidth="200px"
-                                            src={image.url}
-                                            alt={image.description}
-                                            hover="yes"
-                                            text={`Imagen de la propiedad ${property.internalCode}`}
-                                            description={image.description}
-                                          />
-                                        </Box>
-                                        <Box
-                                          bg="defaultColor.700"
-                                          borderStartEndRadius="7px"
-                                          borderEndEndRadius="7px"
-                                          justifyContent="center"
-                                          alignItems="center"
-                                          textAlign="center"
-                                          w="17rem"
-                                          h="100%"
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          {...provided.dragHandleProps}
                                         >
                                           <Box
                                             display="flex"
-                                            justifyContent="center"
-                                            alignItems="center"
-                                            textAlign="center"
-                                            fontWeight="500"
-                                            mt="0.5rem"
-                                            fontSize="0.95rem"
-                                          >
-                                            Imagen{" "}
-                                            {image.type == "360"
-                                              ? "360"
-                                              : "normal"}
-                                            {image.type == "360" && (
-                                              <Box ml="0.3rem">
-                                                <MdOutline360 fontSize="1.2rem" />
-                                              </Box>
-                                            )}
-                                          </Box>
-                                          {image.description.length > 90 ? (
-                                            <Tooltip
-                                              hasArrow
-                                              label={image.description}
-                                              bg="defaultColor.500"
-                                            >
-                                              <Box
-                                                fontSize="0.9rem"
-                                                p="2"
-                                                mt="-0.5rem"
-                                              >
-                                                {image.description
-                                                  .slice(0, 90)
-                                                  .concat("...")}
-                                              </Box>
-                                            </Tooltip>
-                                          ) : (
-                                            <Box
-                                              fontSize="0.9rem"
-                                              p="2"
-                                              mt="-0.5rem"
-                                            >
-                                              {image.description}
-                                            </Box>
-                                          )}
-                                        </Box>
-                                      </Box>
-                                    </Box>
-                                  );
-                                }}
-                              </Draggable>
-                            );
-                          })}
-                          {provided.placeholder}
-                        </Box>
-                      );
-                    }}
-                  </Droppable>
-                </Box>
-                <Box
-                  borderRadius="7px"
-                  display="flex"
-                  flexDirection="column"
-                  w="100%"
-                  ml="0.5rem"
-                  p="1rem 2rem 2rem 2rem"
-                  bg="defaultColor.500"
-                  position="relative"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Text fontSize="1.3rem" fontWeight="500">
-                    Imágenes seleccionadas
-                  </Text>
-                  <Droppable droppableId="selectedImages" type="PERSON">
-                    {(provided, snapshot) => {
-                      return (
-                        <Box
-                          display="flex"
-                          p="3"
-                          flexDirection="column"
-                          alignItems="center"
-                          overflowY="auto"
-                          h="72vh"
-                          w="75%"
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                        >
-                          {state.selectedImages?.map((image, index) => {
-                            return (
-                              <Draggable
-                                key={image._id}
-                                draggableId={image._id}
-                                index={index}
-                              >
-                                {(provided, snapshot) => {
-                                  return (
-                                    <Box
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                    >
-                                      <Box
-                                        display="flex"
-                                        h="110px"
-                                        mb="0.9rem"
-                                        outline="2px solid #cacaca"
-                                        borderRadius="7px"
-                                        _hover={{
-                                          transition: "transform .2s",
-                                          transform: "scale(0.98)",
-                                        }}
-                                      >
-                                        <Box
-                                          minW="200px"
-                                          maxW="200px"
-                                          h="110px"
-                                          borderStartStartRadius="7px"
-                                          borderEndStartRadius="7px"
-                                          overflow="hidden"
-                                          mb="0.8rem"
-                                          position="relative"
-                                        >
-                                          <Box
-                                            bg="defaultColor.400"
-                                            borderRadius="50%"
-                                            position="absolute"
-                                            p="0"
-                                            h="1.7rem"
-                                            w="1.7rem"
-                                            top="2"
-                                            left="2"
-                                            cursor="pointer"
+                                            h="110px"
+                                            mb="0.9rem"
+                                            outline="2px solid #cacaca"
+                                            borderRadius="7px"
                                             _hover={{
-                                              bg: "defaultColor.500",
+                                              transition: "transform .2s",
+                                              transform: "scale(0.98)",
                                             }}
                                           >
-                                            <Box textAlign="center" mt="1px">
-                                              <Text fontWeight="500">
-                                                {index + 1}
-                                              </Text>
+                                            <Box
+                                              minW="200px"
+                                              maxW="200px"
+                                              h="110px"
+                                              borderStartStartRadius="7px"
+                                              borderEndStartRadius="7px"
+                                              overflow="hidden"
+                                              mb="0.8rem"
+                                              position="relative"
+                                            >
+                                              <Box
+                                                bg="defaultColor.400"
+                                                borderRadius="50%"
+                                                position="absolute"
+                                                p="0"
+                                                h="1.7rem"
+                                                w="1.7rem"
+                                                top="2"
+                                                left="2"
+                                                cursor="pointer"
+                                                _hover={{
+                                                  bg: "defaultColor.500",
+                                                }}
+                                              >
+                                                <Box
+                                                  textAlign="center"
+                                                  mt="1px"
+                                                >
+                                                  <Text fontWeight="500">
+                                                    {index + 1}
+                                                  </Text>
+                                                </Box>
+                                              </Box>
+                                              <FullscreenImageModal
+                                                minWidth="200px"
+                                                maxWidth="200px"
+                                                src={image.url}
+                                                alt={image.description}
+                                                hover="yes"
+                                                text={`Imagen de la propiedad ${property.internalCode}`}
+                                                description={image.description}
+                                              />
+                                            </Box>
+                                            <Box
+                                              bg="defaultColor.700"
+                                              borderStartEndRadius="7px"
+                                              borderEndEndRadius="7px"
+                                              justifyContent="center"
+                                              alignItems="center"
+                                              textAlign="center"
+                                              w="17rem"
+                                              h="100%"
+                                            >
+                                              <Box
+                                                display="flex"
+                                                justifyContent="center"
+                                                alignItems="center"
+                                                textAlign="center"
+                                                fontWeight="500"
+                                                mt="0.5rem"
+                                                fontSize="0.95rem"
+                                              >
+                                                Imagen{" "}
+                                                {image.type == "360"
+                                                  ? "360"
+                                                  : "normal"}
+                                                {image.type == "360" && (
+                                                  <Box ml="0.3rem">
+                                                    <MdOutline360 fontSize="1.2rem" />
+                                                  </Box>
+                                                )}
+                                              </Box>
+                                              {image.description.length > 90 ? (
+                                                <Tooltip
+                                                  hasArrow
+                                                  label={image.description}
+                                                  bg="defaultColor.500"
+                                                >
+                                                  <Box
+                                                    fontSize="0.9rem"
+                                                    p="2"
+                                                    mt="-0.5rem"
+                                                  >
+                                                    {image.description
+                                                      .slice(0, 90)
+                                                      .concat("...")}
+                                                  </Box>
+                                                </Tooltip>
+                                              ) : (
+                                                <Box
+                                                  fontSize="0.9rem"
+                                                  p="2"
+                                                  mt="-0.5rem"
+                                                >
+                                                  {image.description}
+                                                </Box>
+                                              )}
                                             </Box>
                                           </Box>
-                                          <FullscreenImageModal
-                                            minWidth="200px"
-                                            maxWidth="200px"
-                                            src={image.url}
-                                            alt={image.description}
-                                            hover="yes"
-                                            text={`Imagen de la propiedad ${property.internalCode}`}
-                                            description={image.description}
-                                          />
                                         </Box>
+                                      );
+                                    }}
+                                  </Draggable>
+                                );
+                              })}
+                              {provided.placeholder}
+                            </Box>
+                          );
+                        }}
+                      </Droppable>
+                    </Box>
+                    <Box
+                      borderRadius="7px"
+                      display="flex"
+                      flexDirection="column"
+                      w="100%"
+                      ml="0.5rem"
+                      p="1rem 2rem 2rem 2rem"
+                      bg="defaultColor.500"
+                      position="relative"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Text fontSize="1.3rem" fontWeight="500">
+                        Imágenes seleccionadas
+                      </Text>
+                      <Droppable droppableId="selectedImages" type="IMAGES">
+                        {(provided, snapshot) => {
+                          return (
+                            <Box
+                              display="flex"
+                              p="3"
+                              flexDirection="column"
+                              alignItems="center"
+                              overflowY="auto"
+                              h="72vh"
+                              w="75%"
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                            >
+                              {state.selectedImages?.map((image, index) => {
+                                return (
+                                  <Draggable
+                                    key={image._id}
+                                    draggableId={image._id}
+                                    index={index}
+                                  >
+                                    {(provided, snapshot) => {
+                                      return (
                                         <Box
-                                          bg="defaultColor.700"
-                                          borderStartEndRadius="7px"
-                                          borderEndEndRadius="7px"
-                                          justifyContent="center"
-                                          alignItems="center"
-                                          textAlign="center"
-                                          w="17rem"
-                                          h="100%"
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          {...provided.dragHandleProps}
                                         >
                                           <Box
                                             display="flex"
-                                            justifyContent="center"
-                                            alignItems="center"
-                                            textAlign="center"
-                                            fontWeight="500"
-                                            mt="0.5rem"
-                                            fontSize="0.95rem"
+                                            h="110px"
+                                            mb="0.9rem"
+                                            outline="2px solid #cacaca"
+                                            borderRadius="7px"
+                                            _hover={{
+                                              transition: "transform .2s",
+                                              transform: "scale(0.98)",
+                                            }}
                                           >
-                                            Imagen{" "}
-                                            {image.type == "360"
-                                              ? "360"
-                                              : "normal"}
-                                            {image.type == "360" && (
-                                              <Box ml="0.3rem">
-                                                <MdOutline360 fontSize="1.2rem" />
-                                              </Box>
-                                            )}
-                                          </Box>
-                                          {image.description.length > 90 ? (
-                                            <Tooltip
-                                              hasArrow
-                                              label={image.description}
-                                              bg="defaultColor.500"
+                                            <Box
+                                              minW="200px"
+                                              maxW="200px"
+                                              h="110px"
+                                              borderStartStartRadius="7px"
+                                              borderEndStartRadius="7px"
+                                              overflow="hidden"
+                                              mb="0.8rem"
+                                              position="relative"
                                             >
                                               <Box
-                                                fontSize="0.9rem"
-                                                p="2"
-                                                mt="-0.5rem"
+                                                bg="defaultColor.400"
+                                                borderRadius="50%"
+                                                position="absolute"
+                                                p="0"
+                                                h="1.7rem"
+                                                w="1.7rem"
+                                                top="2"
+                                                left="2"
+                                                cursor="pointer"
+                                                _hover={{
+                                                  bg: "defaultColor.500",
+                                                }}
                                               >
-                                                {image.description
-                                                  .slice(0, 90)
-                                                  .concat("...")}
+                                                <Box
+                                                  textAlign="center"
+                                                  mt="1px"
+                                                >
+                                                  <Text fontWeight="500">
+                                                    {index + 1}
+                                                  </Text>
+                                                </Box>
                                               </Box>
-                                            </Tooltip>
-                                          ) : (
-                                            <Box
-                                              fontSize="0.9rem"
-                                              p="2"
-                                              mt="-0.5rem"
-                                            >
-                                              {image.description}
+                                              <FullscreenImageModal
+                                                minWidth="200px"
+                                                maxWidth="200px"
+                                                src={image.url}
+                                                alt={image.description}
+                                                hover="yes"
+                                                text={`Imagen de la propiedad ${property.internalCode}`}
+                                                description={image.description}
+                                              />
                                             </Box>
-                                          )}
+                                            <Box
+                                              bg="defaultColor.700"
+                                              borderStartEndRadius="7px"
+                                              borderEndEndRadius="7px"
+                                              justifyContent="center"
+                                              alignItems="center"
+                                              textAlign="center"
+                                              w="17rem"
+                                              h="100%"
+                                            >
+                                              <Box
+                                                display="flex"
+                                                justifyContent="center"
+                                                alignItems="center"
+                                                textAlign="center"
+                                                fontWeight="500"
+                                                mt="0.5rem"
+                                                fontSize="0.95rem"
+                                              >
+                                                Imagen{" "}
+                                                {image.type == "360"
+                                                  ? "360"
+                                                  : "normal"}
+                                                {image.type == "360" && (
+                                                  <Box ml="0.3rem">
+                                                    <MdOutline360 fontSize="1.2rem" />
+                                                  </Box>
+                                                )}
+                                              </Box>
+                                              {image.description.length > 90 ? (
+                                                <Tooltip
+                                                  hasArrow
+                                                  label={image.description}
+                                                  bg="defaultColor.500"
+                                                >
+                                                  <Box
+                                                    fontSize="0.9rem"
+                                                    p="2"
+                                                    mt="-0.5rem"
+                                                  >
+                                                    {image.description
+                                                      .slice(0, 90)
+                                                      .concat("...")}
+                                                  </Box>
+                                                </Tooltip>
+                                              ) : (
+                                                <Box
+                                                  fontSize="0.9rem"
+                                                  p="2"
+                                                  mt="-0.5rem"
+                                                >
+                                                  {image.description}
+                                                </Box>
+                                              )}
+                                            </Box>
+                                          </Box>
                                         </Box>
-                                      </Box>
-                                    </Box>
-                                  );
-                                }}
-                              </Draggable>
-                            );
-                          })}
-                          {provided.placeholder}
-                        </Box>
-                      );
-                    }}
-                  </Droppable>
-                </Box>
-              </Box>
-            </DragDropContext>
+                                      );
+                                    }}
+                                  </Draggable>
+                                );
+                              })}
+                              {provided.placeholder}
+                            </Box>
+                          );
+                        }}
+                      </Droppable>
+                    </Box>
+                  </Box>
+                )}
+                ;
+              </DragDropContext>
+            ) : (
+              <Loader />
+            )}
           </DrawerBody>
+          {property.media.length === 0 && (
+            <Text
+              fontSize="xl"
+              color="#fff"
+              position="relative"
+              display="flex"
+              h="100%"
+              w="100%"
+              justifyContent="center"
+              alignItems="center"
+              mt="-2rem"
+            >
+              Esta propiedad aún no cuenta con imágenes.
+            </Text>
+          )}
           <DrawerFooter borderTopWidth="1px">
             <MediaList
               property={property}

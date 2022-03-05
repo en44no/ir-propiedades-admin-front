@@ -58,7 +58,12 @@ const CreateMedia = (props) => {
         </Button>
         <Drawer isOpen={isOpen} size="sm" placement="left" onClose={onClose}>
           <DrawerOverlay />
-          <DrawerContent bg="defaultColor.400">
+          <DrawerContent
+            borderRight="1px white solid"
+            bg="defaultColor.400"
+            borderStartEndRadius="7px"
+            borderEndEndRadius="7px"
+          >
             <DrawerCloseButton color="#fff" mt="2" />
             <DrawerHeader color="#fff" borderBottomWidth="1px">
               Subir imagen {property.name ? `para "${property.name}"` : ""}

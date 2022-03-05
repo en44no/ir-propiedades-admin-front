@@ -93,77 +93,79 @@ const PostList = (props) => {
               </Text>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
-              <Box position="relative">
-                <Box
-                  display="flex"
-                  bg="defaultColor.500"
-                  p="3"
-                  borderRadius="7px"
-                  alignItems="center"
-                  mb="5"
-                >
-                  <HStack w="100%" spacing="13px" height="25px">
-                    <>
-                      <Box
-                        p="0"
-                        minW="10%"
-                        maxW="10%"
-                        justifyContent="center"
-                        textAlign="center"
-                      >
-                        <Text>Estado</Text>
-                      </Box>
-                      <Divider orientation="vertical" />
-                      <Box
-                        p="0"
-                        minW="15%"
-                        maxW="15%"
-                        justifyContent="center"
-                        textAlign="center"
-                      >
-                        <Text>Venta</Text>
-                      </Box>
-                      <Divider orientation="vertical" />
-                      <Box
-                        p="0"
-                        minW="15%"
-                        maxW="15%"
-                        justifyContent="center"
-                        textAlign="center"
-                      >
-                        <Text>Alquiler</Text>
-                      </Box>
-                      <Divider orientation="vertical" />
-                      <Box
-                        minW="15%"
-                        maxW="15%"
-                        justifyContent="center"
-                        textAlign="center"
-                      >
-                        <Text>Fecha desde</Text>
-                      </Box>
-                      <Divider orientation="vertical" />
-                      <Box
-                        minW="15%"
-                        maxW="15%"
-                        justifyContent="center"
-                        textAlign="center"
-                      >
-                        <Text>Fecha hasta</Text>
-                      </Box>
-                      <Divider orientation="vertical" />
-                      <HStack
-                        minW="15%"
-                        maxW="15%"
-                        justifyContent="center"
-                        textAlign="center"
-                      >
-                        <Text ml="-4">Compartido en</Text>
-                      </HStack>
-                    </>
-                  </HStack>
+              {property.features.length > 0 && (
+                <Box position="relative">
+                  <Box
+                    display="flex"
+                    bg="defaultColor.500"
+                    p="3"
+                    borderRadius="7px"
+                    alignItems="center"
+                    mb="5"
+                  >
+                    <HStack w="100%" spacing="13px" height="25px">
+                      <>
+                        <Box
+                          p="0"
+                          minW="10%"
+                          maxW="10%"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <Text>Estado</Text>
+                        </Box>
+                        <Divider orientation="vertical" />
+                        <Box
+                          p="0"
+                          minW="15%"
+                          maxW="15%"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <Text>Venta</Text>
+                        </Box>
+                        <Divider orientation="vertical" />
+                        <Box
+                          p="0"
+                          minW="15%"
+                          maxW="15%"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <Text>Alquiler</Text>
+                        </Box>
+                        <Divider orientation="vertical" />
+                        <Box
+                          minW="15%"
+                          maxW="15%"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <Text>Fecha desde</Text>
+                        </Box>
+                        <Divider orientation="vertical" />
+                        <Box
+                          minW="15%"
+                          maxW="15%"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <Text>Fecha hasta</Text>
+                        </Box>
+                        <Divider orientation="vertical" />
+                        <HStack
+                          minW="15%"
+                          maxW="15%"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <Text ml="-4">Compartido en</Text>
+                        </HStack>
+                      </>
+                    </HStack>
+                  </Box>
                 </Box>
-              </Box>
+              )}
               {posts.length === 0 ? (
                 <Text
                   fontSize="xl"
