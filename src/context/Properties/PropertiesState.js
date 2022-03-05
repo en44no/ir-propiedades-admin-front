@@ -415,7 +415,7 @@ const PropertiesState = (props) => {
               }
             });
             property.media = [...property.media, resMedia.data];
-            addMediatoProperty(resMedia.data, property);
+            addMediaToProperty(resMedia.data, property);
             setProperties(newProperties);
           })
           .catch((error) => {})
@@ -454,7 +454,7 @@ const PropertiesState = (props) => {
       .catch((error) => {});
   };
 
-  const addMediatoProperty = async (data, property) => {
+  const addMediaToProperty = async (data, property) => {
     let images = [];
     images.push(data._id);
     await axios
@@ -473,6 +473,30 @@ const PropertiesState = (props) => {
         { id: image._id }
       )
       .then((resMedia) => {});
+  };
+
+  const changeInventoryStatus = async (status, inventoryId) => {
+    await axios
+      .put(`${process.env.REACT_APP_API_BASE_URL}/inventories/${inventoryId}`, {
+        status: [status],
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          Notification(
+            "Estado del inventario modificado correctamente",
+            "Has modicado el estado de un inventario",
+            "success"
+          );
+          fetchProperties();
+        } else {
+          Notification(
+            "Error al modificar el estado del inventario",
+            "Ocurrió un error intentado modificar el estado del inventario",
+            "error"
+          );
+        }
+      })
+      .catch((error) => {});
   };
 
   return (
@@ -500,6 +524,7 @@ const PropertiesState = (props) => {
         editFeature,
         editPost,
         deleteMedia,
+        changeInventoryStatus,
       }}
     >
       {props.children}

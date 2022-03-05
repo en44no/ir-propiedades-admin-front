@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
   useDisclosure,
@@ -20,21 +20,17 @@ import { FaBoxes, FaCheck } from "react-icons/fa";
 import { GiPadlock } from "react-icons/gi";
 import CopyInternalCode from "../CopyInternalCode";
 import InventoryItems from "./InventoryItems";
+import PropertiesContext from "../../../context/Properties/PropertiesContext";
 
 const InventoriesList = (props) => {
   const { full, property } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { changeInventoryStatus } = useContext(PropertiesContext);
 
   const formatDate = (date) => {
     const newDate = new Date(date);
     return newDate.toLocaleDateString("en-GB");
   };
-
-  useEffect(() => {
-    if (isOpen) {
-      //getFeaturesByProperty(property._id);
-    }
-  }, [isOpen]);
 
   const parseInventoryStatus = (inventory) => {
     if (inventory.status[0] === "Abierto") {
@@ -43,6 +39,8 @@ const InventoriesList = (props) => {
       return <BadgeInventoryStatus bgColor="#d63031" text="Cerrado" />;
     } else if (inventory.status[0] === "Base") {
       return <BadgeInventoryStatus bgColor="#cacaca" text="Base" />;
+    } else if (inventory.status[0] === "Finalizado") {
+      return <BadgeInventoryStatus bgColor="#0984e3" text="Finalizado" />;
     }
   };
 
@@ -59,7 +57,7 @@ const InventoriesList = (props) => {
           borderRadius="9px"
           variant="add-button-clear"
         >
-          Ver inventarios
+          Gestionar inventarios
         </Button>
         <Drawer size="full" isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
@@ -134,6 +132,7 @@ const InventoriesList = (props) => {
                   w="100%"
                   justifyContent="center"
                   alignItems="center"
+                  mt="-0.5rem"
                 >
                   Esta propiedad aún no cuenta con inventarios.
                 </Text>
@@ -216,7 +215,12 @@ const InventoriesList = (props) => {
                                   bg="defaultColor.400"
                                   borderRadius="7px"
                                   alignItems="center"
-                                  onClick={onOpen}
+                                  onClick={() => {
+                                    changeInventoryStatus(
+                                      "Cerrado",
+                                      inventory._id
+                                    );
+                                  }}
                                 >
                                   <GiPadlock fontSize="1.2rem" />
                                 </HStack>
@@ -235,7 +239,12 @@ const InventoriesList = (props) => {
                                   bg="defaultColor.400"
                                   borderRadius="7px"
                                   alignItems="center"
-                                  onClick={onOpen}
+                                  onClick={() => {
+                                    changeInventoryStatus(
+                                      "Finalizado",
+                                      inventory._id
+                                    );
+                                  }}
                                 >
                                   <FaCheck fontSize="1rem" />
                                 </HStack>
