@@ -12,7 +12,6 @@ const PropertiesPage = () => {
 
   useEffect(() => {
     setFilteredProperties(properties);
-    console.log(filteredProperties)
   }, [properties]);
 
 
@@ -21,12 +20,11 @@ const PropertiesPage = () => {
         <Box ml='1rem' display="flex" justifyContent="end">
           <Search
           placeHolder='Busca propiedades según nombre, tipo, descripción, dirección, comentarios y código interno...'
-            listToFilter={filteredProperties}
+            listToFilter={properties}
             filters={[
               "name",
               "type",
               "description",
-              "address",
               "address.city",
               "address.country",
               "address.neighborhood",

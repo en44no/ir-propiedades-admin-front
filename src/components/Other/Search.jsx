@@ -14,30 +14,28 @@ const Search = (props) => {
   };
 
   const handleChange = (e) => {
-    console.log(e.target.value)
-    const st = normalize(e.target.value)
+    const st = normalize(e.target.value);
     if (st !== '') {
       filterData(st);
     } else {
-      listSetter(listToFilter)
+      listSetter(listToFilter);
     }
   }
 
 
   const filterData = (searchText) => {
-    let filteredList = []
-    for (const item of listToFilter) {
-      let matches = []
-
+    const filteredList = listToFilter.filter((item) => {
       for (const filter of filters) {
-        matches.push(normalize(item[filter]).includes(searchText));
+        const splittedFilter = filter.split(".");
+        let property = item[splittedFilter[0]];
+        if (splittedFilter.length > 1) {
+          property = property[splittedFilter[1]];
+        }
+        if (normalize(property).includes(searchText)) {
+          return true;
+        }
       }
-
-      if (matches.includes(true)) {
-        filteredList.push(item);
-      }
-    }
-    console.log(filteredList)
+    });
     listSetter(filteredList);
   }
 
