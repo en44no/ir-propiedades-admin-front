@@ -9,6 +9,9 @@ const PropertiesState = (props) => {
   const [posts, setPosts] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [featuresProperty, setFeaturesProperty] = useState([]);
+  const [imagesPendingToAddForPost, setImagesPendingToAddForPost] = useState(
+    []
+  );
 
   useEffect(() => {
     fetchProperties();
@@ -165,7 +168,45 @@ const PropertiesState = (props) => {
       });
   };
 
+  const addVirtualTourToProperty = async (virtualTourImages, property) => {
+    await axios
+      .put(`${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}`, {
+        virtualTour: virtualTourImages,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          Notification(
+            "Virtual tour modificado correctamente",
+            "Has modificado el virtual tour de una propiedad",
+            "success"
+          );
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          setProperties(newProperties);
+        }
+      })
+      .catch((error) => {
+        Notification(
+          "Error al modificar virtual tour",
+          "Ocurrió un error intentado modificar el virtual tour de una propiedad",
+          "error"
+        );
+      });
+  };
+
   const addPost = async (data, propertyId) => {
+    let nowWithoutHours = new Date(new Date().toDateString());
+    let startDateWithoutHours = new Date(data.startDate.toDateString());
+    if (startDateWithoutHours <= nowWithoutHours) {
+      data.status = "Activa";
+    } else if (startDateWithoutHours > nowWithoutHours) {
+      data.status = "Pendiente";
+    }
     data.property = propertyId;
     await axios
       .post(`${process.env.REACT_APP_API_BASE_URL}/posts`, data)
@@ -200,7 +241,8 @@ const PropertiesState = (props) => {
       .catch((error) => {});
   };
 
-  const editPost = async (data, postId) => {
+  const editPost = async (data, postId, propertyId) => {
+    const property = properties.find((property) => property._id === propertyId);
     await axios
       .put(`${process.env.REACT_APP_API_BASE_URL}/posts/${postId}`, data)
       .then((res) => {
@@ -210,7 +252,18 @@ const PropertiesState = (props) => {
             "Has editado una publicación",
             "success"
           );
+          let images = [];
+          res.data.media.map((media) => {
+            if (property.media.indexOf(media)) {
+              let realImage = property.media.find(
+                (image) => image._id === media
+              );
+              images.push(realImage);
+            }
+          });
+          res.data.media = images;
           setPosts([...posts.filter((post) => post._id !== postId), res.data]);
+          fetchProperties();
         }
       })
       .catch((error) => {
@@ -466,7 +519,6 @@ const PropertiesState = (props) => {
   };
 
   const deleteMediaToProperty = async (property, image) => {
-    console.log(image._id);
     await axios
       .put(
         `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}/removeMedia`,
@@ -492,6 +544,102 @@ const PropertiesState = (props) => {
           Notification(
             "Error al modificar el estado del inventario",
             "Ocurrió un error intentado modificar el estado del inventario",
+            "error"
+          );
+        }
+      })
+      .catch((error) => {});
+  };
+
+  const changeReviewStatus = async (status, reviewsId) => {
+    await axios
+      .put(`${process.env.REACT_APP_API_BASE_URL}/reviews/${reviewsId}`, {
+        status: status,
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          Notification(
+            "Estado del control modificado correctamente",
+            "Has modicado el estado de un control",
+            "success"
+          );
+          fetchProperties();
+        } else {
+          Notification(
+            "Error al modificar el estado del control",
+            "Ocurrió un error intentado modificar el estado del control",
+            "error"
+          );
+        }
+      })
+      .catch((error) => {});
+  };
+
+  const changeOrderMediaFromProperty = async (data, propertyId) => {
+    const property = properties.find((property) => property._id === propertyId);
+    await axios
+      .put(`${process.env.REACT_APP_API_BASE_URL}/properties/${propertyId}`, {
+        media: data,
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          Notification(
+            "Orden de las imágenes modificado correctamente",
+            "Has modificado el orden de las imágenes de una propiedad",
+            "success"
+          );
+          setProperties(newProperties);
+          fetchProperties();
+        } else {
+          Notification(
+            "Error al modificar el orden de las imágenes",
+            "Ocurrió un error intentado modificar el orden de las imágenes de una propiedad",
+            "error"
+          );
+        }
+      })
+      .catch((error) => {});
+  };
+
+  const addSurfaceToProperty = async (surfaceData, propertyId) => {
+    debugger;
+    const property = properties.find((property) => property._id === propertyId);
+    await axios
+      .put(`${process.env.REACT_APP_API_BASE_URL}/properties/${propertyId}`, {
+        totalSurface: surfaceData.totalSurface,
+        buildedSurface: surfaceData.buildedSurface,
+        unitMeasurement: surfaceData.unitMeasurement,
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          Notification(
+            "Superficie modificada correctamente",
+            "Has modificado la superficie de una propiedad",
+            "success"
+          );
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              property.totalSurface = surfaceData.totalSurface;
+              property.buildedSurface = surfaceData.buildedSurface;
+              property.unitMeasurement = surfaceData.unitMeasurement;
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          setProperties(newProperties);
+          fetchProperties();
+        } else {
+          Notification(
+            "Error al modificar la superficie",
+            "Ocurrió un error intentado modificar la superficie de una propiedad",
             "error"
           );
         }
@@ -525,6 +673,12 @@ const PropertiesState = (props) => {
         editPost,
         deleteMedia,
         changeInventoryStatus,
+        addVirtualTourToProperty,
+        imagesPendingToAddForPost,
+        setImagesPendingToAddForPost,
+        changeReviewStatus,
+        addSurfaceToProperty,
+        changeOrderMediaFromProperty,
       }}
     >
       {props.children}

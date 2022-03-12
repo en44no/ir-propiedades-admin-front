@@ -100,7 +100,7 @@ const PropertyCard = (props) => {
               <Box>{property.description}</Box>
             )}
           </Box>
-          <HStack spacing="10px" mt="2">
+          <HStack spacing="4px" mt="2">
             <Badge
               borderRadius="7px"
               alignItems="center"
@@ -112,6 +112,7 @@ const PropertyCard = (props) => {
             >
               <CopyInternalCode
                 text="propiedad"
+                iconSize="0.9rem"
                 internalCode={
                   property.internalCode ? property.internalCode : "CÓDIGO"
                 }

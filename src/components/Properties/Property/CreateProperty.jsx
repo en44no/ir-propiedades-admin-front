@@ -68,7 +68,11 @@ const CreateProperty = () => {
           borderStartStartRadius="7px"
           borderEndStartRadius="7px"
         >
-          <DrawerCloseButton color="#fff" mt="2" />
+          <DrawerCloseButton
+            _focus={{ boxShadow: "none" }}
+            color="#fff"
+            mt="2"
+          />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
             Agregar propiedad
           </DrawerHeader>

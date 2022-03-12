@@ -19,9 +19,12 @@ import {
 import CustomersContext from "../../context/Customers/CustomersContext";
 import { useForm } from "react-hook-form";
 import { HiPlus } from "react-icons/hi";
+import { BsFillHouseDoorFill } from "react-icons/bs";
+import AssociateProperty from "./AssociateProperty";
 
 const CreateCustomer = (props) => {
-  const { addCustomer } = useContext(CustomersContext);
+  const { addCustomer, associatedPropertiesPendingToAdd } =
+    useContext(CustomersContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [customerType, setCustomerType] = useState("");
 
@@ -33,6 +36,10 @@ const CreateCustomer = (props) => {
   } = useForm();
 
   const submitCustomer = (data) => {
+    if (associatedPropertiesPendingToAdd !== null) {
+      data.ownerProperties = associatedPropertiesPendingToAdd.ownerProperties;
+      data.tenantProperties = associatedPropertiesPendingToAdd.tenantProperties;
+    }
     addCustomer(data);
     reset();
     onClose();
@@ -55,7 +62,11 @@ const CreateCustomer = (props) => {
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent bg="defaultColor.400">
-          <DrawerCloseButton color="#fff" mt="2" />
+          <DrawerCloseButton
+            _focus={{ boxShadow: "none" }}
+            color="#fff"
+            mt="2"
+          />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
             Agregar cliente
           </DrawerHeader>
@@ -107,37 +118,11 @@ const CreateCustomer = (props) => {
                     </Badge>
                   )}
                 </Box>
+
                 <Box>
-                  <FormLabel htmlFor="CustomerType">Tipo</FormLabel>
-                  <Select
-                    {...register("type", { required: "Tipo es requerido." })}
-                    id="CustomerType"
-                    placeholder="Selecciona el tipo"
-                    onChange={(event) => setCustomerType(event.target.value)}
-                  >
-                    <option value="Dueño">Dueño</option>
-                    <option value="Interesado">Interesado</option>
-                    <option value="Inquilino">Inquilino</option>
-                  </Select>
-                  {errors.type && (
-                    <Badge variant="required-error">
-                      {errors.type.message}
-                    </Badge>
-                  )}
+                  <FormLabel htmlFor="CustomerProperty">Propiedades</FormLabel>
+                  <AssociateProperty />
                 </Box>
-                {customerType == "Dueño" || customerType == "Inquilino" ? (
-                  <Box>
-                    <FormLabel htmlFor="CustomerProperty">
-                      Código interno de la propiedad
-                    </FormLabel>
-                    <Input
-                      {...register("property")}
-                      id="CustomerProperty"
-                      placeholder="Ingresa el código"
-                      autoComplete="off"
-                    />
-                  </Box>
-                ) : null}
               </Stack>
             </form>
           </DrawerBody>

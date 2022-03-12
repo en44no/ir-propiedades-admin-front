@@ -17,11 +17,11 @@ import {
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
-import { HiPlus } from "react-icons/hi";
+import { MdFileUpload } from "react-icons/md";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import { useForm } from "react-hook-form";
 
-const CreateMedia = (props) => {
+const CreateDocument = (props) => {
   const { full, property, normalAddButton, noRightMargin } = props;
   const { addMedia } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,6 +35,7 @@ const CreateMedia = (props) => {
   } = useForm();
 
   const submitMedia = (data) => {
+    data.position = property.media.length + 1;
     data.image = selectedImage;
     addMedia(data, property);
     reset();
@@ -49,7 +50,7 @@ const CreateMedia = (props) => {
           w={full === "yes" ? "100%" : "7rem"}
           onClick={onOpen}
           fontSize="15px"
-          leftIcon={<HiPlus fontSize="1.2rem" />}
+          leftIcon={<MdFileUpload fontSize="1.3rem" />}
           mr={noRightMargin ? 0 : 5}
           borderRadius="9px"
           variant={normalAddButton ? "add-button-dark" : "add-button-clear"}
@@ -58,23 +59,49 @@ const CreateMedia = (props) => {
         </Button>
         <Drawer isOpen={isOpen} size="sm" placement="left" onClose={onClose}>
           <DrawerOverlay />
-          <DrawerContent bg="defaultColor.400">
+          <DrawerContent
+            borderRight="1px white solid"
+            bg="defaultColor.400"
+            borderStartEndRadius="7px"
+            borderEndEndRadius="7px"
+          >
             <DrawerCloseButton
               _focus={{ boxShadow: "none" }}
               color="#fff"
               mt="2"
             />
             <DrawerHeader color="#fff" borderBottomWidth="1px">
-              Subir imagen {property.name ? `para "${property.name}"` : ""}
+              Subir documento
             </DrawerHeader>
             <DrawerBody color="#fff">
               <form id="formMedia" onSubmit={handleSubmit(submitMedia)}>
                 <Stack spacing="14px">
                   <Box>
-                    <FormLabel htmlFor="createMediaImage">Imagen</FormLabel>
+                    <FormLabel htmlFor="propertyName">Nombre</FormLabel>
+                    <Input
+                      {...register("name")}
+                      id="propertyName"
+                      placeholder="Ingresa el nombre"
+                      autoComplete="off"
+                    />
+                  </Box>
+                  <Box>
+                    <FormLabel htmlFor="propertyDescription">
+                      Descripción
+                    </FormLabel>
+                    <Textarea
+                      {...register("description")}
+                      id="propertyDescription"
+                      placeholder="Ingresa la descripción"
+                      autoComplete="off"
+                    />
+                  </Box>
+                  <Box>
+                    <FormLabel htmlFor="createMediaImage">Archivos</FormLabel>
                     <Input
                       pt="0.3rem"
                       type="file"
+                      multiple
                       onChange={(e) => {
                         setSelectedImage(e.target.files[0]);
                       }}
@@ -82,34 +109,6 @@ const CreateMedia = (props) => {
                       w="100%"
                       fontSize="1rem"
                     ></Input>
-                  </Box>
-                  <Box>
-                    <FormLabel htmlFor="createMediaDescription">
-                      Descripción
-                    </FormLabel>
-                    <Textarea
-                      {...register("description")}
-                      id="createMediaDescription"
-                      placeholder="Ingresa la descripción"
-                    ></Textarea>
-                  </Box>
-                  <Box>
-                    <FormLabel htmlFor="createMediaType">Tipo</FormLabel>
-                    <Select
-                      {...register("type", {
-                        required: "Tipo es requerido.",
-                      })}
-                      id="createMediaType"
-                      placeholder="Ingresa el tipo"
-                    >
-                      <option value="Imagen">Imagen</option>
-                      <option value="360">Imagen 360</option>
-                    </Select>
-                    {errors.status && (
-                      <Badge variant="required-error">
-                        {errors.status.message}
-                      </Badge>
-                    )}
                   </Box>
                 </Stack>
               </form>
@@ -133,4 +132,4 @@ const CreateMedia = (props) => {
   );
 };
 
-export default CreateMedia;
+export default CreateDocument;

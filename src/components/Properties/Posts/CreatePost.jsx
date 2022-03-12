@@ -12,7 +12,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
   SimpleGrid,
   Stack,
   Switch,
@@ -24,13 +23,15 @@ import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import SocialList from "../../Social/SocialList";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "../../Other/DatePicker/DatePicker";
+import PostImagesManagement from "./PostImagesManagement";
 
 const CreatePost = (props) => {
   const { full, property, normalAddButton, noRightMargin } = props;
-  const { addPost } = useContext(PropertiesContext);
+  const { addPost, imagesPendingToAddForPost } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isForRentDisabled, setIsForRentDisabled] = useState(true);
   const [isForSaleDisabled, setIsForSaleDisabled] = useState(true);
+  const [showDateError, setShowDateError] = useState(false);
 
   const {
     register,
@@ -41,9 +42,19 @@ const CreatePost = (props) => {
   } = useForm();
 
   const submitPost = (data) => {
-    addPost(data, property._id);
-    reset();
-    onClose();
+    if (data.startDate > data.endDate) {
+      setShowDateError(true);
+      setTimeout(() => {
+        setShowDateError(false);
+      }, 5000);
+    } else {
+      if (imagesPendingToAddForPost) {
+        data.media = imagesPendingToAddForPost;
+      }
+      addPost(data, property._id);
+      reset();
+      onClose();
+    }
   };
 
   return (
@@ -64,7 +75,11 @@ const CreatePost = (props) => {
         <Drawer size="md" isOpen={isOpen} placement="left" onClose={onClose}>
           <DrawerOverlay />
           <DrawerContent bg="defaultColor.400">
-            <DrawerCloseButton color="#fff" mt="2" />
+            <DrawerCloseButton
+              _focus={{ boxShadow: "none" }}
+              color="#fff"
+              mt="2"
+            />
             <DrawerHeader color="#fff" borderBottomWidth="1px">
               Crear publicación
             </DrawerHeader>
@@ -186,6 +201,14 @@ const CreatePost = (props) => {
                             {errors.endDate.message}
                           </Badge>
                         )}
+                        <Badge
+                          display={showDateError ? "inline-block" : "none"}
+                          mb="-1rem"
+                          variant="required-error"
+                          whiteSpace="initial"
+                        >
+                          Fecha de fin no puede ser anterior a la de inicio
+                        </Badge>
                       </Box>
                     </Stack>
                     <Button
@@ -197,26 +220,13 @@ const CreatePost = (props) => {
                 </Stack>
                 <SimpleGrid columns={2} spacing={10}>
                   <Box mt="-14">
-                    <FormLabel htmlFor="createPostEndDate">Estado</FormLabel>
-                    <Select
-                      {...register("status", {
-                        required: "Estado es requerido.",
-                      })}
-                      id="propertyTypes"
-                      placeholder="Ingresa el estado"
-                    >
-                      <option value="Active">Activa</option>
-                      <option value="Paused">Pausada</option>
-                      <option value="Pending">Pendiente</option>
-                      <option value="Finished">Finalizada</option>
-                    </Select>
-                    {errors.status && (
-                      <Badge variant="required-error">
-                        {errors.status.message}
-                      </Badge>
-                    )}
+                    <FormLabel htmlFor="createPostEndDate">Imágenes</FormLabel>
+                    <PostImagesManagement
+                      buttonText="Agregar imágenes"
+                      property={property}
+                    />
                   </Box>
-                  <Box mt="-14">
+                  <Box mt="-3.3rem">
                     <SocialList />
                   </Box>
                 </SimpleGrid>

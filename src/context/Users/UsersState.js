@@ -1,4 +1,5 @@
 import axios from "axios";
+import { duration } from "moment";
 import React, { useState, useEffect } from "react";
 import Notification from "../../components/Other/Notification";
 import UsersContext from "./UsersContext";
@@ -63,6 +64,14 @@ const UsersState = (props) => {
             "Has editado un usuario",
             "success"
           );
+          if (data.username == sessionStorage.getItem("userLoggedUserName")) {
+            Notification(
+              "El usuario que editaste es el mismo que estás usando",
+              "Para ver reflejados los cambios deberás volver a iniciar sesión",
+              "warning",
+              7000
+            );
+          }
           setUsers([...users.filter((user) => user._id !== userId), res.data]);
           fetchUsers();
         }

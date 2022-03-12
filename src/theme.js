@@ -66,6 +66,11 @@ const theme = extendTheme({
           color: "#000",
           _hover: { bg: "rgba(0, 0, 0, 0.20)" },
         },
+        "reports-button": {
+          bg: "defaultColor.400",
+          _hover: { bg: "defaultColor.300" },
+          color: "#fff",
+        },
       },
     },
     Badge: {

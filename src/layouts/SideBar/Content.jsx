@@ -49,7 +49,7 @@ const Content = () => {
                 borderRadius: "9px",
               }}
             >
-              <Link to="/properties">
+              <Link to="/propiedades">
                 <Text fontSize="0.95rem">Manejo de propiedades</Text>
               </Link>
             </AccordionPanel>
@@ -99,7 +99,7 @@ const Content = () => {
                 bg: "defaultColor.50",
               }}
             >
-              <Link to="/customers">
+              <Link to="/clientes">
                 <Text fontSize="0.95rem">Manejo de clientes</Text>
               </Link>
             </AccordionPanel>
@@ -132,7 +132,7 @@ const Content = () => {
                 bg: "defaultColor.50",
               }}
             >
-              <Link to="/users">
+              <Link to="/usuarios">
                 <Text fontSize="0.95rem">Manejo de usuarios</Text>
               </Link>
             </AccordionPanel>
@@ -171,8 +171,8 @@ const Content = () => {
                 bg: "defaultColor.50",
               }}
             >
-              <Link to="/">
-                <Text fontSize="0.95rem">Alquileres por año</Text>
+              <Link to="/reportes">
+                <Text fontSize="0.95rem">Ver reportes</Text>
               </Link>
             </AccordionPanel>
           </AccordionItem>

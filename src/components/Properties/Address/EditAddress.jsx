@@ -47,7 +47,6 @@ const EditAddress = (props) => {
         fontSize="15px"
         leftIcon={<MdLocationPin fontSize="18px" />}
         mr={5}
-        mb={5}
         borderRadius="9px"
         variant="add-button-clear"
       >
@@ -66,7 +65,11 @@ const EditAddress = (props) => {
           borderStartEndRadius="7px"
           borderEndEndRadius="7px"
         >
-          <DrawerCloseButton color="#fff" mt="2" />
+          <DrawerCloseButton
+            _focus={{ boxShadow: "none" }}
+            color="#fff"
+            mt="2"
+          />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
             Editar dirección
           </DrawerHeader>

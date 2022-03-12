@@ -1,8 +1,11 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import AuthContext from "./AuthContext";
 
 const AuthState = (props) => {
+  const [userRealName, setUserRealName] = useState("Usuario");
+  const [userRoles, setUserRoles] = useState("");
+
   const authenticateUser = async (data) => {
     await axios
       .post(`${process.env.REACT_APP_API_BASE_URL}/auth/signin`, data)
@@ -23,14 +26,25 @@ const AuthState = (props) => {
       .get(`${process.env.REACT_APP_API_BASE_URL}/users/`)
       .then((res) => {
         const user = res.data.find((user) => user.username === username);
-        sessionStorage.setItem("name", user.name.split(" ")[0]);
+        sessionStorage.setItem("userLoggedName", user.name.split(" ")[0]);
+        sessionStorage.setItem("userLoggedUserName", user.username);
+        let roles = [];
+        if (user.roles) {
+          user.roles.map((role) => {
+            roles.push(role.name);
+          });
+        }
+        setUserRoles(roles);
+        console.log(userRoles);
+        sessionStorage.setItem("userLoggedRoles", roles);
+        setUserRealName(user.name.split(" ")[0]);
       })
       .catch((error) => {});
   };
 
   const logOut = () => {
     sessionStorage.removeItem("token");
-    sessionStorage.removeItem("name");
+    sessionStorage.removeItem("userLoggedName");
   };
 
   return (
@@ -39,6 +53,8 @@ const AuthState = (props) => {
         authenticateUser,
         logOut,
         getUser,
+        userRealName,
+        userRoles,
       }}
     >
       {props.children}

@@ -61,7 +61,11 @@ function CreateUser() {
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent bg="defaultColor.400">
-          <DrawerCloseButton color="#fff" mt="2" />
+          <DrawerCloseButton
+            _focus={{ boxShadow: "none" }}
+            color="#fff"
+            mt="2"
+          />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
             Agregar usuario
           </DrawerHeader>
@@ -100,6 +104,23 @@ function CreateUser() {
                   {errors.username && (
                     <Badge variant="required-error">
                       {errors.username.message}
+                    </Badge>
+                  )}
+                </Box>
+                <Box>
+                  <FormLabel htmlFor="userEmail">Email</FormLabel>
+                  <Input
+                    {...register("email", {
+                      required: "Email es requerido.",
+                    })}
+                    id="userEmail"
+                    type="email"
+                    placeholder="Ingresa el email"
+                    autoComplete="off"
+                  />
+                  {errors.email && (
+                    <Badge variant="required-error">
+                      {errors.email.message}
                     </Badge>
                   )}
                 </Box>

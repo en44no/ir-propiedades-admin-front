@@ -28,22 +28,6 @@ const FeatureList = (props) => {
   const { deleteFeature } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const parseFeatureType = (feature) => {
-    if (feature.type[0] === "Bathroom") {
-      return "Baño";
-    } else if (feature.type[0] === "Kitchen") {
-      return "Cocina";
-    } else if (feature.type[0] === "Bedroom") {
-      return "Dormitorio";
-    } else if (feature.type[0] === "Living Room") {
-      return "Sala de estar";
-    } else if (feature.type[0] === "Garage") {
-      return "Garaje";
-    } else if (feature.type[0] === "Other") {
-      return "Otro";
-    }
-  };
-
   useEffect(() => {});
 
   return (
@@ -69,7 +53,11 @@ const FeatureList = (props) => {
             borderEndStartRadius="7px"
             bg="defaultColor.400"
           >
-            <DrawerCloseButton color="#fff" mt="2" />
+            <DrawerCloseButton
+              _focus={{ boxShadow: "none" }}
+              color="#fff"
+              mt="2"
+            />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
               <Text display="flex">
                 Características de la propiedad{" "}
@@ -150,9 +138,7 @@ const FeatureList = (props) => {
                             border="2px solid #fff"
                             color="#fff"
                           >
-                            <Box textAlign="center">
-                              {parseFeatureType(feature)}
-                            </Box>
+                            <Box textAlign="center">{feature.type}</Box>
                           </Badge>
                           <Divider orientation="vertical" />
                           <Box

@@ -15,14 +15,11 @@ import {
   Box,
   Tooltip,
 } from "@chakra-ui/react";
-import {
-  BsFileImage,
-  BsArrowRightCircleFill,
-  BsArrowLeftCircleFill,
-} from "react-icons/bs";
+import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 import CopyInternalCode from "../CopyInternalCode";
 import FullscreenImageModal from "../../Other/FullscreenImageModal";
 import { MdOutline360 } from "react-icons/md";
+import { BsImages } from "react-icons/bs";
 import MediaList from "../Media/MediaList";
 import Loader from "../../Other/Loader/Loader";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
@@ -38,17 +35,18 @@ const dragReducer = produce((draft, action) => {
   }
 });
 
-const VirtualToursList = (props) => {
-  const { property } = props;
+const PostImagesManagement = (props) => {
+  const { property, buttonText, post } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { addVirtualTourToProperty } = useContext(PropertiesContext);
+  const { setImagesPendingToAddForPost } = useContext(PropertiesContext);
 
   const [state, dispatch] = useReducer(dragReducer, {
-    selectedImages: property.virtualTour ? property.virtualTour : [],
-    availableImages: property.media.filter(
-      ({ _id: id1 }) =>
-        !property.virtualTour.some(({ _id: id2 }) => id2 === id1)
-    ),
+    selectedImages: post?.media ? post.media : [],
+    availableImages: post?.media
+      ? property.media.filter(
+          ({ _id: id1 }) => !post.media.some(({ _id: id2 }) => id2 === id1)
+        )
+      : property.media,
   });
 
   const onDragEnd = useCallback((result) => {
@@ -67,8 +65,8 @@ const VirtualToursList = (props) => {
   }, []);
 
   const sendImages = () => {
-    const virtualTour = state.selectedImages;
-    addVirtualTourToProperty(virtualTour, property);
+    const images = state.selectedImages;
+    setImagesPendingToAddForPost(images);
     onClose();
   };
 
@@ -99,12 +97,12 @@ const VirtualToursList = (props) => {
         w="100%"
         onClick={onOpen}
         fontSize="15px"
-        leftIcon={<BsFileImage fontSize="20px" />}
+        leftIcon={<BsImages fontSize="20px" />}
         mr={5}
         borderRadius="9px"
         variant="add-button-clear"
       >
-        Gestionar tour virtual
+        {buttonText ? buttonText : "Gestionar imágenes"}
       </Button>
       <Drawer size="full" isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
@@ -116,13 +114,8 @@ const VirtualToursList = (props) => {
           />
           <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
             <Text display="flex">
-              Tour virtual de la propiedad{" "}
-              <CopyInternalCode
-                text="propiedad"
-                internalCode={
-                  property.internalCode ? property.internalCode : "CÓDIGO"
-                }
-              />
+              Imágenes de la {post ? null : "nueva"} publicación{" "}
+              {post ? post._id : null}
             </Text>
           </DrawerHeader>
           <DrawerBody color="#fff" overflow="hidden">
@@ -243,7 +236,7 @@ const VirtualToursList = (props) => {
                                                 src={image.url}
                                                 alt={image.description}
                                                 hover="yes"
-                                                text={`Imagen de la propiedad ${property.internalCode}`}
+                                                text={`a`}
                                                 description={image.description}
                                               />
                                             </Box>
@@ -428,7 +421,7 @@ const VirtualToursList = (props) => {
                                                 src={image.url}
                                                 alt={image.description}
                                                 hover="yes"
-                                                text={`Imagen de la propiedad ${property.internalCode}`}
+                                                text={`Imagen de la propiedad a`}
                                                 description={image.description}
                                               />
                                             </Box>
@@ -535,7 +528,7 @@ const VirtualToursList = (props) => {
               Cerrar
             </Button>
             <Button
-              id="createPosts"
+              id="createpropertys"
               w="7rem"
               onClick={() => sendImages()}
               borderRadius="9px"
@@ -549,4 +542,4 @@ const VirtualToursList = (props) => {
     </div>
   );
 };
-export default VirtualToursList;
+export default PostImagesManagement;

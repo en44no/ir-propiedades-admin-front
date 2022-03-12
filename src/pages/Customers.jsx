@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Table,
   Thead,
@@ -9,26 +9,61 @@ import {
   Box,
   HStack,
   Text,
-  Badge,
+  Container,
 } from "@chakra-ui/react";
 import CreateCustomer from "../components/Customers/CreateCustomer";
-import { FaUserEdit, FaUserMinus } from "react-icons/fa";
 import CustomersContext from "../context/Customers/CustomersContext";
 import Loader from "../components/Other/Loader/Loader";
 import EditCustomer from "../components/Customers/EditCustomer";
 import ConfirmDelete from "../components/Other/ConfirmDelete";
+import ViewCustomerProperties from "../components/Customers/ViewCustomerProperties";
+import Search from "../components/Other/Search";
 
 const CustomersPage = () => {
   const { customers, deleteCustomer } = useContext(CustomersContext);
+    const [filteredCustomers, setFilteredCustomers] = useState(customers);
+
+  useEffect(() => {
+    setFilteredCustomers(customers);
+    console.log(customers)
+    console.log(filteredCustomers)
+  }, [customers]);
+
+  const getCustomerProperties = (customer) => {
+    let properties = customer.ownerProperties.concat(customer.tenantProperties);
+    if (properties.length > 0) {
+      let ownerProperties = customer.ownerProperties;
+      let tenantProperties = customer.tenantProperties;
+      return (
+        <ViewCustomerProperties
+          ownerProperties={ownerProperties}
+          tenantProperties={tenantProperties}
+          customer={customer}
+        />
+      );
+    } else {
+      return <Text>Sin propiedades</Text>;
+    }
+  };
 
   return (
     <>
-      <Box display="flex" justifyContent="end" mr="2.2rem">
-        <CreateCustomer />
-      </Box>
+        <Box ml='1rem' display="flex" justifyContent="end">
+          <Search
+            placeHolder='Busca clientes según nombre, email y teléfono...'
+            listToFilter={filteredCustomers}
+            filters={[
+              "name",
+              "email",
+              "phone",
+            ]}
+            listSetter={setFilteredCustomers}
+          />
+             <CreateCustomer />
+        </Box>
       {customers ? (
         <Table variant="unstyled" size="sm">
-          {customers.length > 0 && (
+          {filteredCustomers.length > 0 && (
             <Thead>
               <Tr maxWidth="100%">
                 <Th fontSize="14px" textAlign="center" maxWidth="50px">
@@ -41,9 +76,9 @@ const CustomersPage = () => {
                   Telefono
                 </Th>
                 <Th fontSize="14px" textAlign="center" maxWidth="50px">
-                  Tipo
+                  Propiedades
                 </Th>
-                <Th fontSize="14px" textAlign="center" maxWidth="50px">
+                <Th fontSize="14px" textAlign="center" maxWidth="60px">
                   Opciones
                 </Th>
               </Tr>
@@ -51,8 +86,8 @@ const CustomersPage = () => {
           )}
 
           <Tbody>
-            {customers.map((customer) => (
-              <Tr>
+            {filteredCustomers.map((customer) => (
+              <Tr key={customer._id}>
                 <Td textAlign="center" maxWidth="70px">
                   {customer.name}
                 </Td>
@@ -62,19 +97,8 @@ const CustomersPage = () => {
                 <Td textAlign="center" maxWidth="50px">
                   {customer.phone}
                 </Td>
-                <Td textAlign="center" maxWidth="50px">
-                  <Badge
-                    fontSize="0.7rem"
-                    fontWeight="bold"
-                    color="white"
-                    bgColor="defaultColor.400"
-                    boxShadow="base"
-                    borderRadius="15px"
-                    px={2}
-                    py={1}
-                  >
-                    {customer.type}
-                  </Badge>
+                <Td textAlign="center" maxWidth="60px">
+                  {getCustomerProperties(customer)}
                 </Td>
                 <Td textAlign="center" maxWidth="70px">
                   <HStack justifyContent="center">
@@ -113,6 +137,21 @@ const CustomersPage = () => {
           zIndex="-10"
         >
           El sistema aún no cuenta con clientes registrados.
+        </Text>
+      )}
+         {filteredCustomers.length === 0 && customers.length !== 0 && (
+        <Text
+          fontSize="xl"
+          color="#000"
+          position="relative"
+          display="flex"
+          w="100%"
+          h='100%'
+          justifyContent="center"
+          alignItems="center"
+          mt="-5rem"
+        >
+          No se encontraron clientes que coincidan con tu búsqueda.
         </Text>
       )}
     </>

@@ -74,7 +74,11 @@ function EditUser(props) {
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent bg="defaultColor.400">
-          <DrawerCloseButton color="#fff" mt="2" />
+          <DrawerCloseButton
+            _focus={{ boxShadow: "none" }}
+            color="#fff"
+            mt="2"
+          />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
             Editar usuario
           </DrawerHeader>
@@ -115,6 +119,24 @@ function EditUser(props) {
                   {errors.username && (
                     <Badge variant="required-error">
                       {errors.username.message}
+                    </Badge>
+                  )}
+                </Box>
+                <Box>
+                  <FormLabel htmlFor="userEmail">Email</FormLabel>
+                  <Input
+                    {...register("email", {
+                      required: "Email es requerido.",
+                    })}
+                    id="userEmail"
+                    placeholder="Ingresa el email"
+                    autoComplete="off"
+                    type="email"
+                    defaultValue={user.email}
+                  />
+                  {errors.email && (
+                    <Badge variant="required-error">
+                      {errors.email.message}
                     </Badge>
                   )}
                 </Box>

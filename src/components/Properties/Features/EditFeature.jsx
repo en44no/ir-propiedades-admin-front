@@ -55,7 +55,11 @@ const EditFeature = (props) => {
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent bg="defaultColor.400">
-          <DrawerCloseButton color="#fff" mt="2" />
+          <DrawerCloseButton
+            _focus={{ boxShadow: "none" }}
+            color="#fff"
+            mt="2"
+          />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
             Editar característica
           </DrawerHeader>
@@ -72,12 +76,12 @@ const EditFeature = (props) => {
                     defaultValue={feature.type}
                     placeholder="Ingresa el tipo"
                   >
-                    <option value="Bathroom">Baño</option>
-                    <option value="Kitchen">Cocina</option>
-                    <option value="Bedroom">Dormitorio</option>
-                    <option value="Living Room">Sala de estar</option>
-                    <option value="Garage">Garaje</option>
-                    <option value="Other">Otro</option>
+                    <option value="Baño">Baño</option>
+                    <option value="Cocina">Cocina</option>
+                    <option value="Dormitorio">Dormitorio</option>
+                    <option value="Sala de estar">Sala de estar</option>
+                    <option value="Garaje">Garaje</option>
+                    <option value="Otro">Otro</option>
                   </Select>
                   {errors.type && (
                     <Badge variant="required-error">

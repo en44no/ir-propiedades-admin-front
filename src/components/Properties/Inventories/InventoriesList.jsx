@@ -16,11 +16,12 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import BadgeInventoryStatus from "./BadgeInventoryStatus";
-import { FaBoxes, FaCheck } from "react-icons/fa";
+import { FaBoxes, FaCheck, FaMobileAlt } from "react-icons/fa";
 import { GiPadlock } from "react-icons/gi";
 import CopyInternalCode from "../CopyInternalCode";
-import InventoryItems from "./InventoryItems";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
+import ReviewsList from "./Reviews/ReviewsList";
+import ItemsList from "./Items/ItemsList";
 
 const InventoriesList = (props) => {
   const { full, property } = props;
@@ -62,7 +63,11 @@ const InventoriesList = (props) => {
         <Drawer size="full" isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
           <DrawerContent bg="defaultColor.400">
-            <DrawerCloseButton color="#fff" mt="2" />
+            <DrawerCloseButton
+              _focus={{ boxShadow: "none" }}
+              color="#fff"
+              mt="2"
+            />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
               <Text display="flex">
                 Inventarios de la propiedad{" "}
@@ -73,6 +78,21 @@ const InventoriesList = (props) => {
                   }
                 />
               </Text>
+              <Tooltip
+                hasArrow
+                label="Ten en cuenta que esta sección se gestiona mayormente desde la app de celular"
+                bg="defaultColor.500"
+              >
+                <Box
+                  cursor="pointer"
+                  position="absolute"
+                  top="1.4rem"
+                  right="3.5rem"
+                  float="right"
+                >
+                  <FaMobileAlt />
+                </Box>
+              </Tooltip>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
               {property.inventories.length !== 0 && (
@@ -99,7 +119,7 @@ const InventoriesList = (props) => {
                         <Text fontWeight="500">Código Interno</Text>
                       </Box>
                       <Divider orientation="vertical" />
-                      <Box w="55%" justifyContent="center" textAlign="center">
+                      <Box w="50%" justifyContent="center" textAlign="center">
                         <Text fontWeight="500">Comentario</Text>
                       </Box>
                       <Divider orientation="vertical" />
@@ -107,7 +127,7 @@ const InventoriesList = (props) => {
                         <Text fontWeight="500">Fecha</Text>
                       </Box>
                       <Divider orientation="vertical" />
-                      <Box w="10%" justifyContent="center" textAlign="center">
+                      <Box w="15%" justifyContent="center" textAlign="center">
                         <Text fontWeight="500">Acciones</Text>
                       </Box>
                     </>
@@ -158,11 +178,17 @@ const InventoriesList = (props) => {
                             justifyContent="center"
                             textAlign="center"
                           >
-                            <Box>{inventory.internalCode}</Box>
+                            <Box>
+                              <CopyInternalCode
+                                withIcon="yes"
+                                text="inventario"
+                                internalCode={inventory.internalCode}
+                              />
+                            </Box>
                           </Box>
                           <Divider orientation="vertical" />
                           <Box
-                            w="55%"
+                            w="50%"
                             justifyContent="center"
                             textAlign="center"
                           >
@@ -192,16 +218,19 @@ const InventoriesList = (props) => {
                           </Box>
                           <Divider orientation="vertical" />
                           <Box
-                            w="10%"
+                            w="15%"
                             gap="10px"
                             display="flex"
                             justifyContent="center"
                           >
-                            <InventoryItems
+                            <ItemsList
+                              typeSingular="inventario"
+                              typePlural="inventarios"
                               property={property}
-                              inventory={inventory}
+                              typeObject={inventory}
                               itemsQuantity={inventory.items.length}
                             />
+
                             {inventory.status[0] === "Abierto" && (
                               <Tooltip
                                 hasArrow
@@ -250,6 +279,10 @@ const InventoriesList = (props) => {
                                 </HStack>
                               </Tooltip>
                             )}
+                            <ReviewsList
+                              property={property}
+                              inventory={inventory}
+                            />
                           </Box>
                         </>
                       </HStack>

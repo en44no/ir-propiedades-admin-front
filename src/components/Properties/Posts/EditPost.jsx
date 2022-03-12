@@ -25,13 +25,34 @@ import { Controller, useForm } from "react-hook-form";
 import DatePicker from "../../Other/DatePicker/DatePicker";
 import moment from "moment";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
+import PostImagesManagement from "./PostImagesManagement";
 
 const EditPost = (props) => {
   const { post, property } = props;
-  const { editPost } = useContext(PropertiesContext);
+  const { editPost, imagesPendingToAddForPost } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isForRentDisabled, setIsForRentDisabled] = useState(true);
-  const [isForSaleDisabled, setIsForSaleDisabled] = useState(true);
+  const [isForRentActive, setIsForRentActive] = useState(true);
+  const [isForSaleActive, setIsForSaleActive] = useState(true);
+  const [notAbleToModify, setNotAbleToModify] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [warningStatusMessage, setWarningStatusMessage] = useState("");
+  const [showDateError, setShowDateError] = useState(false);
+
+  const checkIsAllDisabled = () => {
+    if (post.status == "Finalizada") {
+      return true;
+    } else if (post.status == "Pausada") {
+      let now = new Date();
+      let endDate = new Date(post.endDate);
+      if (endDate <= now) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  };
+
+  const [allDisabled, setAllDisabled] = useState(checkIsAllDisabled());
 
   const {
     register,
@@ -41,10 +62,57 @@ const EditPost = (props) => {
     control,
   } = useForm();
 
-  const submitPost = (data) => {
-    editPost(data, property._id);
-    reset();
-    onClose();
+  const submitEditPost = (data) => {
+    if (notAbleToModify) {
+      data.isForSale = false;
+      data.isForRent = false;
+    }
+    if (data.startDate > data.endDate) {
+      setShowDateError(true);
+      setTimeout(() => {
+        setShowDateError(false);
+      }, 5000);
+    } else {
+      if (imagesPendingToAddForPost) {
+        data.media = imagesPendingToAddForPost;
+      }
+      editPost(data, post._id, property._id);
+      reset();
+      onClose();
+    }
+  };
+
+  const checkState = (state) => {
+    if (state === "Activa") {
+      setNotAbleToModify(false);
+      setIsForSaleActive(true);
+      setIsForRentActive(true);
+      setWarningStatusMessage(false);
+      setSelectedStatus("Activa");
+    } else if (state === "Pendiente") {
+      setNotAbleToModify(false);
+      setIsForSaleActive(true);
+      setIsForRentActive(true);
+      setWarningStatusMessage(false);
+      setSelectedStatus("Pendiente");
+    } else if (state == "Pausada") {
+      setNotAbleToModify(true);
+      setIsForSaleActive(false);
+      setIsForRentActive(false);
+      setWarningStatusMessage(true);
+      setSelectedStatus("Pausada");
+    } else if (state == "Finalizada") {
+      setNotAbleToModify(true);
+      setIsForSaleActive(false);
+      setIsForRentActive(false);
+      setWarningStatusMessage(true);
+      setSelectedStatus("Finalizada");
+    }
+  };
+
+  const formatDate = (date) => {
+    const newDate = new Date(date);
+    return newDate.toLocaleDateString("en-GB");
   };
 
   return (
@@ -64,177 +132,257 @@ const EditPost = (props) => {
         <Drawer size="md" isOpen={isOpen} placement="left" onClose={onClose}>
           <DrawerOverlay />
           <DrawerContent bg="defaultColor.400">
-            <DrawerCloseButton color="#fff" mt="2" />
+            <DrawerCloseButton
+              _focus={{ boxShadow: "none" }}
+              color="#fff"
+              mt="2"
+            />
             <DrawerHeader color="#fff" borderBottomWidth="1px">
               Editar publicación
             </DrawerHeader>
-            <DrawerBody color="#fff">
-              <form id="formPost" onSubmit={handleSubmit(submitPost)}>
-                <Stack spacing="14px">
-                  <SimpleGrid mb="-5" columns={1}>
-                    <Box display="flex" mb="4">
-                      <FormControl
-                        display="flex"
-                        mt="2rem"
-                        alignItems="center"
-                        onChange={() =>
-                          setIsForSaleDisabled(!isForSaleDisabled)
-                        }
-                      >
-                        <FormLabel htmlFor="createPostSellSwitch" mb="0">
-                          Disponible para vender
-                        </FormLabel>
-                        <Switch
-                          defaultChecked={post.isForSale}
-                          value={post.isForSale}
-                          {...register("isForSale")}
-                          id="createPostSellSwitch"
-                        />
-                      </FormControl>
-                      <Box>
-                        <FormLabel
-                          textAlign="center"
-                          htmlFor="createPostSellPrice"
-                        >
-                          Precio venta
-                        </FormLabel>
-                        <Input
-                          disabled={!isForSaleDisabled}
-                          defaultValue={post.forSalePrice}
-                          {...register("forSalePrice")}
-                          id="createPostSellPrice"
-                        ></Input>
-                      </Box>
-                    </Box>
-                    <Box display="flex" mb="4">
-                      <FormControl display="flex" mt="2rem" alignItems="center">
-                        <FormLabel htmlFor="createPostRentSwitch" mb="0">
-                          Disponible para alquilar
-                        </FormLabel>
-                        <Switch
-                          defaultChecked={post.isForRent}
-                          value={post.isForRent}
-                          {...register("isForRent")}
-                          id="createPostRentSwitch"
-                          onChange={() =>
-                            setIsForRentDisabled(!isForRentDisabled)
-                          }
-                        />
-                      </FormControl>
-                      <Box>
-                        <FormLabel
-                          textAlign="center"
-                          htmlFor="createPostRentPrice"
-                        >
-                          Precio alquiler
-                        </FormLabel>
-                        <Input
-                          {...register("forRentPrice")}
-                          disabled={!isForRentDisabled}
-                          defaultValue={post.forRentPrice}
-                          id="createPostRentPrice"
-                        ></Input>
-                      </Box>
-                    </Box>
-                  </SimpleGrid>
-                  <SimpleGrid columns={2} spacing={10}>
-                    <Stack spacing="14px" id="leftColumn">
-                      <Box>
-                        <FormLabel htmlFor="createPostStartDate">
-                          Fecha inicio
-                        </FormLabel>
-                        <Controller
-                          control={control}
-                          name="startDate"
-                          rules={{ required: "Fecha de inicio es requerida." }}
-                          render={({ field }) => (
-                            <DatePicker
-                              defaultSelected={moment(post.startDate).toDate()}
-                              field={field}
-                              placeholderText={"Ingresa la fecha de inicio"}
-                              id={"createPostStartDate"}
+            {!allDisabled && (
+              <>
+                <DrawerBody color="#fff">
+                  <form id="formPost" onSubmit={handleSubmit(submitEditPost)}>
+                    <Stack spacing="14px">
+                      <SimpleGrid mb="-5" columns={1}>
+                        <Box display="flex" mb="4">
+                          <FormControl
+                            display="flex"
+                            mt="2rem"
+                            alignItems="center"
+                            onChange={() =>
+                              setIsForSaleActive(!isForSaleActive)
+                            }
+                          >
+                            <FormLabel htmlFor="createPostSellSwitch" mb="0">
+                              {notAbleToModify
+                                ? "No disponible para vender"
+                                : "Disponible para vender"}
+                            </FormLabel>
+                            {notAbleToModify == false && (
+                              <Switch
+                                defaultChecked={post.isForSale}
+                                value={post.isForSale}
+                                {...register("isForSale")}
+                                id="createPostSellSwitch"
+                              />
+                            )}
+                          </FormControl>
+                          <Box>
+                            <FormLabel
+                              textAlign="center"
+                              htmlFor="createPostSellPrice"
+                            >
+                              Precio venta
+                            </FormLabel>
+                            <Input
+                              disabled={!isForSaleActive}
+                              defaultValue={post.forSalePrice}
+                              {...register("forSalePrice")}
+                              id="createPostSellPrice"
+                            ></Input>
+                          </Box>
+                        </Box>
+                        <Box display="flex" mb="4">
+                          <FormControl
+                            display="flex"
+                            mt="2rem"
+                            alignItems="center"
+                          >
+                            <FormLabel htmlFor="createPostRentSwitch" mb="0">
+                              {notAbleToModify
+                                ? "No disponible para alquilar"
+                                : "Disponible para alquilar"}
+                            </FormLabel>
+                            {notAbleToModify == false && (
+                              <Switch
+                                defaultChecked={post.isForRent}
+                                value={post.isForRent}
+                                {...register("isForRent")}
+                                id="createPostRentSwitch"
+                                onChange={() =>
+                                  setIsForRentActive(!isForRentActive)
+                                }
+                              />
+                            )}
+                          </FormControl>
+                          <Box>
+                            <FormLabel
+                              textAlign="center"
+                              htmlFor="createPostRentPrice"
+                            >
+                              Precio alquiler
+                            </FormLabel>
+                            <Input
+                              {...register("forRentPrice")}
+                              disabled={!isForRentActive}
+                              defaultValue={post.forRentPrice}
+                              id="createPostRentPrice"
+                            ></Input>
+                          </Box>
+                        </Box>
+                      </SimpleGrid>
+                      <SimpleGrid columns={2} spacing={10}>
+                        <Stack spacing="14px" id="leftColumn">
+                          <Box>
+                            <FormLabel htmlFor="createPostStartDate">
+                              Fecha inicio
+                            </FormLabel>
+                            <Controller
+                              control={control}
+                              name="startDate"
+                              rules={{
+                                required: "Fecha de inicio es requerida.",
+                              }}
+                              render={({ field }) => (
+                                <DatePicker
+                                  defaultSelected={moment(
+                                    post.startDate
+                                  ).toDate()}
+                                  field={field}
+                                  placeholderText={"Ingresa la fecha de inicio"}
+                                  id={"createPostStartDate"}
+                                />
+                              )}
                             />
-                          )}
-                        />
-                        {errors.startDate && (
-                          <Badge variant="required-error">
-                            {errors.startDate.message}
-                          </Badge>
-                        )}
-                      </Box>
+                            {errors.startDate && (
+                              <Badge variant="required-error">
+                                {errors.startDate.message}
+                              </Badge>
+                            )}
+                          </Box>
+                        </Stack>
+                        <Stack spacing="24px" id="rightColumn">
+                          <Box>
+                            <FormLabel htmlFor="createPostEndDate">
+                              Fecha fin
+                            </FormLabel>
+                            <Controller
+                              control={control}
+                              name="endDate"
+                              rules={{ required: "Fecha de fin es requerida." }}
+                              render={({ field }) => (
+                                <DatePicker
+                                  defaultSelected={moment(
+                                    post.endDate
+                                  ).toDate()}
+                                  field={field}
+                                  placeholderText={"Ingresa la fecha de fin"}
+                                  id={"createPostEndDate"}
+                                />
+                              )}
+                            />
+                            {errors.endDate && (
+                              <Badge variant="required-error">
+                                {errors.endDate.message}
+                              </Badge>
+                            )}
+                            <Badge
+                              display={showDateError ? "inline-block" : "none"}
+                              mb="-1rem"
+                              variant="required-error"
+                              whiteSpace="initial"
+                            >
+                              Fecha de fin no puede ser anterior a la de inicio
+                            </Badge>
+                          </Box>
+                        </Stack>
+                        <Button
+                          visibility="hidden"
+                          type="submit"
+                          id="submitButtonCreatePost"
+                        ></Button>
+                      </SimpleGrid>
                     </Stack>
-                    <Stack spacing="24px" id="rightColumn">
-                      <Box>
+                    <SimpleGrid columns={2} spacing={10}>
+                      <Box mt="-14">
                         <FormLabel htmlFor="createPostEndDate">
-                          Fecha fin
+                          Estado
                         </FormLabel>
-                        <Controller
-                          control={control}
-                          name="endDate"
-                          rules={{ required: "Fecha de fin es requerida." }}
-                          render={({ field }) => (
-                            <DatePicker
-                              defaultSelected={moment(post.endDate).toDate()}
-                              field={field}
-                              placeholderText={"Ingresa la fecha de fin"}
-                              id={"createPostEndDate"}
-                            />
-                          )}
-                        />
-                        {errors.endDate && (
+                        <Select
+                          {...register("status", {
+                            required: "Estado es requerido.",
+                          })}
+                          defaultValue={post.status}
+                          id="propertyTypes"
+                          onChange={(event) => checkState(event.target.value)}
+                        >
+                          <option value="Activa">Activa</option>
+                          <option value="Pendiente">Pendiente</option>
+                          <option value="Pausada">Pausada</option>
+                          <option value="Finalizada">Finalizada</option>
+                        </Select>
+                        {errors.status && (
                           <Badge variant="required-error">
-                            {errors.endDate.message}
+                            {errors.status.message}
                           </Badge>
                         )}
                       </Box>
-                    </Stack>
-                    <Button
-                      visibility="hidden"
-                      type="submit"
-                      id="submitButtonCreatePost"
-                    ></Button>
-                  </SimpleGrid>
-                </Stack>
-                <SimpleGrid columns={2} spacing={10}>
-                  <Box mt="-14">
-                    <FormLabel htmlFor="createPostEndDate">Estado</FormLabel>
-                    <Select
-                      {...register("status", {
-                        required: "Estado es requerido.",
-                      })}
-                      defaultValue={post.status}
-                      id="propertyTypes"
-                      placeholder="Ingresa el estado"
-                    >
-                      <option value="Active">Activa</option>
-                      <option value="Paused">Pausada</option>
-                      <option value="Pending">Pendiente</option>
-                      <option value="Finished">Finalizada</option>
-                    </Select>
-                    {errors.status && (
-                      <Badge variant="required-error">
-                        {errors.status.message}
-                      </Badge>
-                    )}
-                  </Box>
-                  <Box mt="-14">
-                    <SocialList />
-                  </Box>
-                </SimpleGrid>
-              </form>
-            </DrawerBody>
-            <DrawerFooter borderTopWidth="1px">
-              <Button variant="cancel-action" mr={3} onClick={onClose}>
-                Cancelar
-              </Button>
-              <Button
-                form="formPost"
-                type="submit"
-                variant="confirm-add-button"
-              >
-                Confirmar
-              </Button>
-            </DrawerFooter>
+                      <Box mt="-14">
+                        <FormLabel htmlFor="createPostEndDate">
+                          Imágenes
+                        </FormLabel>
+                        <PostImagesManagement property={property} post={post} />
+                      </Box>
+                      <Box mt="-5">
+                        <SocialList />
+                      </Box>
+                    </SimpleGrid>
+                  </form>
+                </DrawerBody>
+                <Badge
+                  display={warningStatusMessage ? "inline-block" : "none"}
+                  mb="1rem"
+                  w="93%"
+                  ml="1rem"
+                  variant="required-warning"
+                  whiteSpace="initial"
+                >
+                  {selectedStatus === "Pausada"
+                    ? `Ten en cuenta que si el estado es "Pausada" la publicación dejará de estar disponible, tienes hasta el ${formatDate(
+                        post.endDate
+                      )} para activarla.`
+                    : 'Ten en cuenta que si el estado es "Finalizada" no podrás reanudarla y la publicación dejará de estar disponible.'}
+                </Badge>
+                <DrawerFooter borderTopWidth="1px">
+                  <Button variant="cancel-action" mr={3} onClick={onClose}>
+                    Cancelar
+                  </Button>
+                  <Button
+                    form="formPost"
+                    type="submit"
+                    variant="confirm-add-button"
+                  >
+                    Confirmar
+                  </Button>
+                </DrawerFooter>
+              </>
+            )}
+            {allDisabled && (
+              <>
+                <Text
+                  fontSize="xl"
+                  color="#EAE9ED"
+                  position="relative"
+                  display="flex"
+                  textAlign="center"
+                  h="100%"
+                  w="100%"
+                  p="1rem"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  Ya no puedes editar esta publicación debido a que fue pausada
+                  y no se reanudó a tiempo o se encuentra finalizada.
+                </Text>
+                <DrawerFooter borderTopWidth="1px">
+                  <Button variant="cancel-action" mr={3} onClick={onClose}>
+                    Cerrar
+                  </Button>
+                </DrawerFooter>
+              </>
+            )}
           </DrawerContent>
         </Drawer>
       </>

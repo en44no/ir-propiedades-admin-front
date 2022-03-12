@@ -17,7 +17,7 @@ import {
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
-import { HiPlus } from "react-icons/hi";
+import { MdFileUpload } from "react-icons/md";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import { useForm } from "react-hook-form";
 
@@ -35,6 +35,7 @@ const CreateMedia = (props) => {
   } = useForm();
 
   const submitMedia = (data) => {
+    data.position = property.media.length + 1;
     data.image = selectedImage;
     addMedia(data, property);
     reset();
@@ -49,7 +50,7 @@ const CreateMedia = (props) => {
           w={full === "yes" ? "100%" : "7rem"}
           onClick={onOpen}
           fontSize="15px"
-          leftIcon={<HiPlus fontSize="1.2rem" />}
+          leftIcon={<MdFileUpload fontSize="1.3rem" />}
           mr={noRightMargin ? 0 : 5}
           borderRadius="9px"
           variant={normalAddButton ? "add-button-dark" : "add-button-clear"}
@@ -64,7 +65,11 @@ const CreateMedia = (props) => {
             borderStartEndRadius="7px"
             borderEndEndRadius="7px"
           >
-            <DrawerCloseButton color="#fff" mt="2" />
+            <DrawerCloseButton
+              _focus={{ boxShadow: "none" }}
+              color="#fff"
+              mt="2"
+            />
             <DrawerHeader color="#fff" borderBottomWidth="1px">
               Subir imagen {property.name ? `para "${property.name}"` : ""}
             </DrawerHeader>

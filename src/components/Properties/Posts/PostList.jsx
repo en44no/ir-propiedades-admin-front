@@ -22,6 +22,7 @@ import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import CopyInternalCode from "../CopyInternalCode";
 import ConfirmDelete from "../../Other/ConfirmDelete";
 import EditPost from "./EditPost";
+import PostImagesList from "./PostImagesList";
 
 const PostList = (props) => {
   const { full, property } = props;
@@ -72,7 +73,7 @@ const PostList = (props) => {
         >
           Gestionar publicaciones
         </Button>
-        <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
+        <Drawer size="full" isOpen={isOpen} placement="right" onClose={onClose}>
           <DrawerOverlay />
           <DrawerContent
             borderLeft="1px white solid"
@@ -80,7 +81,11 @@ const PostList = (props) => {
             borderEndStartRadius="7px"
             bg="defaultColor.400"
           >
-            <DrawerCloseButton color="#fff" mt="2" />
+            <DrawerCloseButton
+              _focus={{ boxShadow: "none" }}
+              color="#fff"
+              mt="2"
+            />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
               <Text display="flex">
                 Publicaciones de la propiedad{" "}
@@ -93,7 +98,7 @@ const PostList = (props) => {
               </Text>
             </DrawerHeader>
             <DrawerBody zIndex="0" color="#fff">
-              {property.features.length > 0 && (
+              {posts.length > 0 && (
                 <Box position="relative">
                   <Box
                     display="flex"
@@ -154,12 +159,19 @@ const PostList = (props) => {
                         </Box>
                         <Divider orientation="vertical" />
                         <HStack
-                          minW="15%"
-                          maxW="15%"
+                          w="10%"
                           justifyContent="center"
                           textAlign="center"
                         >
-                          <Text ml="-4">Compartido en</Text>
+                          <Text ml="-4">Publicado en</Text>
+                        </HStack>
+                        <Divider orientation="vertical" />
+                        <HStack
+                          w="10%"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <Text ml="-4">Opciones</Text>
                         </HStack>
                       </>
                     </HStack>
@@ -257,12 +269,12 @@ const PostList = (props) => {
                               <Box>{formatDate(post.endDate)}</Box>
                             </Box>
                             <Divider orientation="vertical" />
-                            <HStack
-                              minW="14%"
-                              maxW="14%"
-                              justifyContent="center"
-                            >
+                            <HStack w="10%" justifyContent="center">
                               <SocialList onlyIcons="true" />
+                            </HStack>
+                            <Divider orientation="vertical" />
+                            <HStack w="10%" justifyContent="center">
+                              <PostImagesList images={post.media} post={post} />
                             </HStack>
                           </>
                         </HStack>

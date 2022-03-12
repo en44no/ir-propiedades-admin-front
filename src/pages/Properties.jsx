@@ -1,19 +1,46 @@
-import React, { useContext } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import React, { useContext, useEffect, useState } from "react";
+import { Box, Text, Container } from "@chakra-ui/react";
 import PropertiesContext from "../context/Properties/PropertiesContext";
 import Loader from "../components/Other/Loader/Loader";
 import CreateProperty from "../components/Properties/Property/CreateProperty";
 import PropertyCard from "../components/Properties/Property/Card/PropertyCard";
+import Search from "../components/Other/Search";
 
 const PropertiesPage = () => {
   const { properties } = useContext(PropertiesContext);
+  const [filteredProperties, setFilteredProperties] = useState(properties);
+
+  useEffect(() => {
+    setFilteredProperties(properties);
+    console.log(filteredProperties)
+  }, [properties]);
+
 
   return (
     <>
-      <Box display="flex" justifyContent="end" mr="2.2rem">
-        <CreateProperty />
-      </Box>
-      <Box
+        <Box ml='1rem' display="flex" justifyContent="end">
+          <Search
+          placeHolder='Busca propiedades según nombre, tipo, descripción, dirección, comentarios y código interno...'
+            listToFilter={filteredProperties}
+            filters={[
+              "name",
+              "type",
+              "description",
+              "address",
+              "address.city",
+              "address.country",
+              "address.neighborhood",
+              "address.state",
+              "address.street",
+              "comment",
+              "internalCode",
+            ]}
+            listSetter={setFilteredProperties}
+          />
+          <CreateProperty />
+        </Box>
+      <Box 
+      position='relative'
         className="allProperties"
         display="flex"
         flexWrap="wrap"
@@ -23,7 +50,7 @@ const PropertiesPage = () => {
         height="90%"
       >
         {properties ? (
-          properties.map((property) => (
+          filteredProperties.map((property) => (
             <Box key={property._id}>
               <PropertyCard property={property} image={property.media[0]} />
             </Box>
@@ -31,15 +58,16 @@ const PropertiesPage = () => {
         ) : (
           <Loader />
         )}
-      </Box>
       {properties.length === 0 && (
         <Text
           fontSize="xl"
           color="#000"
-          position="relative"
+          position="absolute"
+          top='0'
+          left='0'
           display="flex"
-          h="100%"
           w="100%"
+          h='100%'
           justifyContent="center"
           alignItems="center"
           mt="-5rem"
@@ -47,6 +75,24 @@ const PropertiesPage = () => {
           El sistema aún no cuenta con propiedades registrados.
         </Text>
       )}
+      {filteredProperties.length === 0 && properties.length !== 0 && (
+        <Text
+          fontSize="xl"
+          color="#000"
+          position="absolute"
+          top='0'
+          left='0'
+          display="flex"
+          w="100%"
+          h='100%'
+          justifyContent="center"
+          alignItems="center"
+          mt="-5rem"
+        >
+          No se encontraron propiedades que coincidan con tu búsqueda.
+        </Text>
+      )}
+      </Box>
     </>
   );
 };

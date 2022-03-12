@@ -1,14 +1,19 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Notification from "../../components/Other/Notification";
+import PropertiesContext from "../Properties/PropertiesContext";
 import CustomersContext from "./CustomersContext";
 
 const CustomersState = (props) => {
+  const { properties, fetchProperties } = useContext(PropertiesContext);
   const [customers, setCustomers] = useState([]);
+  const [
+    associatedPropertiesPendingToAdd,
+    setAssociatedPropertiesPendingToAdd,
+  ] = useState([]);
 
   useEffect(() => {
     fetchCustomers();
-    console.log(customers);
   }, []);
 
   const fetchCustomers = async () => {
@@ -21,6 +26,38 @@ const CustomersState = (props) => {
   };
 
   const addCustomer = async (data, address) => {
+    if (
+      data.ownerProperties !== null &&
+      data.ownerProperties !== undefined &&
+      data.ownerProperties.length > 0
+    ) {
+      let ownerPropertiesIds = [];
+      data.ownerProperties.map((property) => {
+        const propertyToAdd = properties.find(
+          (p) => p.internalCode === property
+        );
+        if (propertyToAdd) {
+          ownerPropertiesIds.push(propertyToAdd._id);
+        }
+      });
+      data.ownerProperties = ownerPropertiesIds;
+    }
+    if (
+      data.tenantProperties !== null &&
+      data.tenantProperties !== undefined &&
+      data.tenantProperties.length > 0
+    ) {
+      let tenantPropertiesIds = [];
+      data.tenantProperties.map((property) => {
+        const propertyToAdd = properties.find(
+          (p) => p.internalCode === property
+        );
+        if (propertyToAdd) {
+          tenantPropertiesIds.push(propertyToAdd._id);
+        }
+      });
+      data.tenantProperties = tenantPropertiesIds;
+    }
     await axios
       .post(`${process.env.REACT_APP_API_BASE_URL}/customers`, data)
       .then((res) =>
@@ -43,6 +80,38 @@ const CustomersState = (props) => {
   };
 
   const editCustomer = async (data, customerId) => {
+    if (
+      data.ownerProperties !== null &&
+      data.ownerProperties !== undefined &&
+      data.ownerProperties.length > 0
+    ) {
+      let ownerPropertiesIds = [];
+      data.ownerProperties.map((property) => {
+        const propertyToAdd = properties.find(
+          (p) => p.internalCode === property
+        );
+        if (propertyToAdd) {
+          ownerPropertiesIds.push(propertyToAdd._id);
+        }
+      });
+      data.ownerProperties = ownerPropertiesIds;
+    }
+    if (
+      data.tenantProperties !== null &&
+      data.tenantProperties !== undefined &&
+      data.tenantProperties.length > 0
+    ) {
+      let tenantPropertiesIds = [];
+      data.tenantProperties.map((property) => {
+        const propertyToAdd = properties.find(
+          (p) => p.internalCode === property
+        );
+        if (propertyToAdd) {
+          tenantPropertiesIds.push(propertyToAdd._id);
+        }
+      });
+      data.tenantProperties = tenantPropertiesIds;
+    }
     await axios
       .put(
         `${process.env.REACT_APP_API_BASE_URL}/customers/${customerId}`,
@@ -59,6 +128,7 @@ const CustomersState = (props) => {
             ...customers.filter((customer) => customer._id !== customerId),
             res.data,
           ]);
+          fetchCustomers();
         }
       })
       .catch((error) => {
@@ -102,6 +172,8 @@ const CustomersState = (props) => {
         addCustomer,
         editCustomer,
         deleteCustomer,
+        associatedPropertiesPendingToAdd,
+        setAssociatedPropertiesPendingToAdd,
       }}
     >
       {props.children}

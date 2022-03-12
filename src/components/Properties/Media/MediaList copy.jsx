@@ -60,7 +60,11 @@ const MediaListe = (props) => {
             borderEndStartRadius="7px"
             bg="defaultColor.400"
           >
-            <DrawerCloseButton color="#fff" mt="2" />
+            <DrawerCloseButton
+              _focus={{ boxShadow: "none" }}
+              color="#fff"
+              mt="2"
+            />
             <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
               <Text display="flex">
                 Imágenes de la propiedad{" "}

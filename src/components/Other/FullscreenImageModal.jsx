@@ -52,7 +52,7 @@ const FullscreenImageModal = (props) => {
           <ModalHeader fontSize="1.1rem" mb="0" pb="0" pt="0.7rem">
             <Box>
               <Box>{text}</Box>
-              <Box fontSize="1rem">"{description}"</Box>
+              {description && <Box fontSize="1rem">"{description}"</Box>}
             </Box>
           </ModalHeader>
           <ModalCloseButton _focus={{ boxShadow: "none" }} onClick={onClose} />

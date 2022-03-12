@@ -1,4 +1,4 @@
-import { useCallback, useContext, useReducer } from "react";
+import { useCallback, useContext, useEffect, useReducer } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import produce from "immer";
 import {
@@ -14,13 +14,6 @@ import {
   Text,
   Box,
   Tooltip,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
-  PopoverBody,
 } from "@chakra-ui/react";
 import CopyInternalCode from "../CopyInternalCode";
 import FullscreenImageModal from "../../Other/FullscreenImageModal";
@@ -30,6 +23,7 @@ import Loader from "../../Other/Loader/Loader";
 import ConfirmDelete from "../../Other/ConfirmDelete";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import CreateMedia from "./CreateMedia";
+import Notification from "../../Other/Notification";
 
 const dragReducer = produce((draft, action) => {
   switch (action.type) {
@@ -46,7 +40,8 @@ const MediaList = (props) => {
   const { property, text, width, buttonWithoutIcon, drawerSize, columns } =
     props;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { deleteMedia } = useContext(PropertiesContext);
+  const { deleteMedia, changeOrderMediaFromProperty } =
+    useContext(PropertiesContext);
 
   const [state, dispatch] = useReducer(dragReducer, {
     images: property.media,
@@ -68,8 +63,21 @@ const MediaList = (props) => {
   }, []);
 
   const sendImages = () => {
-    const images = state.selectedImages;
-    console.log(images);
+    const images = state.images;
+  };
+
+  const confirmOrder = () => {
+    if (property.media != state.images) {
+      const images = state.images;
+      changeOrderMediaFromProperty(images, property._id);
+      onClose();
+    } else {
+      Notification(
+        "Las imágenes no cambiaron",
+        "No se han realizado cambios en el orden de las imágenes",
+        "warning"
+      );
+    }
   };
 
   return (
@@ -89,7 +97,11 @@ const MediaList = (props) => {
       <Drawer size="full" isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent bg="defaultColor.400">
-          <DrawerCloseButton color="#fff" mt="2" />
+          <DrawerCloseButton
+            _focus={{ boxShadow: "none" }}
+            color="#fff"
+            mt="2"
+          />
           <DrawerHeader color="#fff" borderBottomWidth="1px" mb="2">
             <Text display="flex">
               Imágenes de la propiedad{" "}
@@ -155,6 +167,7 @@ const MediaList = (props) => {
                                               py="1.5"
                                             >
                                               <Box
+                                                cursor="pointer"
                                                 position="absolute"
                                                 top="0.8rem"
                                                 left="-2rem"
@@ -312,7 +325,6 @@ const MediaList = (props) => {
                     </Box>
                   </Box>
                 )}
-                ;
               </DragDropContext>
             ) : (
               <Loader />
@@ -340,7 +352,7 @@ const MediaList = (props) => {
             <Button
               id="createPosts"
               w="9rem"
-              onClick={() => sendImages()}
+              onClick={() => confirmOrder()}
               borderRadius="9px"
               variant="add-button-clear"
               mr={3}

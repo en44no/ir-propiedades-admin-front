@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Badge,
   Box,
@@ -32,6 +32,8 @@ import InventoriesList from "../Inventories/InventoriesList";
 import CopyInternalCode from "../CopyInternalCode";
 import ConfirmDelete from "../../Other/ConfirmDelete";
 import VirtualToursList from "../VirtualTours/VirtualToursList";
+import ManageSurface from "../Surface/ManageSurface";
+import DocumentList from "../Documents/DocumentList";
 
 const PropertyDetails = (props) => {
   const { deleteProperty, addDetailsToProperty } =
@@ -91,7 +93,11 @@ const PropertyDetails = (props) => {
           borderStartStartRadius="7px"
           borderEndStartRadius="7px"
         >
-          <DrawerCloseButton color="#fff" mt="2" />
+          <DrawerCloseButton
+            _focus={{ boxShadow: "none" }}
+            color="#fff"
+            mt="2"
+          />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
             <Box display="flex">
               Detalles de la propiedad{" "}
@@ -177,7 +183,13 @@ const PropertyDetails = (props) => {
                     {errors.comments && <span>wad</span>}
                   </Box>
                   <Box>
-                    <FormLabel htmlFor="propertyComments">
+                    <FormLabel htmlFor="propertySurface">Superficie</FormLabel>
+                    <Box>
+                      <ManageSurface property={property} full="yes" />
+                    </Box>
+                  </Box>
+                  <Box>
+                    <FormLabel htmlFor="propertyFeatures">
                       Características
                     </FormLabel>
                     <Box>
@@ -185,22 +197,18 @@ const PropertyDetails = (props) => {
                     </Box>
                   </Box>
                   <Box>
-                    <FormLabel htmlFor="propertyComments">Documentos</FormLabel>
-                    <Input></Input>
+                    <Box>
+                      <FormLabel htmlFor="propertyDocuments">
+                        Documentos
+                      </FormLabel>
+                      <DocumentList width="100%" property={property} />
+                    </Box>
                   </Box>
                   <Box>
-                    <FormLabel htmlFor="propertyComments">
+                    <FormLabel htmlFor="propertyVirtualTour">
                       Tour virtual
                     </FormLabel>
                     <VirtualToursList full="yes" property={property} />
-                  </Box>
-                  <Box>
-                    <FormLabel htmlFor="propertyAddress">Dirección</FormLabel>
-                    {property.address ? (
-                      <EditAddress address={property.address} full="yes" />
-                    ) : (
-                      <CreateAddress full="yes" />
-                    )}
                   </Box>
                 </Stack>
                 <Stack spacing="14px" id="rightColumn">
@@ -234,7 +242,15 @@ const PropertyDetails = (props) => {
                     />
                   </Box>
                   <Box>
-                    <FormLabel htmlFor="propertyComments">Imágenes</FormLabel>
+                    <FormLabel htmlFor="propertyAddress">Dirección</FormLabel>
+                    {property.address ? (
+                      <EditAddress address={property.address} full="yes" />
+                    ) : (
+                      <CreateAddress full="yes" />
+                    )}
+                  </Box>
+                  <Box>
+                    <FormLabel htmlFor="propertyMedia">Imágenes</FormLabel>
                     <MediaList width="100%" property={property} />
                   </Box>
                   <Box>
@@ -254,7 +270,7 @@ const PropertyDetails = (props) => {
           <DrawerFooter borderTopWidth="1px">
             <ConfirmDelete
               text="¿Estás seguro de que deseas eliminar esta propiedad?"
-              topText="En caso de que esta propiedad cuente con publicaciones y/o inventarios los mismos serán eliminados. "
+              topText="En caso de que esta propiedad cuente con publicaciones, inventarios, controles, etc. los mismos serán eliminados. "
               name="propiedad"
               functionToExecute={handleDeleteProperty}
               element={property}

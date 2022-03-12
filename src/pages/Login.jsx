@@ -21,7 +21,7 @@ const Login = () => {
   const handleClick = () => setShowPassword(!showPassword);
   const navigate = useNavigate();
   const login = () => {
-    navigate("/properties");
+    navigate("/propiedades");
   };
   const token = sessionStorage.getItem("token");
 

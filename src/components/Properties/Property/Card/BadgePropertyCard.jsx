@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Badge } from "@chakra-ui/react";
 
 const BadgePropertyCard = (props) => {
-  const { title, icon } = props;
+  const { title, icon, bgColor } = props;
 
   return (
     <Badge
@@ -12,7 +12,7 @@ const BadgePropertyCard = (props) => {
       ml="-0.5"
       px="2"
       py="0.5"
-      bg="defaultColor.400"
+      bg={bgColor ? bgColor : "defaultColor.400"}
       color="#fff"
       display="flex"
       alignItems="center"

@@ -5,7 +5,8 @@ import PropertiesPage from "./pages/Properties";
 import Login from "./pages/Login";
 import PrivateRoute from "./PrivateRoute";
 import UsersPage from "./pages/Users";
-import CustomerPages from "./pages/Customers";
+import CustomersPage from "./pages/Customers";
+import ReportsPage from "./pages/Reports";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
           />
           <Route path="/login" element={<Login />} />
           <Route
-            path="/users"
+            path="/usuarios"
             element={
               <PrivateRoute
                 component={
@@ -38,7 +39,7 @@ function App() {
             }
           />
           <Route
-            path="/properties"
+            path="/propiedades"
             element={
               <PrivateRoute
                 component={
@@ -50,12 +51,24 @@ function App() {
             }
           />
           <Route
-            path="/customers"
+            path="/clientes"
             element={
               <PrivateRoute
                 component={
                   <Section title="Manejo de Clientes">
-                    <CustomerPages />
+                    <CustomersPage />
+                  </Section>
+                }
+              />
+            }
+          />
+          <Route
+            path="/reportes"
+            element={
+              <PrivateRoute
+                component={
+                  <Section title="Reportes">
+                    <ReportsPage />
                   </Section>
                 }
               />

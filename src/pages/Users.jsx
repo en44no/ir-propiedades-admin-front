@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Table,
   Thead,
@@ -10,23 +10,42 @@ import {
   Box,
   Text,
   Badge,
+  Container,
 } from "@chakra-ui/react";
 import CreateUser from "../components/Users/CreateUser";
 import UsersContext from "../context/Users/UsersContext";
 import EditUser from "../components/Users/EditUser";
 import ConfirmDelete from "../components/Other/ConfirmDelete";
 import RolesInfoModal from "../components/Users/Roles/RolesInfoModal";
+import Search from "../components/Other/Search";
 
 const UsersPage = () => {
   const { users, deleteUser } = useContext(UsersContext);
+      const [filteredUsers, setFilteredUsers] = useState(users);
+
+        useEffect(() => {
+    setFilteredUsers(users);
+    console.log(users)
+    console.log(filteredUsers)
+  }, [users]);
 
   return (
     <>
-      <Box display="flex" justifyContent="end" mr="2.2rem">
-        <CreateUser />
-      </Box>
-
-      <Table variant="unstyled" size="sm">
+        <Box ml='1rem' display="flex" justifyContent="end">
+          <Search
+            placeHolder='Busca usuarios según nombre, email y nombre de usuario...'
+            listToFilter={filteredUsers}
+            filters={[
+              "name",
+              "email",
+              "username",
+            ]}
+            listSetter={setFilteredUsers}
+          />
+          <CreateUser />
+        </Box>
+{filteredUsers.length != 0 && (
+<Table variant="unstyled" size="sm">
         <Thead>
           <Tr maxWidth="100%">
             <Th fontSize="14px" textAlign="center" maxWidth="50px">
@@ -36,6 +55,9 @@ const UsersPage = () => {
               Nombre de Usuario
             </Th>
             <Th fontSize="14px" textAlign="center" maxWidth="50px">
+              Email
+            </Th>
+            <Th fontSize="14px" textAlign="center" maxWidth="60px">
               <Box display="flex" gap="10px" justifyContent="center">
                 Roles
                 <RolesInfoModal />
@@ -47,15 +69,18 @@ const UsersPage = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <Tr key={user._id}>
-              <Td textAlign="center" isTruncated maxWidth="50px">
+              <Td textAlign="center" maxWidth="50px">
                 {user.name}
               </Td>
-              <Td textAlign="center" isTruncated maxWidth="80px">
+              <Td textAlign="center" maxWidth="80px">
                 {user.username}
               </Td>
-              <Td textAlign="center" maxWidth="50px">
+              <Td textAlign="center" maxWidth="80px">
+                {user.email}
+              </Td>
+              <Td textAlign="center" maxWidth="60px">
                 {user.roles.length > 0 ? (
                   user.roles.map((role) => {
                     return (
@@ -79,7 +104,7 @@ const UsersPage = () => {
                   <Text>Sin roles</Text>
                 )}
               </Td>
-              <Td textAlign="center" isTruncated maxWidth="50px">
+              <Td textAlign="center" maxWidth="50px">
                 <HStack justifyContent="center">
                   <EditUser user={user} />
                   <ConfirmDelete
@@ -96,6 +121,23 @@ const UsersPage = () => {
           ))}
         </Tbody>
       </Table>
+)}
+      
+             {filteredUsers.length === 0 && users.length !== 0 && (
+        <Text
+          fontSize="xl"
+          color="#000"
+          position="relative"
+          display="flex"
+          w="100%"
+          h='100%'
+          justifyContent="center"
+          alignItems="center"
+          mt="-5rem"
+        >
+          No se encontraron usuarios que coincidan con tu búsqueda.
+        </Text>
+      )}
     </>
   );
 };

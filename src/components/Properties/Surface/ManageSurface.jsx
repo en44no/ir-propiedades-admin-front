@@ -13,17 +13,16 @@ import {
   Input,
   Select,
   Stack,
-  Textarea,
   useDisclosure,
   Badge,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { HiPlus } from "react-icons/hi";
+import { BsRulers } from "react-icons/bs";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 
-const CreateFeature = (props) => {
+const ManageSurface = (props) => {
   const { full, normalAddButton, noRightMargin, property } = props;
-  const { addFeature } = useContext(PropertiesContext);
+  const { addSurfaceToProperty } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
@@ -33,8 +32,8 @@ const CreateFeature = (props) => {
     reset,
   } = useForm();
 
-  const submitFeature = (data) => {
-    addFeature(data, property._id);
+  const submitSurface = (data) => {
+    addSurfaceToProperty(data, property._id);
     reset();
     onClose();
   };
@@ -42,16 +41,16 @@ const CreateFeature = (props) => {
   return (
     <>
       <Button
-        id="createFeatures"
+        id="submitSurface"
         w={full === "yes" ? "100%" : "7rem"}
         onClick={onOpen}
         fontSize="15px"
-        leftIcon={<HiPlus fontSize="1.2rem" />}
+        leftIcon={<BsRulers fontSize="1.2rem" />}
         mr={noRightMargin ? 0 : 5}
         borderRadius="9px"
         variant={normalAddButton ? "add-button-dark" : "add-button-clear"}
       >
-        {normalAddButton ? "Agregar" : "Agregar características"}
+        Gestionar superficie
       </Button>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
@@ -62,26 +61,29 @@ const CreateFeature = (props) => {
             mt="2"
           />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
-            Agregar características
+            Gestionar superficie
           </DrawerHeader>
           <DrawerBody color="#fff">
-            <form id="formFeature" onSubmit={handleSubmit(submitFeature)}>
+            <form id="manageSurfaceForm" onSubmit={handleSubmit(submitSurface)}>
               <Stack spacing="14px">
                 <Box>
-                  <FormLabel htmlFor="createFeatureType">Tipo</FormLabel>
+                  <FormLabel htmlFor="surfaceUnitMeasurement">
+                    Unidad de medida
+                  </FormLabel>
                   <Select
-                    {...register("type", {
-                      required: "Tipo es requerido.",
+                    {...register("unitMeasurement", {
+                      required: "Unidad de medida es requerida.",
                     })}
-                    id="createFeatureType"
-                    placeholder="Ingresa el tipo"
+                    id="surfaceUnitMeasurement"
+                    placeholder="Ingresa la unidad"
+                    defaultValue={
+                      property.unitMeasurement ? property.unitMeasurement : null
+                    }
                   >
-                    <option value="Baño">Baño</option>
-                    <option value="Cocina">Cocina</option>
-                    <option value="Dormitorio">Dormitorio</option>
-                    <option value="Sala de estar">Sala de estar</option>
-                    <option value="Garaje">Garaje</option>
-                    <option value="Otro">Otro</option>
+                    <option value="m2" selected>
+                      Metros cuadrados
+                    </option>
+                    <option value="ha">Hectáreas</option>
                   </Select>
                   {errors.type && (
                     <Badge variant="required-error">
@@ -90,13 +92,19 @@ const CreateFeature = (props) => {
                   )}
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="createFeatureTitle">Título</FormLabel>
+                  <FormLabel htmlFor="surfaceBuilded">
+                    Superficie construída
+                  </FormLabel>
                   <Input
-                    {...register("title", {
-                      required: "Título es requerido.",
+                    {...register("buildedSurface", {
+                      required: "Superficie construída es requerida.",
                     })}
-                    id="createFeatureTitle"
-                    placeholder="Ingresa el título"
+                    id="surfaceBuilded"
+                    type="number"
+                    placeholder="Ingresa la superficie construída"
+                    defaultValue={
+                      property.buildedSurface ? property.buildedSurface : null
+                    }
                   ></Input>
                   {errors.title && (
                     <Badge variant="required-error">
@@ -105,19 +113,21 @@ const CreateFeature = (props) => {
                   )}
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="createFeatureDescription">
-                    Descripción
-                  </FormLabel>
-                  <Textarea
-                    {...register("description", {
-                      required: "Descripción es requerido.",
+                  <FormLabel htmlFor="surfaceTotal">Superficie total</FormLabel>
+                  <Input
+                    {...register("totalSurface", {
+                      required: "Superficie total es requerida.",
                     })}
-                    id="createFeatureDescription"
-                    placeholder="Ingresa la descripción"
-                  ></Textarea>
-                  {errors.description && (
+                    id="surfaceTotal"
+                    type="number"
+                    placeholder="Ingresa la superficie total"
+                    defaultValue={
+                      property.totalSurface ? property.totalSurface : null
+                    }
+                  ></Input>
+                  {errors.title && (
                     <Badge variant="required-error">
-                      {errors.description.message}
+                      {errors.title.message}
                     </Badge>
                   )}
                 </Box>
@@ -129,7 +139,7 @@ const CreateFeature = (props) => {
               Cancelar
             </Button>
             <Button
-              form="formFeature"
+              form="manageSurfaceForm"
               type="submit"
               variant="confirm-add-button"
             >
@@ -142,4 +152,4 @@ const CreateFeature = (props) => {
   );
 };
 
-export default CreateFeature;
+export default ManageSurface;

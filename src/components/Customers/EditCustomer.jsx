@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Badge,
   Box,
@@ -19,9 +19,11 @@ import {
 import CustomersContext from "../../context/Customers/CustomersContext";
 import { useForm } from "react-hook-form";
 import { FaUserEdit } from "react-icons/fa";
+import AssociateProperty from "./AssociateProperty";
 
 const EditCustomer = (props) => {
-  const { editCustomer } = useContext(CustomersContext);
+  const { editCustomer, associatedPropertiesPendingToAdd } =
+    useContext(CustomersContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { customer, direction } = props;
   const [customerType, setCustomerType] = useState(customer.type);
@@ -34,6 +36,10 @@ const EditCustomer = (props) => {
   } = useForm();
 
   const submitCustomer = (data) => {
+    if (associatedPropertiesPendingToAdd !== null) {
+      data.ownerProperties = associatedPropertiesPendingToAdd.ownerProperties;
+      data.tenantProperties = associatedPropertiesPendingToAdd.tenantProperties;
+    }
     editCustomer(data, customer._id);
     reset();
     onClose();
@@ -49,7 +55,11 @@ const EditCustomer = (props) => {
       >
         <DrawerOverlay />
         <DrawerContent bg="defaultColor.400">
-          <DrawerCloseButton color="#fff" mt="2" />
+          <DrawerCloseButton
+            _focus={{ boxShadow: "none" }}
+            color="#fff"
+            mt="2"
+          />
           <DrawerHeader color="#fff" borderBottomWidth="1px">
             Editar cliente
           </DrawerHeader>
@@ -105,37 +115,14 @@ const EditCustomer = (props) => {
                   )}
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="CustomerType">Tipo</FormLabel>
-                  <Select
-                    {...register("type", { required: "Tipo es requerido." })}
-                    id="CustomerType"
-                    placeholder="Selecciona el tipo"
-                    defaultValue={customer.type}
-                    onChange={(event) => setCustomerType(event.target.value)}
-                  >
-                    <option value="Dueño">Dueño</option>
-                    <option value="Interesado">Interesado</option>
-                    <option value="Inquilino">Inquilino</option>
-                  </Select>
-                  {errors.type && (
-                    <Badge variant="required-error">
-                      {errors.type.message}
-                    </Badge>
-                  )}
+                  <FormLabel htmlFor="CustomerProperty">Propiedades</FormLabel>
+                  <AssociateProperty
+                    customer={customer}
+                    customerHaveProperties={customer.ownerProperties.concat(
+                      customer.tenantProperties
+                    )}
+                  />
                 </Box>
-                {customerType == "Dueño" || customerType == "Inquilino" ? (
-                  <Box>
-                    <FormLabel htmlFor="CustomerProperty">
-                      Código interno de la propiedad
-                    </FormLabel>
-                    <Input
-                      {...register("property")}
-                      id="CustomerProperty"
-                      placeholder="Ingresa el código"
-                      autoComplete="off"
-                    />
-                  </Box>
-                ) : null}
               </Stack>
             </form>
           </DrawerBody>
