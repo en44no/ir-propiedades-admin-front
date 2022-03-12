@@ -35,8 +35,9 @@ const Header = () => {
                 ? userRoles
                     .toString()
                     .split(",")
-                    .map((role) => (
+                    .map((role, index) => (
                       <Tag
+                        key={index}
                         fontSize="12px"
                         fontWeight="bold"
                         color="white"
@@ -51,8 +52,9 @@ const Header = () => {
                         {role.toUpperCase()}
                       </Tag>
                     ))
-                : roles.split(",").map((role) => (
+                : roles.split(",").map((role, index) => (
                     <Tag
+                      key={index}
                       fontSize="12px"
                       fontWeight="bold"
                       color="white"

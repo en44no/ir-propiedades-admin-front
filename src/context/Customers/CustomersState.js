@@ -5,7 +5,7 @@ import PropertiesContext from "../Properties/PropertiesContext";
 import CustomersContext from "./CustomersContext";
 
 const CustomersState = (props) => {
-  const { properties, fetchProperties } = useContext(PropertiesContext);
+  const { properties } = useContext(PropertiesContext);
   const [customers, setCustomers] = useState([]);
   const [
     associatedPropertiesPendingToAdd,

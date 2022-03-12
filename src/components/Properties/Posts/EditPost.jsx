@@ -37,6 +37,8 @@ const EditPost = (props) => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [warningStatusMessage, setWarningStatusMessage] = useState("");
   const [showDateError, setShowDateError] = useState(false);
+  const [notAbleToModifyStartDate, setNotAbleToModifyStartDate] =
+    useState(false);
 
   const checkIsAllDisabled = () => {
     if (post.status == "Finalizada") {

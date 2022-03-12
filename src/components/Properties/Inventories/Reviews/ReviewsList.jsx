@@ -35,7 +35,6 @@ const ReviewsList = (props) => {
   };
 
   const parseReviewStatus = (review) => {
-    console.log(review);
     if (review.status === "Abierto") {
       return <BadgeInventoryStatus bgColor="#00b894" text="Abierto" />;
     } else if (review.status === "Cerrado") {

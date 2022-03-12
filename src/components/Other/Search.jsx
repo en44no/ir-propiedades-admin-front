@@ -14,7 +14,6 @@ const Search = (props) => {
   };
 
   const handleChange = (e) => {
-    console.log(e.target.value)
     const st = normalize(e.target.value)
     if (st !== '') {
       filterData(st);
@@ -37,7 +36,6 @@ const Search = (props) => {
         filteredList.push(item);
       }
     }
-    console.log(filteredList)
     listSetter(filteredList);
   }
 

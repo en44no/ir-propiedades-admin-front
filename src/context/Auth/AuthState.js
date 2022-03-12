@@ -35,7 +35,6 @@ const AuthState = (props) => {
           });
         }
         setUserRoles(roles);
-        console.log(userRoles);
         sessionStorage.setItem("userLoggedRoles", roles);
         setUserRealName(user.name.split(" ")[0]);
       })
