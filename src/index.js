@@ -8,6 +8,7 @@ import PropertiesState from "./context/Properties/PropertiesState";
 import AuthState from "./context/Auth/AuthState";
 import UsersState from "./context/Users/UsersState";
 import CustomersState from "./context/Customers/CustomersState";
+import ReportsState from "./context/Reports/ReportsState";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,7 +17,9 @@ ReactDOM.render(
         <AuthState>
           <UsersState>
             <CustomersState>
-              <App />
+              <ReportsState>
+                <App />
+              </ReportsState>
             </CustomersState>
           </UsersState>
         </AuthState>

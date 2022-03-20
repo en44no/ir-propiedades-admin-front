@@ -25,7 +25,7 @@ const Footer = () => {
         justifyContent="end"
       >
         <Menu>
-          <MenuButton
+          {/* <MenuButton
             as={IconButton}
             aria-label="Options"
             icon={<IoSettingsOutline fontSize="1.5rem" />}
@@ -36,7 +36,7 @@ const Footer = () => {
               borderRadius="9px"
               _hover={{ borderRadius: "9px" }}
             ></MenuItem>
-          </MenuList>
+          </MenuList> */}
         </Menu>
         <Link to="/login">
           <IconButton onClick={() => logOut()} ml={1} bg="transparent">

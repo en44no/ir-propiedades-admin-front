@@ -53,23 +53,6 @@ const Content = () => {
                 <Text fontSize="0.95rem">Manejo de propiedades</Text>
               </Link>
             </AccordionPanel>
-            <AccordionPanel
-              mt="1"
-              cursor="pointer"
-              pb={2}
-              _focusWithin={{
-                boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)",
-                borderRadius: "9px",
-              }}
-              _hover={{
-                borderRadius: "9px",
-                bg: "defaultColor.50",
-              }}
-            >
-              <Link to="/">
-                <Text fontSize="0.95rem">Inventarios</Text>
-              </Link>
-            </AccordionPanel>
           </AccordionItem>
           <AccordionItem m="3" pt="1" borderBottom="2px solid #cacaca" pb="1">
             <h2>

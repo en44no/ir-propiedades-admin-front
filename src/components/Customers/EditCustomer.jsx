@@ -12,21 +12,20 @@ import {
   DrawerOverlay,
   FormLabel,
   Input,
-  Select,
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
 import CustomersContext from "../../context/Customers/CustomersContext";
 import { useForm } from "react-hook-form";
 import { FaUserEdit } from "react-icons/fa";
-import AssociateProperty from "./AssociateProperty";
+import EditAssociateProperty from "./EditAssociateProperty";
 
 const EditCustomer = (props) => {
   const { editCustomer, associatedPropertiesPendingToAdd } =
     useContext(CustomersContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { customer, direction } = props;
-  const [customerType, setCustomerType] = useState(customer.type);
+  const [reactiveCustomer, setReactiveCustomer] = useState(customer);
 
   const {
     register,
@@ -44,6 +43,10 @@ const EditCustomer = (props) => {
     reset();
     onClose();
   };
+
+  useEffect(() => {
+    setReactiveCustomer(customer);
+  }, [customer]);
 
   return (
     <>
@@ -73,7 +76,13 @@ const EditCustomer = (props) => {
                     id="CustomerName"
                     placeholder="Ingresa el nombre"
                     autoComplete="off"
-                    defaultValue={customer.name}
+                    value={reactiveCustomer.name}
+                    onChange={(e) =>
+                      setReactiveCustomer({
+                        ...reactiveCustomer,
+                        name: e.target.value,
+                      })
+                    }
                   />
                   {errors.name && (
                     <Badge variant="required-error">
@@ -89,7 +98,13 @@ const EditCustomer = (props) => {
                     placeholder="Ingresa el email"
                     autoComplete="off"
                     type="email"
-                    defaultValue={customer.email}
+                    value={reactiveCustomer.email}
+                    onChange={(e) =>
+                      setReactiveCustomer({
+                        ...reactiveCustomer,
+                        email: e.target.value,
+                      })
+                    }
                   />
                   {errors.email && (
                     <Badge variant="required-error">
@@ -106,7 +121,13 @@ const EditCustomer = (props) => {
                     id="CustomerPhone"
                     placeholder="Ingresa el télefono"
                     autoComplete="off"
-                    defaultValue={customer.phone}
+                    value={reactiveCustomer.phone}
+                    onChange={(e) =>
+                      setReactiveCustomer({
+                        ...reactiveCustomer,
+                        phone: e.target.value,
+                      })
+                    }
                   />
                   {errors.phone && (
                     <Badge variant="required-error">
@@ -116,7 +137,7 @@ const EditCustomer = (props) => {
                 </Box>
                 <Box>
                   <FormLabel htmlFor="CustomerProperty">Propiedades</FormLabel>
-                  <AssociateProperty
+                  <EditAssociateProperty
                     customer={customer}
                     customerHaveProperties={customer.ownerProperties.concat(
                       customer.tenantProperties

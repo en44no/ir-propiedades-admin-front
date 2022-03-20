@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -25,6 +25,7 @@ const EditFeature = (props) => {
   const { property, feature } = props;
   const { editFeature } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [reactiveFeature, setReactiveFeature] = useState(feature);
 
   const {
     register,
@@ -38,6 +39,10 @@ const EditFeature = (props) => {
     reset();
     onClose();
   };
+
+  useEffect(() => {
+    setReactiveFeature(feature);
+  }, [feature]);
 
   return (
     <>
@@ -73,7 +78,13 @@ const EditFeature = (props) => {
                       required: "Tipo es requerido.",
                     })}
                     id="createFeatureType"
-                    defaultValue={feature.type}
+                    value={reactiveFeature.type}
+                    onChange={(e) =>
+                      setReactiveFeature({
+                        ...reactiveFeature,
+                        type: e.target.value,
+                      })
+                    }
                     placeholder="Ingresa el tipo"
                   >
                     <option value="Baño">Baño</option>
@@ -97,7 +108,13 @@ const EditFeature = (props) => {
                     })}
                     id="createFeatureTitle"
                     placeholder="Ingresa el título"
-                    defaultValue={feature.title}
+                    value={reactiveFeature.title}
+                    onChange={(e) =>
+                      setReactiveFeature({
+                        ...reactiveFeature,
+                        title: e.target.value,
+                      })
+                    }
                   ></Input>
                   {errors.title && (
                     <Badge variant="required-error">
@@ -115,7 +132,13 @@ const EditFeature = (props) => {
                     })}
                     id="createFeatureDescription"
                     placeholder="Ingresa la descripción"
-                    defaultValue={feature.description}
+                    value={reactiveFeature.description}
+                    onChange={(e) =>
+                      setReactiveFeature({
+                        ...reactiveFeature,
+                        description: e.target.value,
+                      })
+                    }
                   ></Textarea>
                   {errors.description && (
                     <Badge variant="required-error">

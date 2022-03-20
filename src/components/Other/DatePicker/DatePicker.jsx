@@ -31,9 +31,7 @@ const DatePicker = (props) => {
           setDefaultSelectedDate(null);
           setSelectedDate(date);
         }}
-        selected={
-          defaultSelectedDate != null ? defaultSelectedDate : selectedDate
-        }
+        selected={selectedDate || defaultSelectedDate}
       />
     </>
   );

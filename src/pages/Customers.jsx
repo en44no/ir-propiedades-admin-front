@@ -21,12 +21,10 @@ import Search from "../components/Other/Search";
 
 const CustomersPage = () => {
   const { customers, deleteCustomer } = useContext(CustomersContext);
-    const [filteredCustomers, setFilteredCustomers] = useState(customers);
+  const [filteredCustomers, setFilteredCustomers] = useState(customers);
 
   useEffect(() => {
     setFilteredCustomers(customers);
-    console.log(customers)
-    console.log(filteredCustomers)
   }, [customers]);
 
   const getCustomerProperties = (customer) => {
@@ -48,19 +46,15 @@ const CustomersPage = () => {
 
   return (
     <>
-        <Box ml='1rem' display="flex" justifyContent="end">
-          <Search
-            placeHolder='Busca clientes según nombre, email y teléfono...'
-            listToFilter={filteredCustomers}
-            filters={[
-              "name",
-              "email",
-              "phone",
-            ]}
-            listSetter={setFilteredCustomers}
-          />
-             <CreateCustomer />
-        </Box>
+      <Box ml="1rem" display="flex" justifyContent="end">
+        <Search
+          placeHolder="Busca clientes según nombre, email y teléfono..."
+          listToFilter={customers}
+          filters={["name", "email", "phone"]}
+          listSetter={setFilteredCustomers}
+        />
+        <CreateCustomer />
+      </Box>
       {customers ? (
         <Table variant="unstyled" size="sm">
           {filteredCustomers.length > 0 && (
@@ -139,14 +133,14 @@ const CustomersPage = () => {
           El sistema aún no cuenta con clientes registrados.
         </Text>
       )}
-         {filteredCustomers.length === 0 && customers.length !== 0 && (
+      {filteredCustomers.length === 0 && customers.length !== 0 && (
         <Text
           fontSize="xl"
           color="#000"
           position="relative"
           display="flex"
           w="100%"
-          h='100%'
+          h="100%"
           justifyContent="center"
           alignItems="center"
           mt="-5rem"

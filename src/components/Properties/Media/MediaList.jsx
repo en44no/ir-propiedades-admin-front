@@ -43,6 +43,10 @@ const MediaList = (props) => {
   const { deleteMedia, changeOrderMediaFromProperty } =
     useContext(PropertiesContext);
 
+  useEffect(() => {
+    state.images = property.media;
+  }, [property.media]);
+
   const [state, dispatch] = useReducer(dragReducer, {
     images: property.media,
   });

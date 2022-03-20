@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Badge,
   Box,
@@ -13,19 +13,18 @@ import {
   FormLabel,
   Input,
   Stack,
+  Text,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
-import { MdFileUpload } from "react-icons/md";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import { useForm } from "react-hook-form";
-import Notification from "../../Other/Notification";
 
-const CreateDocument = (props) => {
-  const { full, property, normalAddButton, noRightMargin } = props;
-  const { addDocument } = useContext(PropertiesContext);
+const EditDocument = (props) => {
+  const { document, property } = props;
+  const { editDocument } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [reactiveDocument, setReactiveDocument] = useState(document);
 
   const {
     register,
@@ -35,38 +34,27 @@ const CreateDocument = (props) => {
   } = useForm();
 
   const submitDocument = (data) => {
-    if (
-      selectedFile.type == "application/pdf" ||
-      selectedFile.type == "image/jpeg" ||
-      selectedFile.type == "image/png"
-    ) {
-      data.files = selectedFile;
-      addDocument(data, property._id);
-      reset();
-      onClose();
-    } else {
-      Notification(
-        `Error al subir archivo`,
-        "El archivo debe ser un PDF o una imagen",
-        "warning"
-      );
-    }
+    editDocument(data, document._id, property._id);
+    reset();
+    onClose();
   };
+
+  useEffect(() => {
+    setReactiveDocument(document);
+  }, [document]);
 
   return (
     <>
       <>
         <Button
-          id="createPosts"
-          w={full === "yes" ? "100%" : "7rem"}
+          w="100%"
+          bg="none"
+          _hover={{ background: "none" }}
           onClick={onOpen}
-          fontSize="15px"
-          leftIcon={<MdFileUpload fontSize="1.3rem" />}
-          mr={noRightMargin ? 0 : 5}
-          borderRadius="9px"
-          variant={normalAddButton ? "add-button-dark" : "add-button-clear"}
+          _active={{ boxShadow: "none" }}
+          _focus={{ boxShadow: "none" }}
         >
-          {normalAddButton ? "Subir" : " Subir imagen"}
+          <Text pt="0.7rem">Editar</Text>
         </Button>
         <Drawer isOpen={isOpen} size="sm" placement="left" onClose={onClose}>
           <DrawerOverlay />
@@ -82,11 +70,11 @@ const CreateDocument = (props) => {
               mt="2"
             />
             <DrawerHeader color="#fff" borderBottomWidth="1px">
-              Subir documento
+              Editar documento
             </DrawerHeader>
             <DrawerBody color="#fff">
               <form
-                id="formCreateDocument"
+                id="formEditDocument"
                 onSubmit={handleSubmit(submitDocument)}
               >
                 <Stack spacing="14px">
@@ -97,6 +85,13 @@ const CreateDocument = (props) => {
                         required: "Nombre es requerido.",
                       })}
                       id="propertyName"
+                      value={reactiveDocument.name}
+                      onChange={(e) =>
+                        setReactiveDocument({
+                          ...reactiveDocument,
+                          name: e.target.value,
+                        })
+                      }
                       placeholder="Ingresa el nombre"
                       autoComplete="off"
                     />
@@ -115,6 +110,13 @@ const CreateDocument = (props) => {
                         required: "Descripción es requerido.",
                       })}
                       id="propertyDescription"
+                      value={reactiveDocument.description}
+                      onChange={(e) =>
+                        setReactiveDocument({
+                          ...reactiveDocument,
+                          description: e.target.value,
+                        })
+                      }
                       placeholder="Ingresa la descripción"
                       autoComplete="off"
                     />
@@ -128,14 +130,10 @@ const CreateDocument = (props) => {
                     <FormLabel margin="0" htmlFor="createMediaImage">
                       Archivo (PDF o imagen)
                       <Input
-                        accept="application/pdf, image/jpeg, image/png"
+                        disabled
                         mt="0.4rem"
                         pt="0.3rem"
                         type="file"
-                        onChange={(e) => {
-                          setSelectedFile(e.target.files[0]);
-                        }}
-                        id="createMediaImage"
                         w="100%"
                         fontSize="1rem"
                       ></Input>
@@ -149,7 +147,7 @@ const CreateDocument = (props) => {
                 Cancelar
               </Button>
               <Button
-                form="formCreateDocument"
+                form="formEditDocument"
                 type="submit"
                 variant="confirm-add-button"
               >
@@ -163,4 +161,4 @@ const CreateDocument = (props) => {
   );
 };
 
-export default CreateDocument;
+export default EditDocument;

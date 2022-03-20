@@ -12,6 +12,8 @@ import {
   FormControl,
   FormLabel,
   Input,
+  InputGroup,
+  InputLeftElement,
   SimpleGrid,
   Stack,
   Switch,
@@ -24,10 +26,13 @@ import SocialList from "../../Social/SocialList";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "../../Other/DatePicker/DatePicker";
 import PostImagesManagement from "./PostImagesManagement";
+import { IoLogoUsd } from "react-icons/io";
+import Notification from "../../Other/Notification";
 
 const CreatePost = (props) => {
   const { full, property, normalAddButton, noRightMargin } = props;
-  const { addPost, imagesPendingToAddForPost } = useContext(PropertiesContext);
+  const { addPost, imagesPendingToAddForPost, setImagesPendingToAddForPost } =
+    useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isForRentDisabled, setIsForRentDisabled] = useState(true);
   const [isForSaleDisabled, setIsForSaleDisabled] = useState(true);
@@ -47,13 +52,35 @@ const CreatePost = (props) => {
       setTimeout(() => {
         setShowDateError(false);
       }, 5000);
+    }
+    if (imagesPendingToAddForPost.length == 0) {
+      Notification(
+        `Error al crear publicación`,
+        `Debes agregar al menos una imagen`,
+        "warning"
+      );
     } else {
       if (imagesPendingToAddForPost) {
         data.media = imagesPendingToAddForPost;
       }
       addPost(data, property._id);
       reset();
+      setIsForRentDisabled(true);
+      setIsForSaleDisabled(true);
       onClose();
+      setImagesPendingToAddForPost([]);
+    }
+  };
+
+  const checkPropertyMedia = () => {
+    if (property.media.length == 0) {
+      Notification(
+        `No puedes crear publicaciones para esta propiedad`,
+        `La propiedad debe tener al menos una imagen para poder crear una publicación`,
+        "warning"
+      );
+    } else {
+      onOpen();
     }
   };
 
@@ -63,7 +90,7 @@ const CreatePost = (props) => {
         <Button
           id="createPosts"
           w={full === "yes" ? "100%" : "7rem"}
-          onClick={onOpen}
+          onClick={() => checkPropertyMedia()}
           fontSize="15px"
           leftIcon={<HiPlus fontSize="1.2rem" />}
           mr={noRightMargin ? 0 : 5}
@@ -107,20 +134,27 @@ const CreatePost = (props) => {
                       </FormControl>
                       <Box>
                         <FormLabel
+                          ml="-3.5rem"
                           textAlign="center"
                           htmlFor="createPostSellPrice"
                         >
                           Precio venta
                         </FormLabel>
-                        <Input
-                          defaultValue="0"
-                          disabled={isForSaleDisabled}
-                          {...register("forSalePrice")}
-                          id="createPostSellPrice"
-                        ></Input>
+                        <InputGroup>
+                          <InputLeftElement
+                            pointerEvents="none"
+                            children={<IoLogoUsd color="#cacaca" />}
+                          />
+                          <Input
+                            defaultValue="0"
+                            disabled={isForSaleDisabled}
+                            {...register("forSalePrice")}
+                            id="createPostSellPrice"
+                          ></Input>
+                        </InputGroup>
                       </Box>
                     </Box>
-                    <Box display="flex" mb="4">
+                    <Box display="flex" mb="8">
                       <FormControl
                         display="flex"
                         mt="2rem"
@@ -140,17 +174,24 @@ const CreatePost = (props) => {
                       </FormControl>
                       <Box>
                         <FormLabel
+                          ml="-2.5rem"
                           textAlign="center"
                           htmlFor="createPostRentPrice"
                         >
                           Precio alquiler
                         </FormLabel>
-                        <Input
-                          defaultValue="0"
-                          disabled={isForRentDisabled}
-                          {...register("forRentPrice")}
-                          id="createPostRentPrice"
-                        ></Input>
+                        <InputGroup>
+                          <InputLeftElement
+                            pointerEvents="none"
+                            children={<IoLogoUsd color="#cacaca" />}
+                          />
+                          <Input
+                            defaultValue="0"
+                            disabled={isForRentDisabled}
+                            {...register("forRentPrice")}
+                            id="createPostRentPrice"
+                          ></Input>
+                        </InputGroup>
                       </Box>
                     </Box>
                   </SimpleGrid>

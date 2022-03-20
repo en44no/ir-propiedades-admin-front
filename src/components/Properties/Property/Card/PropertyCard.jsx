@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Badge, Box, HStack, Image, Tooltip } from "@chakra-ui/react";
 import PropertyDetails from "../PropertyDetails";
 import BadgePropertyCard from "./BadgePropertyCard";
@@ -20,6 +20,10 @@ const PropertyCard = (props) => {
       return <BadgePropertyCard title="Depósito" icon={<FaWarehouse />} />;
     }
   };
+
+  useEffect(() => {
+    console.log(property.address);
+  }, [property]);
 
   return (
     <>

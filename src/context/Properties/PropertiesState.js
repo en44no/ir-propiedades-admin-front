@@ -17,6 +17,8 @@ const PropertiesState = (props) => {
     fetchProperties();
   }, []);
 
+  useEffect(() => {}, []);
+
   const fetchProperties = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/properties`)
@@ -71,7 +73,7 @@ const PropertiesState = (props) => {
           setAddresses([...addresses, res.data]);
           const newProperties = properties.map((prop) => {
             if (prop._id === property._id) {
-              return property;
+              return { ...property, address: res.data };
             } else {
               return prop;
             }
@@ -149,6 +151,12 @@ const PropertiesState = (props) => {
             "Has agregado detalles a una propiedad",
             "success"
           );
+          data.type != null && (property.type[0] = data.type);
+          data.isForRent != null && (property.isForRent = data.isForRent);
+          data.isForSale != null && (property.isForSale = data.isForSale);
+          data.name != null && (property.name = data.name);
+          data.comment != null && (property.comment = data.comment);
+          data.description != null && (property.description = data.description);
           const newProperties = properties.map((prop) => {
             if (prop._id === property._id) {
               return property;
@@ -447,7 +455,7 @@ const PropertiesState = (props) => {
         await axios
           .post(`${process.env.REACT_APP_API_BASE_URL}/media`, data)
           .then((resMedia) => {
-            if (resMedia.status === 201) {
+            if (resMedia.status === 201 || res.status === 200) {
               Notification(
                 "Imagen agregada correctamente",
                 "Has agregado una nueva imagen",
@@ -609,7 +617,6 @@ const PropertiesState = (props) => {
   };
 
   const addSurfaceToProperty = async (surfaceData, propertyId) => {
-    debugger;
     const property = properties.find((property) => property._id === propertyId);
     await axios
       .put(`${process.env.REACT_APP_API_BASE_URL}/properties/${propertyId}`, {
@@ -647,10 +654,148 @@ const PropertiesState = (props) => {
       .catch((error) => {});
   };
 
+  const addDocumentToProperty = async (documentId, property) => {
+    let documents;
+    if (property.documents.length > 0) {
+      documents = property.documents.map((document) => {
+        return document._id;
+      });
+    }
+    await axios
+      .put(`${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}`, {
+        documents:
+          property.documents.length > 0
+            ? [...documents, documentId]
+            : [documentId],
+      })
+      .catch((error) => {});
+  };
+
+  const removeDocumentFromProperty = async (documentId, property) => {
+    await axios
+      .put(`${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}`, {
+        documents: [
+          ...property.documents.filter(
+            (document) => document._id !== documentId
+          ),
+        ],
+      })
+      .catch((error) => {});
+  };
+
+  const addDocument = async (data, propertyId) => {
+    let formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("documents", data.files);
+    let property = properties.find((property) => property._id === propertyId);
+    await axios
+      .post(`${process.env.REACT_APP_API_BASE_URL}/documents`, formData)
+      .then((res) => {
+        if (res.status === 201 || res.status === 200) {
+          Notification(
+            "Documento agregado correctamente",
+            "Has agregado un nuevo documento",
+            "success"
+          );
+          const newProperties = properties.map((prop) => {
+            if (prop._id === propertyId) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          addDocumentToProperty(res.data[0]._id, property);
+          property.documents = [...property.documents, res.data[0]];
+          setProperties(newProperties);
+        }
+      })
+      .catch((error) => {
+        Notification(
+          "Error al agregar el documento",
+          "Ocurrió un error intentado agregar el documento",
+          "error"
+        );
+      });
+  };
+
+  const editDocument = async (data, documentId, propertyId) => {
+    let property = properties.find((property) => property._id === propertyId);
+    await axios
+      .put(
+        `${process.env.REACT_APP_API_BASE_URL}/documents/${documentId}`,
+        data
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          Notification(
+            "Documento editado correctamente",
+            "Has editado un documento",
+            "success"
+          );
+          property.documents = [
+            ...property.documents.filter(
+              (document) => document._id !== documentId
+            ),
+            res.data,
+          ];
+          const newProperties = properties.map((prop) => {
+            if (prop._id === propertyId) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          setProperties(newProperties);
+        }
+      })
+      .catch((error) => {
+        Notification(
+          "Error al editar el documento",
+          "Ocurrió un error intentado editar el documento",
+          "error"
+        );
+      });
+  };
+
+  const deleteDocument = async (documentId, property) => {
+    await axios
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/documents/${documentId}`)
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          Notification(
+            "Documento eliminado correctamente",
+            "Has eliminado un documento",
+            "success"
+          );
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          property.documents = property.documents.filter(
+            (doc) => doc._id !== documentId
+          );
+          setProperties(newProperties);
+          removeDocumentFromProperty(documentId, property);
+        }
+      })
+      .catch((err) => {
+        Notification(
+          "Error al eliminar el documento",
+          "Ocurrió un error intentado eliminar el documento",
+          "error"
+        );
+      });
+  };
+
   return (
     <PropertiesContext.Provider
       value={{
         properties,
+        fetchProperties,
         setProperties,
         addressToAdd,
         setAddressToAdd,
@@ -679,6 +824,9 @@ const PropertiesState = (props) => {
         changeReviewStatus,
         addSurfaceToProperty,
         changeOrderMediaFromProperty,
+        addDocument,
+        editDocument,
+        deleteDocument,
       }}
     >
       {props.children}

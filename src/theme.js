@@ -97,18 +97,6 @@ const theme = extendTheme({
         },
       },
     },
-    Link: {
-      baseStyle: {
-        fontWeight: "semibold",
-        _hover: {
-          bgGradient: "linear(to-r, cyan.400, blue.500, purple.600)",
-          bgClip: "text",
-          transform: "scale(1.06)",
-          transition: "transform 1s, all 0.2s ease-in-out",
-          textDecoration: "none",
-        },
-      },
-    },
     Tooltip: {
       baseStyle: {
         borderRadius: "5px",

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -24,6 +24,7 @@ const ManageSurface = (props) => {
   const { full, normalAddButton, noRightMargin, property } = props;
   const { addSurfaceToProperty } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [reactiveProperty, setReactiveProperty] = useState(property);
 
   const {
     register,
@@ -37,6 +38,10 @@ const ManageSurface = (props) => {
     reset();
     onClose();
   };
+
+  useEffect(() => {
+    setReactiveProperty(property);
+  }, [property]);
 
   return (
     <>
@@ -76,13 +81,15 @@ const ManageSurface = (props) => {
                     })}
                     id="surfaceUnitMeasurement"
                     placeholder="Ingresa la unidad"
-                    defaultValue={
-                      property.unitMeasurement ? property.unitMeasurement : null
+                    value={reactiveProperty.unitMeasurement}
+                    onChange={(e) =>
+                      setReactiveProperty({
+                        ...reactiveProperty,
+                        unitMeasurement: e.target.value,
+                      })
                     }
                   >
-                    <option value="m2" selected>
-                      Metros cuadrados
-                    </option>
+                    <option value="m2">Metros cuadrados</option>
                     <option value="ha">Hectáreas</option>
                   </Select>
                   {errors.type && (
@@ -102,8 +109,12 @@ const ManageSurface = (props) => {
                     id="surfaceBuilded"
                     type="number"
                     placeholder="Ingresa la superficie construída"
-                    defaultValue={
-                      property.buildedSurface ? property.buildedSurface : null
+                    value={reactiveProperty.buildedSurface}
+                    onChange={(e) =>
+                      setReactiveProperty({
+                        ...reactiveProperty,
+                        buildedSurface: e.target.value,
+                      })
                     }
                   ></Input>
                   {errors.title && (
@@ -121,8 +132,12 @@ const ManageSurface = (props) => {
                     id="surfaceTotal"
                     type="number"
                     placeholder="Ingresa la superficie total"
-                    defaultValue={
-                      property.totalSurface ? property.totalSurface : null
+                    value={reactiveProperty.totalSurface}
+                    onChange={(e) =>
+                      setReactiveProperty({
+                        ...reactiveProperty,
+                        totalSurface: e.target.value,
+                      })
                     }
                   ></Input>
                   {errors.title && (

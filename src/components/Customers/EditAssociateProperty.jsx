@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Badge,
   Box,
@@ -21,10 +21,11 @@ import { BsFillHouseDoorFill } from "react-icons/bs";
 import { RiCloseCircleFill } from "react-icons/ri";
 import PropertiesContext from "../../context/Properties/PropertiesContext";
 
-const AssociateProperty = (props) => {
-  const { setAssociatedPropertiesPendingToAdd } = useContext(CustomersContext);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const EditAssociateProperty = (props) => {
+  const { customer } = props;
+  const { editCustomer } = useContext(CustomersContext);
   const { properties } = useContext(PropertiesContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [propertyCode, setPropertyCode] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [associatedProperties, setAssociatedProperties] = useState([]);
@@ -34,6 +35,29 @@ const AssociateProperty = (props) => {
     useState(false);
   const [showNoPropWithThatCodeError, setShowNoPropWithThatCodeError] =
     useState(false);
+
+  const getCustomerProperties = () => {
+    let customerProperties = [];
+    customer.tenantProperties.map((property) => {
+      let prop = {
+        code: property.internalCode,
+        type: "Inquilino",
+      };
+      customerProperties.push(prop);
+    });
+    customer.ownerProperties.map((property) => {
+      let prop = {
+        code: property.internalCode,
+        type: "Dueño",
+      };
+      customerProperties.push(prop);
+    });
+    setAssociatedProperties(customerProperties);
+  };
+
+  useEffect(() => {
+    getCustomerProperties();
+  }, []);
 
   const associateProperty = (data) => {
     if (propertyCode.trim() != "") {
@@ -89,7 +113,7 @@ const AssociateProperty = (props) => {
     });
 
     const data = { ownerProperties, tenantProperties };
-    setAssociatedPropertiesPendingToAdd(data);
+    editCustomer(data, customer._id);
     onClose();
   };
 
@@ -263,4 +287,4 @@ const AssociateProperty = (props) => {
   );
 };
 
-export default AssociateProperty;
+export default EditAssociateProperty;

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FormLabel,
   Input,
@@ -28,8 +28,8 @@ import { ImEye, ImEyeBlocked } from "react-icons/im";
 function EditUser(props) {
   const { user } = props;
   const { editUser, roles } = useContext(UsersContext);
-
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [reactiveUser, setReactiveUser] = useState(user);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showEditPassword, setShowEditPassword] = useState(false);
@@ -44,6 +44,10 @@ function EditUser(props) {
       setShowEditPassword(true);
     }
   };
+
+  useEffect(() => {
+    setReactiveUser(user);
+  }, [user]);
 
   const {
     register,
@@ -95,7 +99,13 @@ function EditUser(props) {
                     id="userName"
                     placeholder="Ingresa el nuevo nombre"
                     autoComplete="off"
-                    defaultValue={user.name}
+                    value={reactiveUser.name}
+                    onChange={(e) =>
+                      setReactiveUser({
+                        ...reactiveUser,
+                        name: e.target.value,
+                      })
+                    }
                   />
                   {errors.name && (
                     <Badge variant="required-error">
@@ -114,7 +124,13 @@ function EditUser(props) {
                     id="userUserName"
                     placeholder="Ingresa el nuevo nombre de usuario"
                     autoComplete="off"
-                    defaultValue={user.username}
+                    value={reactiveUser.username}
+                    onChange={(e) =>
+                      setReactiveUser({
+                        ...reactiveUser,
+                        username: e.target.value,
+                      })
+                    }
                   />
                   {errors.username && (
                     <Badge variant="required-error">
@@ -132,7 +148,13 @@ function EditUser(props) {
                     placeholder="Ingresa el email"
                     autoComplete="off"
                     type="email"
-                    defaultValue={user.email}
+                    value={reactiveUser.email}
+                    onChange={(e) =>
+                      setReactiveUser({
+                        ...reactiveUser,
+                        email: e.target.value,
+                      })
+                    }
                   />
                   {errors.email && (
                     <Badge variant="required-error">

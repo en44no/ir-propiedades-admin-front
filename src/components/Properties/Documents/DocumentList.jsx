@@ -1,5 +1,4 @@
-import { useCallback, useContext, useEffect, useReducer } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { useContext, useEffect, useReducer } from "react";
 import produce from "immer";
 import {
   Button,
@@ -16,17 +15,15 @@ import {
   Tooltip,
   HStack,
   Divider,
-  Badge,
+  Link,
 } from "@chakra-ui/react";
 import CopyInternalCode from "../CopyInternalCode";
-import FullscreenImageModal from "../../Other/FullscreenImageModal";
-import { MdOutline360 } from "react-icons/md";
-import { BsFillInfoCircleFill } from "react-icons/bs";
+import { HiOutlineExternalLink } from "react-icons/hi";
 import { CgFileDocument } from "react-icons/cg";
-import Loader from "../../Other/Loader/Loader";
 import ConfirmDelete from "../../Other/ConfirmDelete";
-import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import CreateDocument from "./CreateDocument";
+import EditDocument from "./EditDocument";
+import PropertiesContext from "../../../context/Properties/PropertiesContext";
 
 const dragReducer = produce((draft, action) => {
   switch (action.type) {
@@ -35,42 +32,18 @@ const dragReducer = produce((draft, action) => {
       draft[action.to] = draft[action.to] || [];
       const [removed] = draft[action.from].splice(action.fromIndex, 1);
       draft[action.to].splice(action.toIndex, 0, removed);
+      break;
     }
+    default:
+      return;
   }
 });
 
 const DocumentList = (props) => {
   const { property, text, width, buttonWithoutIcon, drawerSize, columns } =
     props;
+  const { deleteDocument } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { deleteMedia } = useContext(PropertiesContext);
-
-  const [state, dispatch] = useReducer(dragReducer, {
-    images: property.media,
-  });
-
-  useEffect(() => {
-    state.images = property.media;
-  }, [property.media]);
-
-  const onDragEnd = useCallback((result) => {
-    if (result.reason === "DROP") {
-      if (!result.destination) {
-        return;
-      }
-      dispatch({
-        type: "MOVE",
-        from: result.source.droppableId,
-        to: result.destination.droppableId,
-        fromIndex: result.source.index,
-        toIndex: result.destination.index,
-      });
-    }
-  }, []);
-
-  const sendImages = () => {
-    const images = state.images;
-  };
 
   return (
     <div>
@@ -111,7 +84,7 @@ const DocumentList = (props) => {
             </Text>
           </DrawerHeader>
           <DrawerBody zIndex="0" color="#fff">
-            {property.features.length > 0 && (
+            {property.documents.length > 0 && (
               <Box position="relative">
                 <Box
                   display="flex"
@@ -127,12 +100,12 @@ const DocumentList = (props) => {
                         <Text fontWeight="500">Nombre</Text>
                       </Box>
                       <Divider orientation="vertical" />
-                      <Box w="50%" justifyContent="center" textAlign="center">
+                      <Box w="55%" justifyContent="center" textAlign="center">
                         <Text fontWeight="500">Descripción</Text>
                       </Box>
                       <Divider orientation="vertical" />
-                      <Box w="15%" justifyContent="center" textAlign="center">
-                        <Text fontWeight="500">Archivos</Text>
+                      <Box w="10%" justifyContent="center" textAlign="center">
+                        <Text fontWeight="500">Archivo</Text>
                       </Box>
                     </>
                   </HStack>
@@ -140,7 +113,7 @@ const DocumentList = (props) => {
               </Box>
             )}
 
-            {property.features.length === 0 ? (
+            {property.documents.length === 0 ? (
               <Text
                 fontSize="xl"
                 color="#EAE9ED"
@@ -150,11 +123,11 @@ const DocumentList = (props) => {
                 justifyContent="center"
                 alignItems="center"
               >
-                Esta propiedad aún no cuenta con características.
+                Esta propiedad aún no cuenta con documentos.
               </Text>
             ) : (
-              property.features.map((feature) => (
-                <Box key={feature._id} position="relative">
+              property.documents.map((document) => (
+                <Box key={document._id} position="relative">
                   <Box
                     display="flex"
                     bg="defaultColor.300"
@@ -166,51 +139,66 @@ const DocumentList = (props) => {
                     <HStack w="100%" spacing="13px" height="25px">
                       <>
                         <Box w="35%" justifyContent="center" textAlign="center">
-                          {feature.title.length > 24 ? (
+                          {document.name.length > 24 ? (
                             <Tooltip
                               hasArrow
-                              label={feature.title}
+                              label={document.name}
                               bg="defaultColor.500"
                             >
                               <Box>
-                                {feature.title.slice(0, 24).concat("...")}
+                                {document.name.slice(0, 24).concat("...")}
                               </Box>
                             </Tooltip>
                           ) : (
-                            <Box>{feature.title}</Box>
+                            <Box>{document.name}</Box>
                           )}
                         </Box>
                         <Divider orientation="vertical" />
-                        <Box w="50%" justifyContent="center" textAlign="center">
-                          {feature.title.length > 24 ? (
+                        <Box w="55%" justifyContent="center" textAlign="center">
+                          {document.description.length > 24 ? (
                             <Tooltip
                               hasArrow
-                              label={feature.title}
+                              label={document.description}
                               bg="defaultColor.500"
                             >
                               <Box>
-                                {feature.title.slice(0, 24).concat("...")}
+                                {document.description
+                                  .slice(0, 24)
+                                  .concat("...")}
                               </Box>
                             </Tooltip>
                           ) : (
-                            <Box>{feature.title}</Box>
+                            <Box>{document.description}</Box>
                           )}
                         </Box>
                         <Divider orientation="vertical" />
-                        <Box w="15%" justifyContent="center" textAlign="center">
-                          {feature.description.length > 50 ? (
-                            <Tooltip
-                              hasArrow
-                              label={feature.description}
-                              bg="defaultColor.500"
+                        <Box
+                          w="10%"
+                          display="flex"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
+                          <Tooltip
+                            hasArrow
+                            label="Abrir archivo en otra pestaña"
+                            bg="defaultColor.500"
+                          >
+                            <Link
+                              zIndex="0"
+                              href={`${process.env.REACT_APP_API_BASE_URL}/${document.url}`}
+                              download
+                              target="_blank"
+                              rel="noreferrer"
+                              cursor="pointer"
+                              px="3"
+                              py="1.5"
+                              bg="defaultColor.400"
+                              borderRadius="7px"
+                              alignItems="center"
                             >
-                              <Box>
-                                {feature.description.slice(0, 50).concat("...")}
-                              </Box>
-                            </Tooltip>
-                          ) : (
-                            <Box>{feature.description}</Box>
-                          )}
+                              <HiOutlineExternalLink fontSize="1.4rem" />
+                            </Link>
+                          </Tooltip>
                         </Box>
                       </>
                     </HStack>
@@ -232,11 +220,11 @@ const DocumentList = (props) => {
                     >
                       <Box pb="0rem" textAlign="center" fontWeight="500">
                         <ConfirmDelete
-                          text="¿Estás seguro de que deseas eliminar esta característica?"
-                          name="característica"
+                          text="¿Estás seguro de que deseas eliminar este documento?"
+                          name="documento"
                           onlyText="yes"
-                          // functionToExecute={deleteFeature}
-                          element={feature}
+                          functionToExecute={deleteDocument}
+                          element={document._id}
                           anotherElement={property}
                         />
                       </Box>
@@ -250,7 +238,7 @@ const DocumentList = (props) => {
                       borderRadius="5px"
                     >
                       <Box pb="0rem" textAlign="center" fontWeight="500">
-                        {/* <EditFeature feature={feature} property={property} /> */}
+                        <EditDocument document={document} property={property} />
                       </Box>
                     </Box>
                   </HStack>

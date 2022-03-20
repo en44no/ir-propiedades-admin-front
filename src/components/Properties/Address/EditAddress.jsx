@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Badge,
   Box,
@@ -25,6 +25,7 @@ const EditAddress = (props) => {
   const { editAddress } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { full, address, direction } = props;
+  const [reactiveAddress, setReactiveAddress] = useState(address);
 
   const {
     register,
@@ -38,6 +39,10 @@ const EditAddress = (props) => {
     reset();
     onClose();
   };
+
+  useEffect(() => {
+    setReactiveAddress(address);
+  }, [address]);
 
   return (
     <>
@@ -84,10 +89,15 @@ const EditAddress = (props) => {
                     })}
                     id="addressCountry"
                     placeholder="Ingresa el país"
+                    value={reactiveAddress.country}
+                    onChange={(e) =>
+                      setReactiveAddress({
+                        ...reactiveAddress,
+                        country: e.target.value,
+                      })
+                    }
                   >
-                    <option selected value="argentina">
-                      Argentina
-                    </option>
+                    <option value="argentina">Argentina</option>
                   </Select>
                   {errors.country && (
                     <Badge variant="required-error">
@@ -104,7 +114,13 @@ const EditAddress = (props) => {
                     id="AddressState"
                     placeholder="Ingresa la provincia"
                     autoComplete="off"
-                    defaultValue={address.state}
+                    value={reactiveAddress.state}
+                    onChange={(e) =>
+                      setReactiveAddress({
+                        ...reactiveAddress,
+                        state: e.target.value,
+                      })
+                    }
                   />
                   {errors.state && (
                     <Badge variant="required-error">
@@ -119,7 +135,13 @@ const EditAddress = (props) => {
                     id="AddressCity"
                     placeholder="Ingresa la ciudad"
                     autoComplete="off"
-                    defaultValue={address.city}
+                    value={reactiveAddress.city}
+                    onChange={(e) =>
+                      setReactiveAddress({
+                        ...reactiveAddress,
+                        city: e.target.value,
+                      })
+                    }
                   />
                   {errors.city && (
                     <Badge variant="required-error">
@@ -136,7 +158,13 @@ const EditAddress = (props) => {
                     id="AddressNeighborhood"
                     placeholder="Ingresa el barrio"
                     autoComplete="off"
-                    defaultValue={address.neighborhood}
+                    value={reactiveAddress.neighborhood}
+                    onChange={(e) =>
+                      setReactiveAddress({
+                        ...reactiveAddress,
+                        neighborhood: e.target.value,
+                      })
+                    }
                   />
                   {errors.neighborhood && (
                     <Badge variant="required-error">
@@ -153,7 +181,13 @@ const EditAddress = (props) => {
                     id="AddressStreet"
                     placeholder="Ingresa la calle"
                     autoComplete="off"
-                    defaultValue={address.street}
+                    value={reactiveAddress.street}
+                    onChange={(e) =>
+                      setReactiveAddress({
+                        ...reactiveAddress,
+                        street: e.target.value,
+                      })
+                    }
                   />
                   {errors.street && (
                     <Badge variant="required-error">
@@ -170,7 +204,13 @@ const EditAddress = (props) => {
                     id="AddressDoor"
                     placeholder="Ingresa el número de puerta"
                     autoComplete="off"
-                    defaultValue={address.door}
+                    value={reactiveAddress.door}
+                    onChange={(e) =>
+                      setReactiveAddress({
+                        ...reactiveAddress,
+                        door: e.target.value,
+                      })
+                    }
                   />
                   {errors.door && (
                     <Badge variant="required-error">
@@ -187,7 +227,13 @@ const EditAddress = (props) => {
                     id="AddressDetails"
                     placeholder="Ingresa los detalles"
                     autoComplete="off"
-                    defaultValue={address.details}
+                    value={reactiveAddress.details}
+                    onChange={(e) =>
+                      setReactiveAddress({
+                        ...reactiveAddress,
+                        details: e.target.value,
+                      })
+                    }
                   />
                   {errors.details && (
                     <Badge variant="required-error">

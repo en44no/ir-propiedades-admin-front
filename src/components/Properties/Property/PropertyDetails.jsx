@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Badge,
   Box,
@@ -13,15 +13,19 @@ import {
   FormControl,
   FormLabel,
   Input,
+  InputGroup,
+  InputLeftElement,
   Select,
   SimpleGrid,
   Stack,
   Switch,
+  Text,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { BsFillInfoCircleFill } from "react-icons/bs";
+import { IoLogoUsd } from "react-icons/io";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import FeatureList from "../Features/FeatureList";
 import EditAddress from "../Address/EditAddress";
@@ -34,12 +38,18 @@ import ConfirmDelete from "../../Other/ConfirmDelete";
 import VirtualToursList from "../VirtualTours/VirtualToursList";
 import ManageSurface from "../Surface/ManageSurface";
 import DocumentList from "../Documents/DocumentList";
+import Notification from "../../Other/Notification";
 
 const PropertyDetails = (props) => {
   const { deleteProperty, addDetailsToProperty } =
     useContext(PropertiesContext);
   const { property } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [propertyForDetails, setPropertyForDetails] = useState(property);
+
+  useEffect(() => {
+    setPropertyForDetails(property);
+  }, [property]);
 
   const {
     register,
@@ -54,9 +64,45 @@ const PropertyDetails = (props) => {
   };
 
   const submitPropertyDetails = (data) => {
+    let today = new Date();
+    if (data.saleDate === true) {
+      data.saleDate = today;
+      data.isForSale = false;
+    } else {
+      data.saleDate = null;
+    }
+    if (data.rentDate === true) {
+      data.rentDate = today;
+      data.isForRent = false;
+    } else {
+      data.rentDate = null;
+    }
     addDetailsToProperty(data, property);
     reset();
     onClose();
+  };
+
+  const notifySaleOrRent = (e, text, text2) => {
+    if (e.target.checked) {
+      Notification(
+        `Propiedad marcada como ${text}`,
+        `Ten en cuenta que si marcas esta propiedad como ${text} deberás revisar sus publicaciones asociadas. Si estás seguro haz click en "Confirmar" para guardar los cambios.`,
+        "warning",
+        10000
+      );
+    } else {
+      Notification(
+        `Propiedad desmarcada como ${text}`,
+        `Si desmarcas esta propiedad como ${text} podrás hacer que esté disponible para ${text2}. Si estás seguro haz click en "Confirmar" para guardar los cambios.`,
+        "warning",
+        10000
+      );
+    }
+  };
+
+  const formatDate = (date) => {
+    const newDate = new Date(date);
+    return newDate.toLocaleDateString("en-GB");
   };
 
   return (
@@ -109,65 +155,191 @@ const PropertyDetails = (props) => {
               />
             </Box>
           </DrawerHeader>
-          <DrawerBody color="#fff">
+          <DrawerBody color="#fff" pb="1rem">
             <form>
-              <SimpleGrid columns={2} spacing={10}>
-                <Box display="flex" mb="4">
-                  <FormControl display="flex" mt="2rem" alignItems="center">
+              <SimpleGrid columns={2} spacing={4} spacingX={10}>
+                <Box display="flex" mt="1rem">
+                  <FormControl display="flex" alignItems="center">
                     <FormLabel htmlFor="detailsSellSwitch" mb="0">
-                      Disponible para vender
+                      Propiedad vendida
                     </FormLabel>
                     <Switch
-                      defaultChecked={property.isForSale}
-                      {...register("isForSale")}
+                      defaultChecked={
+                        property.saleDate && property.saleDate !== null
+                          ? true
+                          : false
+                      }
+                      {...register("saleDate")}
+                      onChange={(e) => notifySaleOrRent(e, "vendida", "venta")}
+                      id="detailsSaleDateSwitch"
+                    />
+                  </FormControl>
+                  <Box>
+                    <FormLabel
+                      margin="0"
+                      w="max-content"
+                      htmlFor="detailsSellPrice"
+                    >
+                      Fecha de venta
+                    </FormLabel>
+                    <Text textAlign="right" mr="0.1rem">
+                      {property.saleDate
+                        ? formatDate(property.saleDate)
+                        : "Sin vender"}
+                    </Text>
+                  </Box>
+                </Box>
+                <Box display="flex" mt="1rem">
+                  <FormControl display="flex" alignItems="center">
+                    <FormLabel htmlFor="detailsSellSwitch" mb="0">
+                      Propiedad alquilada
+                    </FormLabel>
+                    <Switch
+                      defaultChecked={
+                        property.rentDate && property.rentDate !== null
+                          ? true
+                          : false
+                      }
+                      {...register("rentDate")}
+                      onChange={(e) =>
+                        notifySaleOrRent(e, "alquilada", "alquiler")
+                      }
                       id="detailsSellSwitch"
                     />
                   </FormControl>
                   <Box>
-                    <FormLabel textAlign="center" htmlFor="detailsSellPrice">
-                      Tasación venta
+                    <FormLabel
+                      margin="0"
+                      w="max-content"
+                      htmlFor="detailsSellPrice"
+                    >
+                      Fecha de alquiler
                     </FormLabel>
-                    <Input
-                      defaultValue={property.appraisedSalePrice || 0}
-                      {...register("appraisedSalePrice")}
-                      id="detailsSellPrice"
-                    ></Input>
+                    <Text textAlign="right" mr="0.1rem">
+                      {property.rentDate
+                        ? formatDate(property.rentDate)
+                        : "Sin alquilar"}
+                    </Text>
                   </Box>
                 </Box>
-                <Box display="flex" mb="4">
-                  <FormControl display="flex" mt="2rem" alignItems="center">
-                    <FormLabel htmlFor="detailsRentSwitch" mb="0">
-                      Disponible para alquilar
-                    </FormLabel>
-                    <Switch
-                      defaultChecked={property.isForRent}
-                      {...register("isForRent")}
-                      id="detailsRentSwitch"
-                    />
-                  </FormControl>
-                  <Box>
-                    <FormLabel textAlign="center" htmlFor="detailsRentPrice">
-                      Tasación alquiler
-                    </FormLabel>
-                    <Input
-                      defaultValue={property.appraisedRentPrice || 0}
-                      {...register("appraisedRentPrice")}
-                      id="detailsRentPrice"
-                    ></Input>
+                {property.saleDate ? (
+                  <Text
+                    display="flex"
+                    fontWeight="500"
+                    mt="2rem"
+                    alignSelf="center"
+                    mb="1rem"
+                  >
+                    Esta propiedad no está disponible para vender
+                  </Text>
+                ) : (
+                  <Box display="flex" mb="4">
+                    <FormControl display="flex" mt="2rem" alignItems="center">
+                      <FormLabel htmlFor="detailsSellSwitch" mb="0">
+                        Disponible para vender
+                      </FormLabel>
+                      <Switch
+                        defaultChecked={property.isForSale}
+                        {...register("isForSale")}
+                        id="detailsSellSwitch"
+                      />
+                    </FormControl>
+
+                    <Box>
+                      <FormLabel
+                        ml="-2rem"
+                        textAlign="center"
+                        htmlFor="detailsSellPrice"
+                      >
+                        Tasación venta
+                      </FormLabel>
+                      <InputGroup>
+                        <InputLeftElement
+                          pointerEvents="none"
+                          children={<IoLogoUsd color="#cacaca" />}
+                        />
+                        <Input
+                          {...register("appraisedSalePrice")}
+                          id="detailsSellPrice"
+                          value={propertyForDetails.appraisedSalePrice}
+                          onChange={(e) =>
+                            setPropertyForDetails({
+                              ...propertyForDetails,
+                              appraisedSalePrice: e.target.value || 0,
+                            })
+                          }
+                        ></Input>
+                      </InputGroup>
+                    </Box>
                   </Box>
-                </Box>
+                )}
+                {property.rentDate ? (
+                  <Text
+                    display="flex"
+                    fontWeight="500"
+                    mt="2rem"
+                    alignSelf="center"
+                    mb="1rem"
+                  >
+                    Esta propiedad no está disponible para alquilar
+                  </Text>
+                ) : (
+                  <Box display="flex" mb="4">
+                    <FormControl display="flex" mt="2rem" alignItems="center">
+                      <FormLabel htmlFor="detailsRentSwitch" mb="0">
+                        Disponible para alquilar
+                      </FormLabel>
+                      <Switch
+                        defaultChecked={property.isForRent}
+                        {...register("isForRent")}
+                        id="detailsRentSwitch"
+                      />
+                    </FormControl>
+                    <Box>
+                      <FormLabel
+                        ml="-1.3rem"
+                        textAlign="center"
+                        htmlFor="detailsRentPrice"
+                      >
+                        Tasación alquiler
+                      </FormLabel>
+                      <InputGroup>
+                        <InputLeftElement
+                          pointerEvents="none"
+                          children={<IoLogoUsd color="#cacaca" />}
+                        />
+                        <Input
+                          {...register("appraisedRentPrice")}
+                          id="detailsRentPrice"
+                          value={propertyForDetails.appraisedRentPrice}
+                          onChange={(e) =>
+                            setPropertyForDetails({
+                              ...propertyForDetails,
+                              appraisedRentPrice: e.target.value || 0,
+                            })
+                          }
+                        ></Input>
+                      </InputGroup>
+                    </Box>
+                  </Box>
+                )}
               </SimpleGrid>
               <SimpleGrid columns={2} spacing={10}>
                 <Stack spacing="14px" id="leftColumn">
                   <Box>
                     <FormLabel htmlFor="propertyName">Nombre</FormLabel>
                     <Input
-                      defaultValue={property.name}
-                      {...register("comment")}
+                      {...register("name")}
                       id="propertyName"
                       placeholder="Ingresa el nombre"
+                      value={propertyForDetails.name}
+                      onChange={(e) =>
+                        setPropertyForDetails({
+                          ...propertyForDetails,
+                          name: e.target.value,
+                        })
+                      }
                     />
-                    {errors.name && <span>wad</span>}
                   </Box>
 
                   <Box>
@@ -175,12 +347,17 @@ const PropertyDetails = (props) => {
                       Comentarios
                     </FormLabel>
                     <Textarea
-                      defaultValue={property.comment}
                       {...register("comment")}
                       id="propertyComments"
                       placeholder="Ingresa los comentarios"
+                      value={propertyForDetails.comment}
+                      onChange={(e) =>
+                        setPropertyForDetails({
+                          ...propertyForDetails,
+                          comment: e.target.value,
+                        })
+                      }
                     />
-                    {errors.comments && <span>wad</span>}
                   </Box>
                   <Box>
                     <FormLabel htmlFor="propertySurface">Superficie</FormLabel>
@@ -217,7 +394,13 @@ const PropertyDetails = (props) => {
                     <Select
                       {...register("type", { required: "Tipo es requerido." })}
                       id="propertyType"
-                      defaultValue={property.type}
+                      value={propertyForDetails.type}
+                      onChange={(e) =>
+                        setPropertyForDetails({
+                          ...propertyForDetails,
+                          type: e.target.value,
+                        })
+                      }
                       placeholder="Ingresa el tipo"
                     >
                       <option value="Casa">Casa</option>
@@ -235,16 +418,25 @@ const PropertyDetails = (props) => {
                       Descripción
                     </FormLabel>
                     <Textarea
-                      defaultValue={property.description}
                       {...register("description")}
                       id="propertyDescription"
                       placeholder="Ingresa la descripción"
+                      value={propertyForDetails.description}
+                      onChange={(e) =>
+                        setPropertyForDetails({
+                          ...propertyForDetails,
+                          description: e.target.value,
+                        })
+                      }
                     />
                   </Box>
                   <Box>
                     <FormLabel htmlFor="propertyAddress">Dirección</FormLabel>
-                    {property.address ? (
-                      <EditAddress address={property.address} full="yes" />
+                    {propertyForDetails.address ? (
+                      <EditAddress
+                        address={propertyForDetails.address}
+                        full="yes"
+                      />
                     ) : (
                       <CreateAddress full="yes" />
                     )}

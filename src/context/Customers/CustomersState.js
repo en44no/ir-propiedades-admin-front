@@ -26,6 +26,9 @@ const CustomersState = (props) => {
   };
 
   const addCustomer = async (data, address) => {
+    let ownerPropertiesObjects = [];
+    let tenantPropertiesObjects = [];
+    console.log(data);
     if (
       data.ownerProperties !== null &&
       data.ownerProperties !== undefined &&
@@ -38,6 +41,7 @@ const CustomersState = (props) => {
         );
         if (propertyToAdd) {
           ownerPropertiesIds.push(propertyToAdd._id);
+          ownerPropertiesObjects.push(propertyToAdd);
         }
       });
       data.ownerProperties = ownerPropertiesIds;
@@ -54,6 +58,7 @@ const CustomersState = (props) => {
         );
         if (propertyToAdd) {
           tenantPropertiesIds.push(propertyToAdd._id);
+          tenantPropertiesObjects.push(propertyToAdd);
         }
       });
       data.tenantProperties = tenantPropertiesIds;
@@ -67,6 +72,8 @@ const CustomersState = (props) => {
               "Has agregado un nuevo cliente",
               "success"
             ),
+            (res.data.ownerProperties = ownerPropertiesObjects),
+            (res.data.tenantProperties = tenantPropertiesObjects),
             setCustomers([...customers, res.data]))
           : null
       )
@@ -80,6 +87,8 @@ const CustomersState = (props) => {
   };
 
   const editCustomer = async (data, customerId) => {
+    let ownerPropertiesObjects = [];
+    let tenantPropertiesObjects = [];
     if (
       data.ownerProperties !== null &&
       data.ownerProperties !== undefined &&
@@ -92,6 +101,7 @@ const CustomersState = (props) => {
         );
         if (propertyToAdd) {
           ownerPropertiesIds.push(propertyToAdd._id);
+          ownerPropertiesObjects.push(propertyToAdd);
         }
       });
       data.ownerProperties = ownerPropertiesIds;
@@ -108,6 +118,7 @@ const CustomersState = (props) => {
         );
         if (propertyToAdd) {
           tenantPropertiesIds.push(propertyToAdd._id);
+          tenantPropertiesObjects.push(propertyToAdd);
         }
       });
       data.tenantProperties = tenantPropertiesIds;
@@ -124,6 +135,8 @@ const CustomersState = (props) => {
             "Has editado un cliente",
             "success"
           );
+          res.data.ownerProperties = ownerPropertiesObjects;
+          res.data.tenantProperties = tenantPropertiesObjects;
           setCustomers([
             ...customers.filter((customer) => customer._id !== customerId),
             res.data,
@@ -167,6 +180,7 @@ const CustomersState = (props) => {
   return (
     <CustomersContext.Provider
       value={{
+        fetchCustomers,
         setCustomers,
         customers,
         addCustomer,

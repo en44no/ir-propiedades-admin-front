@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Badge,
   Box,
@@ -13,6 +13,8 @@ import {
   FormControl,
   FormLabel,
   Input,
+  InputGroup,
+  InputLeftElement,
   Select,
   SimpleGrid,
   Stack,
@@ -26,6 +28,7 @@ import DatePicker from "../../Other/DatePicker/DatePicker";
 import moment from "moment";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import PostImagesManagement from "./PostImagesManagement";
+import { IoLogoUsd } from "react-icons/io";
 
 const EditPost = (props) => {
   const { post, property } = props;
@@ -37,8 +40,11 @@ const EditPost = (props) => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [warningStatusMessage, setWarningStatusMessage] = useState("");
   const [showDateError, setShowDateError] = useState(false);
-  const [notAbleToModifyStartDate, setNotAbleToModifyStartDate] =
-    useState(false);
+  const [reactivePost, setReactivePost] = useState(post);
+
+  useEffect(() => {
+    setReactivePost(post);
+  }, [post]);
 
   const checkIsAllDisabled = () => {
     if (post.status == "Finalizada") {
@@ -65,6 +71,12 @@ const EditPost = (props) => {
   } = useForm();
 
   const submitEditPost = (data) => {
+    if (data.startDate == undefined) {
+      data.startDate = post.startDate;
+    }
+    if (data.endDate == undefined) {
+      data.endDate = post.endDate;
+    }
     if (notAbleToModify) {
       data.isForSale = false;
       data.isForRent = false;
@@ -173,20 +185,33 @@ const EditPost = (props) => {
                           </FormControl>
                           <Box>
                             <FormLabel
+                              ml="-3.5rem"
                               textAlign="center"
                               htmlFor="createPostSellPrice"
                             >
                               Precio venta
                             </FormLabel>
-                            <Input
-                              disabled={!isForSaleActive}
-                              defaultValue={post.forSalePrice}
-                              {...register("forSalePrice")}
-                              id="createPostSellPrice"
-                            ></Input>
+                            <InputGroup>
+                              <InputLeftElement
+                                pointerEvents="none"
+                                children={<IoLogoUsd color="#cacaca" />}
+                              />
+                              <Input
+                                disabled={!isForSaleActive}
+                                value={reactivePost.forSalePrice}
+                                onChange={(e) =>
+                                  setReactivePost({
+                                    ...reactivePost,
+                                    forSalePrice: e.target.value,
+                                  })
+                                }
+                                {...register("forSalePrice")}
+                                id="createPostSellPrice"
+                              ></Input>
+                            </InputGroup>
                           </Box>
                         </Box>
-                        <Box display="flex" mb="4">
+                        <Box display="flex" mb="8">
                           <FormControl
                             display="flex"
                             mt="2rem"
@@ -211,17 +236,30 @@ const EditPost = (props) => {
                           </FormControl>
                           <Box>
                             <FormLabel
+                              ml="-2.5rem"
                               textAlign="center"
                               htmlFor="createPostRentPrice"
                             >
                               Precio alquiler
                             </FormLabel>
-                            <Input
-                              {...register("forRentPrice")}
-                              disabled={!isForRentActive}
-                              defaultValue={post.forRentPrice}
-                              id="createPostRentPrice"
-                            ></Input>
+                            <InputGroup>
+                              <InputLeftElement
+                                pointerEvents="none"
+                                children={<IoLogoUsd color="#cacaca" />}
+                              />
+                              <Input
+                                {...register("forRentPrice")}
+                                disabled={!isForRentActive}
+                                value={reactivePost.forRentPrice}
+                                onChange={(e) =>
+                                  setReactivePost({
+                                    ...reactivePost,
+                                    forRentPrice: e.target.value,
+                                  })
+                                }
+                                id="createPostRentPrice"
+                              ></Input>
+                            </InputGroup>
                           </Box>
                         </Box>
                       </SimpleGrid>
@@ -234,9 +272,6 @@ const EditPost = (props) => {
                             <Controller
                               control={control}
                               name="startDate"
-                              rules={{
-                                required: "Fecha de inicio es requerida.",
-                              }}
                               render={({ field }) => (
                                 <DatePicker
                                   defaultSelected={moment(
@@ -263,7 +298,6 @@ const EditPost = (props) => {
                             <Controller
                               control={control}
                               name="endDate"
-                              rules={{ required: "Fecha de fin es requerida." }}
                               render={({ field }) => (
                                 <DatePicker
                                   defaultSelected={moment(
@@ -306,9 +340,15 @@ const EditPost = (props) => {
                           {...register("status", {
                             required: "Estado es requerido.",
                           })}
-                          defaultValue={post.status}
+                          value={reactivePost.status}
+                          onChange={(e) => {
+                            setReactivePost({
+                              ...reactivePost,
+                              status: e.target.value,
+                            });
+                            checkState(e.target.value);
+                          }}
                           id="propertyTypes"
-                          onChange={(event) => checkState(event.target.value)}
                         >
                           <option value="Activa">Activa</option>
                           <option value="Pendiente">Pendiente</option>

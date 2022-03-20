@@ -1,10 +1,9 @@
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FaSearch } from "react-icons/fa";
 
 const Search = (props) => {
   const { listToFilter, filters, listSetter, placeHolder } = props;
-  const [searchText, setSearchText] = useState("");
 
   let normalize = (value) => {
     return String(value)
