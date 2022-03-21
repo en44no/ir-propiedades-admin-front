@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import PropertiesContext from "../Properties/PropertiesContext";
 import CustomersContext from "../Customers/CustomersContext";
 import ReportsContext from "./ReportsContext";
 import axios from "axios";

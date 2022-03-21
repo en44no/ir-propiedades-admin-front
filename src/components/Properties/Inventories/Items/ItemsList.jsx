@@ -23,12 +23,6 @@ const ItemsList = (props) => {
   const { typeSingular, typePlural, itemsQuantity, typeObject } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  useEffect(() => {
-    if (isOpen) {
-      //getFeaturesByProperty(property._id);
-    }
-  }, [isOpen]);
-
   const noItemsNotification = () => {
     Notification(
       `Este ${typeSingular} no tiene objetos`,

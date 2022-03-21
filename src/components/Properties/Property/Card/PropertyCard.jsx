@@ -21,9 +21,7 @@ const PropertyCard = (props) => {
     }
   };
 
-  useEffect(() => {
-    console.log(property.address);
-  }, [property]);
+  useEffect(() => {}, [property]);
 
   return (
     <>
@@ -50,7 +48,7 @@ const PropertyCard = (props) => {
           objectFit="cover"
         />
         <Box py="3" px="3">
-          <Box position="absolute" p="0" left="2" top="2">
+          <Box position="absolute" p="0" left={"3"} top="2">
             {parsePropertyType()}
           </Box>
           <Box

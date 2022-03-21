@@ -28,7 +28,6 @@ const CustomersState = (props) => {
   const addCustomer = async (data, address) => {
     let ownerPropertiesObjects = [];
     let tenantPropertiesObjects = [];
-    console.log(data);
     if (
       data.ownerProperties !== null &&
       data.ownerProperties !== undefined &&

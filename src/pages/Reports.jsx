@@ -15,8 +15,6 @@ const ReportsPage = () => {
     getPropertyWithLessArea,
     getCustomerWithMoreProperties,
     getAvailableProperties,
-    getAvailablePropertiesForRent,
-    getAvailablePropertiesForSale,
     getCustomersWithoutProperties,
     getRentedProperties,
     getSoldProperties,
@@ -213,6 +211,10 @@ const ReportsPage = () => {
             />
             <SpecificPropertyReport
               property={getPropertyWithLargestArea()}
+              topText={` Esta propiedad cuenta con una superficie total de 
+                          ${getPropertyWithLargestArea().totalSurface} ${
+                getPropertyWithLargestArea().unitMeasurement
+              }.`}
               modalTitle="Propiedad con mayor superficie"
               buttonText="Mayor superficie"
             />
@@ -295,7 +297,7 @@ const ReportsPage = () => {
               customers={customersWithoutProperties}
               modalTitle="Clientes sin propiedades"
               buttonText="Sin propiedades"
-              topText="Estos son los clientes que no tienen propiedades registradas en el sistema"
+              topText="Estos son los clientes que no tienen propiedades registradas en el sistema."
             />
           </Box>
         </HStack>
