@@ -10,7 +10,6 @@ import {
   Box,
   Text,
   Badge,
-  Container,
 } from "@chakra-ui/react";
 import CreateUser from "../components/Users/CreateUser";
 import UsersContext from "../context/Users/UsersContext";

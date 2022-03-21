@@ -373,6 +373,35 @@ const PropertiesState = (props) => {
       });
   };
 
+  const changePostIsFeature = async (post, newState) => {
+    await axios
+      .put(`${process.env.REACT_APP_API_BASE_URL}/posts/${post._id}`, {
+        isFeatured: newState,
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          Notification(
+            newState == true
+              ? "Publicación marcada como destacada correctamente"
+              : "Publicación quitada de favoritos correctamente",
+            newState == true
+              ? "Has marcado esta publicación como destacada"
+              : "Has quitado esta publicación de destacados",
+            "success"
+          );
+          post.isFeatured = newState;
+          fetchProperties();
+        } else {
+          Notification(
+            "Error al marcar la publicación como destacada",
+            "Ocurrió un error intentado marcar la publicación como destacada",
+            "error"
+          );
+        }
+      })
+      .catch((error) => {});
+  };
+
   const deleteFeature = async (feature, property) => {
     await axios
       .delete(`${process.env.REACT_APP_API_BASE_URL}/features/${feature._id}`)
@@ -827,6 +856,7 @@ const PropertiesState = (props) => {
         addDocument,
         editDocument,
         deleteDocument,
+        changePostIsFeature,
       }}
     >
       {props.children}

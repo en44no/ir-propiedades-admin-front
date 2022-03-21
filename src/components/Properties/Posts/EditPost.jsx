@@ -81,18 +81,40 @@ const EditPost = (props) => {
       data.isForSale = false;
       data.isForRent = false;
     }
-    if (data.startDate > data.endDate) {
-      setShowDateError(true);
-      setTimeout(() => {
-        setShowDateError(false);
-      }, 5000);
+    if (data.forSalePrice == undefined && data.forRentPrice == undefined) {
+      Notification(
+        `Error al crear publicación`,
+        `Debes especificar si la publicación es para alquiler, venta o ambos`,
+        "warning"
+      );
     } else {
-      if (imagesPendingToAddForPost) {
-        data.media = imagesPendingToAddForPost;
+      if (data.forSalePrice == undefined) {
+        data.forSalePrice = 0;
       }
-      editPost(data, post._id, property._id);
-      reset();
-      onClose();
+      if (data.forRentPrice == undefined) {
+        data.forRentPrice = 0;
+      }
+      if (data.startDate > data.endDate) {
+        setShowDateError(true);
+        setTimeout(() => {
+          setShowDateError(false);
+        }, 5000);
+      } else {
+        if (imagesPendingToAddForPost.length == 0) {
+          Notification(
+            `Error al crear publicación`,
+            `Debes agregar al menos una imagen`,
+            "warning"
+          );
+        } else {
+          if (imagesPendingToAddForPost) {
+            data.media = imagesPendingToAddForPost;
+          }
+        }
+        editPost(data, post._id, property._id);
+        reset();
+        onClose();
+      }
     }
   };
 

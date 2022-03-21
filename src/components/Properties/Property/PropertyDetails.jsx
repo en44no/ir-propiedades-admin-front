@@ -63,6 +63,37 @@ const PropertyDetails = (props) => {
     onClose();
   };
 
+  const handlePropertyIsFeatured = (isFeatured) => {
+    let data = {};
+    if (isFeatured == false) {
+      data.isFeatured = false;
+      addDetailsToProperty(
+        data,
+        property,
+        "Propiedad quitada de destacados",
+        "Has quitado esta propiedad de destacados, no es necesario que confirmes los cambios"
+      );
+      setPropertyForDetails({
+        ...propertyForDetails,
+        isFeatured: false,
+      });
+      property.isFeatured = false;
+    } else {
+      data.isFeatured = true;
+      addDetailsToProperty(
+        data,
+        property,
+        "Propiedad marcada como destacada",
+        "Has marcado esta propiedad como destacada, no es necesario que confirmes los cambios"
+      );
+      setPropertyForDetails({
+        ...propertyForDetails,
+        isFeatured: true,
+      });
+      property.isFeatured = true;
+    }
+  };
+
   const submitPropertyDetails = (data) => {
     let today = new Date();
     if (data.saleDate === true) {
@@ -125,11 +156,6 @@ const PropertyDetails = (props) => {
         <Box fontSize="1rem">
           <BsFillInfoCircleFill />
         </Box>
-        {/*
-        ESTO ES PARA CUANDO LA PROPIEDAD NO TENGA TODOS LOS DATOS COMPLETADOS
-         <Box fontSize="0.9rem">
-          <GoAlert />
-        </Box> */}
       </Button>
       <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />

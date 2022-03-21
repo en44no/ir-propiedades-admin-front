@@ -1,5 +1,4 @@
 import axios from "axios";
-import { duration } from "moment";
 import React, { useState, useEffect } from "react";
 import Notification from "../../components/Other/Notification";
 import UsersContext from "./UsersContext";

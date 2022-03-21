@@ -13,11 +13,13 @@ import {
   Text,
   HStack,
   Divider,
+  Tooltip,
 } from "@chakra-ui/react";
 import CreatePost from "./CreatePost";
 import SocialList from "../../Social/SocialList";
 import BadgePostState from "./BadgePostState";
 import { HiOutlineClipboardList } from "react-icons/hi";
+import { MdOutlineStar } from "react-icons/md";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import CopyInternalCode from "../CopyInternalCode";
 import ConfirmDelete from "../../Other/ConfirmDelete";
@@ -26,7 +28,7 @@ import PostImagesList from "./PostImagesList";
 
 const PostList = (props) => {
   const { full, property } = props;
-  const { getPostsByProperty, posts, deletePost } =
+  const { getPostsByProperty, posts, deletePost, changePostIsFeature } =
     useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -39,6 +41,14 @@ const PostList = (props) => {
       return <BadgePostState bgColor="#0984e3" text="Pendiente" />;
     } else if (post.status[0] === "Finalizada") {
       return <BadgePostState bgColor="#d63031" text="Finalizada" />;
+    }
+  };
+
+  const handlePostIsFeatured = (post) => {
+    if (post.isFeatured == true) {
+      changePostIsFeature(post, false);
+    } else {
+      changePostIsFeature(post, true);
     }
   };
 
@@ -216,7 +226,7 @@ const PostList = (props) => {
                               justifyContent="center"
                               textAlign="center"
                             >
-                              {post.isForSale ? (
+                              {post.isForSale != 0 ? (
                                 <>
                                   <Box>
                                     {formatToUSD
@@ -229,7 +239,9 @@ const PostList = (props) => {
                                       )}
                                   </Box>
                                 </>
-                              ) : null}
+                              ) : (
+                                <Text>-</Text>
+                              )}
                             </HStack>
                             <Divider orientation="vertical" />
                             <HStack
@@ -239,7 +251,7 @@ const PostList = (props) => {
                               justifyContent="center"
                               textAlign="center"
                             >
-                              {post.isForRent ? (
+                              {post.isForRent != 0 ? (
                                 <>
                                   <Text>
                                     {formatToUSD
@@ -248,7 +260,9 @@ const PostList = (props) => {
                                     {post.forSalePrice.length > 10 ? "..." : ""}
                                   </Text>
                                 </>
-                              ) : null}
+                              ) : (
+                                <Text>-</Text>
+                              )}
                             </HStack>
                             <Divider orientation="vertical" />
                             <Box
@@ -275,6 +289,42 @@ const PostList = (props) => {
                             <Divider orientation="vertical" />
                             <HStack w="10%" justifyContent="center">
                               <PostImagesList images={post.media} post={post} />
+                              <Tooltip
+                                hasArrow
+                                label={
+                                  post.isFeatured == true
+                                    ? "Quitar de destacados"
+                                    : "Marcar como destacada"
+                                }
+                                bg="defaultColor.500"
+                              >
+                                <HStack
+                                  cursor="pointer"
+                                  px="3"
+                                  py="1.5"
+                                  bg="defaultColor.400"
+                                  borderRadius="7px"
+                                  alignItems="center"
+                                  onClick={() => handlePostIsFeatured(post)}
+                                >
+                                  <Box
+                                    fontSize="0.8rem"
+                                    display="flex"
+                                    fontWeight="500"
+                                    alignItems="center"
+                                    gap="0.2rem"
+                                  >
+                                    <MdOutlineStar
+                                      color={
+                                        post.isFeatured == true
+                                          ? "#fdcb6e"
+                                          : "#fff"
+                                      }
+                                      fontSize="20px"
+                                    />
+                                  </Box>
+                                </HStack>
+                              </Tooltip>
                             </HStack>
                           </>
                         </HStack>

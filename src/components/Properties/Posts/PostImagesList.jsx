@@ -65,7 +65,7 @@ const PostImagesList = (props) => {
           <ModalBody pb="1.5rem">
             <Flex flexWrap="wrap" justifyContent="center" alignItems="center">
               {images.map((image) => (
-                <Center key={image._id} flexGrow={1} w="33%" mb="1.5rem">
+                <Center key={image.url} flexGrow={1} w="33%" mb="1.5rem">
                   <Box
                     minW="270px"
                     maxW="270px"
