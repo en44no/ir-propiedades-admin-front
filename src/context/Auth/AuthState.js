@@ -34,8 +34,8 @@ const AuthState = (props) => {
             roles.push(role.name);
           });
         }
-        setUserRoles(roles);
         sessionStorage.setItem("userLoggedRoles", roles);
+        setUserRoles(roles);
         setUserRealName(user.name.split(" ")[0]);
       })
       .catch((error) => {});
@@ -44,6 +44,8 @@ const AuthState = (props) => {
   const logOut = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userLoggedName");
+    sessionStorage.removeItem("userLoggedUserName");
+    sessionStorage.removeItem("userLoggedRoles");
   };
 
   return (

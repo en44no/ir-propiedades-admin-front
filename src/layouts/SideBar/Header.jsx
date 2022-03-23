@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Tag, Image, Box, HStack } from "@chakra-ui/react";
 import photo from "../../assets/ir-logo.png";
 import AuthContext from "../../context/Auth/AuthContext";
@@ -7,6 +7,16 @@ const Header = () => {
   const [name, setName] = useState(sessionStorage.getItem("userLoggedName"));
   const [roles, setRoles] = useState(sessionStorage.getItem("userLoggedRoles"));
   const { userRealName, userRoles } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (userRealName) {
+      setName(userRealName);
+    }
+    if (userRoles) {
+      setRoles(userRoles);
+    }
+  }, [userRealName, userRoles]);
+
   return (
     <>
       <Box h="25%" mb="2" display="flex" justifyContent="space-between">
