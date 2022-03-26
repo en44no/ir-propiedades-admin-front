@@ -226,7 +226,7 @@ const PropertiesState = (props) => {
               "success"
             ),
             setPosts([...posts, res.data]),
-            postInMercadolibre(res.data),
+            data.mercadoLibre == true && postInMercadolibre(res.data),
             getPostsByProperty(propertyId))
           : null
       )
@@ -316,13 +316,14 @@ const PropertiesState = (props) => {
       await axios
         .post(`${process.env.REACT_APP_API_BASE_URL}/mercadolibre`, postToSend)
         .then((res) => {
-          console.log(res);
           if (res.status == 201) {
             Notification(
               "Publicación en MercadoLibre creada correctamente",
               "Deberás efectuar el pago en MercadoLibre para que la publicación sea visible.",
               "success"
             );
+            addMercadoLibreLinkToPost(post, res.data.permalink);
+            getPostsByProperty(propertyId);
           }
         })
         .catch((error) => {
@@ -585,6 +586,21 @@ const PropertiesState = (props) => {
             "Ocurrió un error intentado marcar la publicación como destacada",
             "error"
           );
+        }
+      })
+      .catch((error) => {});
+  };
+
+  const addMercadoLibreLinkToPost = async (post, link) => {
+    await axios
+      .put(`${process.env.REACT_APP_API_BASE_URL}/posts/${post._id}`, {
+        mercadoLibreLink: link,
+      })
+      .then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          post.mercadoLibreLink = link;
+          getPostsByProperty(post.property);
+        } else {
         }
       })
       .catch((error) => {});

@@ -1,11 +1,10 @@
 import React from "react";
 import SocialCard from "./SocialCard";
-import { FaFacebookF } from "react-icons/fa";
 import { HStack, Image, Text, VStack } from "@chakra-ui/react";
 import mercadoLibreIcon from "../../assets/mercado-libre-icon.png";
 
 const SocialList = (props) => {
-  const { onlyIcons } = props;
+  const { onlyIcons, isOnMercadoLibre } = props;
 
   return (
     <>
@@ -25,6 +24,7 @@ const SocialList = (props) => {
           </Text>
           <VStack spacing="14px" justifyContent="center">
             <SocialCard
+              isOnMercadoLibre={isOnMercadoLibre}
               appColor="#cc9f0b"
               appName="MercadoLibre"
               appIcon={<Image src={mercadoLibreIcon} alt="MercadoLibre" />}

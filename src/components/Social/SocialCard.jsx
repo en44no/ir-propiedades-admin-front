@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Switch, FormLabel } from "@chakra-ui/react";
 
 const SocialCard = (props) => {
-  const { appColor, appName, appIcon } = props;
+  const { appColor, appName, appIcon, isOnMercadoLibre } = props;
 
   return (
     <>
@@ -25,7 +25,11 @@ const SocialCard = (props) => {
         <FormLabel htmlFor={`social${appName}`} m="0">
           {appName}
         </FormLabel>
-        <Switch ml="3" id={`social${appName}`} />
+        <Switch
+          defaultChecked={isOnMercadoLibre == true ? true : false}
+          ml="3"
+          id={`social${appName}`}
+        />
       </Box>
     </>
   );

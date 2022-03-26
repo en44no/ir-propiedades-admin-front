@@ -322,7 +322,11 @@ const PostList = (props) => {
                             </Box>
                             <Divider orientation="vertical" />
                             <HStack w="10%" justifyContent="center">
-                              <SocialList onlyIcons="true" />
+                              {post.mercadoLibreLink != null ? (
+                                <SocialList onlyIcons="true" />
+                              ) : (
+                                <Text>-</Text>
+                              )}
                             </HStack>
                             <Divider orientation="vertical" />
                             <HStack w="12%" justifyContent="center">
@@ -364,32 +368,34 @@ const PostList = (props) => {
                                 </HStack>
                               </Tooltip>
                               <HStack>
-                                <Box
-                                  display="flex"
-                                  justifyContent="center"
-                                  textAlign="center"
-                                >
-                                  <Tooltip
-                                    hasArrow
-                                    label="Ver en MercadoLibre"
-                                    bg="defaultColor.500"
+                                {post.mercadoLibreLink != null && (
+                                  <Box
+                                    display="flex"
+                                    justifyContent="center"
+                                    textAlign="center"
                                   >
-                                    <Link
-                                      zIndex="0"
-                                      download
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      cursor="pointer"
-                                      px="3"
-                                      py="1.5"
-                                      bg="defaultColor.400"
-                                      borderRadius="7px"
-                                      alignItems="center"
+                                    <Tooltip
+                                      hasArrow
+                                      label="Ver en MercadoLibre"
+                                      bg="defaultColor.500"
                                     >
-                                      <HiOutlineExternalLink fontSize="1.25rem" />
-                                    </Link>
-                                  </Tooltip>
-                                </Box>
+                                      <Link
+                                        zIndex="0"
+                                        href={post.mercadoLibreLink}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        cursor="pointer"
+                                        px="3"
+                                        py="1.5"
+                                        bg="defaultColor.400"
+                                        borderRadius="7px"
+                                        alignItems="center"
+                                      >
+                                        <HiOutlineExternalLink fontSize="1.25rem" />
+                                      </Link>
+                                    </Tooltip>
+                                  </Box>
+                                )}
                               </HStack>
                             </HStack>
                           </>

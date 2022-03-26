@@ -430,7 +430,11 @@ const EditPost = (props) => {
                         <PostImagesManagement property={property} post={post} />
                       </Box>
                       <Box mt="-1.5rem">
-                        <SocialList />
+                        <SocialList
+                          isOnMercadoLibre={
+                            post.mercadoLibreLink != null ? true : false
+                          }
+                        />
                       </Box>
                     </SimpleGrid>
                   </form>

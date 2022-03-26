@@ -11,12 +11,14 @@ import {
   DrawerOverlay,
   FormControl,
   FormLabel,
+  Image,
   Input,
   InputGroup,
   InputLeftElement,
   SimpleGrid,
   Stack,
   Switch,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
@@ -28,6 +30,7 @@ import DatePicker from "../../Other/DatePicker/DatePicker";
 import PostImagesManagement from "./PostImagesManagement";
 import { IoLogoUsd } from "react-icons/io";
 import Notification from "../../Other/Notification";
+import mercadoLibreIcon from "../../../assets/mercado-libre-icon.png";
 
 const CreatePost = (props) => {
   const { full, property, normalAddButton, noRightMargin } = props;
@@ -293,7 +296,28 @@ const CreatePost = (props) => {
                     />
                   </Box>
                   <Box mt="1rem">
-                    <SocialList />
+                    <Text fontSize="1rem" fontWeight="semibold" mb="2">
+                      Publicar en
+                    </Text>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      border="1px solid"
+                      borderColor="inherit"
+                      borderRadius="7px"
+                      h="2.5rem"
+                      pl="0.9rem"
+                      pr="0.9rem"
+                      w="13rem"
+                      justifyContent="center"
+                      bg="#cc9f0b"
+                    >
+                      <FormLabel mt="0" mb="0" mr="2">
+                        {<Image src={mercadoLibreIcon} alt="MercadoLibre" />}
+                      </FormLabel>
+                      <FormLabel m="0">MercadoLibre</FormLabel>
+                      <Switch {...register("mercadoLibre")} ml="3" />
+                    </Box>
                   </Box>
                 </SimpleGrid>
               </form>
