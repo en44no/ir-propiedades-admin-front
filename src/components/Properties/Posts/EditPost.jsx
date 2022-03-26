@@ -35,8 +35,12 @@ const EditPost = (props) => {
   const { post, property } = props;
   const { editPost, imagesPendingToAddForPost } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isForRentActive, setIsForRentActive] = useState(true);
-  const [isForSaleActive, setIsForSaleActive] = useState(true);
+  const [isForRent, setIsForRent] = useState(
+    post.isForRent == true ? true : false
+  );
+  const [isForSale, setIsForSale] = useState(
+    post.isForSale == true ? true : false
+  );
   const [notAbleToModify, setNotAbleToModify] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [warningStatusMessage, setWarningStatusMessage] = useState("");
@@ -82,7 +86,7 @@ const EditPost = (props) => {
       data.isForSale = false;
       data.isForRent = false;
     }
-    if (data.forSalePrice == undefined && data.forRentPrice == undefined) {
+    if (isForSale == false && isForRent == false) {
       Notification(
         `Error al crear publicación`,
         `Debes especificar si la publicación es para alquiler, venta o ambos`,
@@ -122,26 +126,26 @@ const EditPost = (props) => {
   const checkState = (state) => {
     if (state === "Activa") {
       setNotAbleToModify(false);
-      setIsForSaleActive(true);
-      setIsForRentActive(true);
+      setIsForSale(true);
+      setIsForRent(true);
       setWarningStatusMessage(false);
       setSelectedStatus("Activa");
     } else if (state === "Pendiente") {
       setNotAbleToModify(false);
-      setIsForSaleActive(true);
-      setIsForRentActive(true);
+      setIsForSale(true);
+      setIsForRent(true);
       setWarningStatusMessage(false);
       setSelectedStatus("Pendiente");
     } else if (state == "Pausada") {
       setNotAbleToModify(true);
-      setIsForSaleActive(false);
-      setIsForRentActive(false);
+      setIsForSale(false);
+      setIsForRent(false);
       setWarningStatusMessage(true);
       setSelectedStatus("Pausada");
     } else if (state == "Finalizada") {
       setNotAbleToModify(true);
-      setIsForSaleActive(false);
-      setIsForRentActive(false);
+      setIsForSale(false);
+      setIsForRent(false);
       setWarningStatusMessage(true);
       setSelectedStatus("Finalizada");
     }
@@ -188,9 +192,7 @@ const EditPost = (props) => {
                             display="flex"
                             mt="2rem"
                             alignItems="center"
-                            onChange={() =>
-                              setIsForSaleActive(!isForSaleActive)
-                            }
+                            onChange={() => setIsForSale(!isForSale)}
                           >
                             <FormLabel htmlFor="createPostSellSwitch" mb="0">
                               {notAbleToModify
@@ -199,8 +201,7 @@ const EditPost = (props) => {
                             </FormLabel>
                             {notAbleToModify == false && (
                               <Switch
-                                defaultChecked={post.isForSale}
-                                value={post.isForSale}
+                                isChecked={isForSale == true ? true : false}
                                 {...register("isForSale")}
                                 id="createPostSellSwitch"
                               />
@@ -222,7 +223,7 @@ const EditPost = (props) => {
                               <Input
                                 {...register("forSalePrice")}
                                 type="number"
-                                disabled={!isForSaleActive}
+                                disabled={isForSale == true ? false : true}
                                 value={reactivePost.forSalePrice}
                                 onChange={(e) =>
                                   setReactivePost({
@@ -248,13 +249,10 @@ const EditPost = (props) => {
                             </FormLabel>
                             {notAbleToModify == false && (
                               <Switch
-                                defaultChecked={post.isForRent}
-                                value={post.isForRent}
+                                isChecked={isForRent == true ? true : false}
                                 {...register("isForRent")}
                                 id="createPostRentSwitch"
-                                onChange={() =>
-                                  setIsForRentActive(!isForRentActive)
-                                }
+                                onChange={() => setIsForRent(!isForRent)}
                               />
                             )}
                           </FormControl>
@@ -274,7 +272,7 @@ const EditPost = (props) => {
                               <Input
                                 {...register("forRentPrice")}
                                 type="number"
-                                disabled={!isForRentActive}
+                                disabled={isForRent == true ? false : true}
                                 value={reactivePost.forRentPrice}
                                 onChange={(e) =>
                                   setReactivePost({

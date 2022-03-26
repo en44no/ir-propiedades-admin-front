@@ -208,6 +208,7 @@ const PropertiesState = (props) => {
   };
 
   const addPost = async (data, propertyId) => {
+    console.log(data);
     let nowWithoutHours = new Date(new Date().toDateString());
     let startDateWithoutHours = new Date(data.startDate.toDateString());
     if (startDateWithoutHours <= nowWithoutHours) {

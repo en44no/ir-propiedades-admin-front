@@ -37,8 +37,8 @@ const CreatePost = (props) => {
   const { addPost, imagesPendingToAddForPost, setImagesPendingToAddForPost } =
     useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isForRentDisabled, setIsForRentDisabled] = useState(true);
-  const [isForSaleDisabled, setIsForSaleDisabled] = useState(true);
+  const [isForRent, setIsForRent] = useState(false);
+  const [isForSale, setIsForSale] = useState(false);
   const [showDateError, setShowDateError] = useState(false);
 
   const {
@@ -50,13 +50,14 @@ const CreatePost = (props) => {
   } = useForm();
 
   const submitPost = (data) => {
+    console.log(data);
     if (data.startDate > data.endDate) {
       setShowDateError(true);
       setTimeout(() => {
         setShowDateError(false);
       }, 5000);
     }
-    if (data.forSalePrice == undefined && data.forRentPrice == undefined) {
+    if (isForSale == false && isForRent == false) {
       Notification(
         `Error al crear publicación`,
         `Debes especificar si la publicación es para alquiler, venta o ambos`,
@@ -81,6 +82,8 @@ const CreatePost = (props) => {
         }
         addPost(data, property._id);
         reset();
+        setIsForSale(false);
+        setIsForRent(false);
         onClose();
         setImagesPendingToAddForPost([]);
       }
@@ -134,15 +137,13 @@ const CreatePost = (props) => {
                         display="flex"
                         mt="2rem"
                         alignItems="center"
-                        onChange={() =>
-                          setIsForSaleDisabled(!isForSaleDisabled)
-                        }
+                        onChange={() => setIsForSale(!isForSale)}
                       >
                         <FormLabel htmlFor="createPostSellSwitch" mb="0">
                           Disponible para vender
                         </FormLabel>
                         <Switch
-                          value={!isForSaleDisabled}
+                          isChecked={isForSale == true ? true : false}
                           {...register("isForSale")}
                           id="createPostSellSwitch"
                         />
@@ -163,7 +164,7 @@ const CreatePost = (props) => {
                           <Input
                             type="number"
                             defaultValue="0"
-                            disabled={isForSaleDisabled}
+                            disabled={isForSale == true ? false : true}
                             {...register("forSalePrice")}
                             id="createPostSellPrice"
                           ></Input>
@@ -175,15 +176,13 @@ const CreatePost = (props) => {
                         display="flex"
                         mt="2rem"
                         alignItems="center"
-                        onChange={() =>
-                          setIsForRentDisabled(!isForRentDisabled)
-                        }
+                        onChange={() => setIsForRent(!isForRent)}
                       >
                         <FormLabel htmlFor="createPostRentSwitch" mb="0">
                           Disponible para alquilar
                         </FormLabel>
                         <Switch
-                          value={!isForRentDisabled}
+                          isChecked={isForRent == true ? true : false}
                           {...register("isForRent")}
                           id="createPostRentSwitch"
                         />
@@ -204,7 +203,7 @@ const CreatePost = (props) => {
                           <Input
                             type="number"
                             defaultValue="0"
-                            disabled={isForRentDisabled}
+                            disabled={isForRent == true ? false : true}
                             {...register("forRentPrice")}
                             id="createPostRentPrice"
                           ></Input>
