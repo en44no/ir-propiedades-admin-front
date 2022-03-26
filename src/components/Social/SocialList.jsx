@@ -11,8 +11,12 @@ const SocialList = (props) => {
     <>
       {onlyIcons ? (
         <HStack>
-          <FaFacebookF />
-          <Image h="12px" src={mercadoLibreIcon} alt="MercadoLibre" />
+          <Image
+            loading="lazy"
+            h="12px"
+            src={mercadoLibreIcon}
+            alt="MercadoLibre"
+          />
         </HStack>
       ) : (
         <>
@@ -20,11 +24,6 @@ const SocialList = (props) => {
             Publicar en
           </Text>
           <VStack spacing="14px" justifyContent="center">
-            <SocialCard
-              appColor="#38529a"
-              appName="Facebook"
-              appIcon={<FaFacebookF />}
-            />
             <SocialCard
               appColor="#cc9f0b"
               appName="MercadoLibre"

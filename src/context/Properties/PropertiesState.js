@@ -226,6 +226,7 @@ const PropertiesState = (props) => {
               "success"
             ),
             setPosts([...posts, res.data]),
+            postInMercadolibre(res.data),
             getPostsByProperty(propertyId))
           : null
       )
@@ -236,6 +237,193 @@ const PropertiesState = (props) => {
           "error"
         );
       });
+  };
+
+  const postInMercadolibre = async (post) => {
+    let property = properties.find(
+      (property) => property._id === post.property
+    );
+    if (post.isForSale === true) {
+      const postToSend = {
+        title: post.title,
+        category_id: "MLU1468",
+        price: post.forSalePrice,
+        currency_id: "USD",
+        available_quantity: 1,
+        buying_mode: "classified",
+        listing_type_id: "silver",
+        condition: "new",
+        start_time: post.startDate,
+        pictures: post.media.map((media) => ({
+          source: media.url,
+        })),
+        seller_contact: {
+          contact: "Ian Rodríguez Propiedades",
+          area_code: "011",
+          phone: "11 66 42 34 62",
+          email: "info@ianrodriguezprop.com",
+        },
+        location: {
+          address_line:
+            property.address.street +
+            ", " +
+            property.address.city +
+            ", " +
+            property.address.state +
+            ", " +
+            property.address.country,
+          zip_code: null,
+          neighborhood: {
+            id: "TUxBQlBBUzgyNjBa",
+          },
+          latitude: null,
+          longitude: null,
+        },
+        attributes: [
+          {
+            id: "FULL_BATHROOMS",
+            value_name: property.features.filter(
+              (feature) => feature.type[0] === "Baño"
+            ).length,
+          },
+          {
+            id: "PARKING_LOTS",
+            value_name: property.features.filter(
+              (feature) => feature.type[0] === "Garaje"
+            ).length,
+          },
+          {
+            id: "ROOMS",
+            value_name: 0,
+          },
+          {
+            id: "BEDROOMS",
+            value_name: property.features.filter(
+              (feature) => feature.type[0] === "Dormitorio"
+            ).length,
+          },
+          {
+            id: "COVERED_AREA",
+            value_name:
+              property.buildedSurface + " " + property.unitMeasurement,
+          },
+          {
+            id: "TOTAL_AREA",
+            value_name: property.totalSurface + " " + property.unitMeasurement,
+          },
+        ],
+      };
+      await axios
+        .post(`${process.env.REACT_APP_API_BASE_URL}/mercadolibre`, postToSend)
+        .then((res) => {
+          console.log(res);
+          if (res.status == 201) {
+            Notification(
+              "Publicación en MercadoLibre creada correctamente",
+              "Deberás efectuar el pago en MercadoLibre para que la publicación sea visible.",
+              "success"
+            );
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          Notification(
+            "Error al crear la publicación en MercadoLibre",
+            "Ocurrió un error intentado crear la publicación en MercadoLibre",
+            "error"
+          );
+        });
+    }
+    if (post.isForRent === true) {
+      const postToSend = {
+        title: post.title,
+        category_id: "MLU1467",
+        price: post.forRentPrice,
+        currency_id: "USD",
+        available_quantity: 1,
+        buying_mode: "classified",
+        listing_type_id: "silver",
+        condition: "new",
+        start_time: post.startDate,
+        pictures: post.media.map((media) => ({
+          source: media.url,
+        })),
+        seller_contact: {
+          contact: "Ian Rodríguez Propiedades",
+          area_code: "011",
+          phone: "11 66 42 34 62",
+          email: "info@ianrodriguezprop.com",
+        },
+        location: {
+          address_line:
+            property.address.street +
+            ", " +
+            property.address.city +
+            ", " +
+            property.address.state +
+            ", " +
+            property.address.country,
+          zip_code: null,
+          neighborhood: {
+            id: "TUxBQlBBUzgyNjBa",
+          },
+          latitude: null,
+          longitude: null,
+        },
+        attributes: [
+          {
+            id: "FULL_BATHROOMS",
+            value_name: property.features.filter(
+              (feature) => feature.type[0] === "Baño"
+            ).length,
+          },
+          {
+            id: "PARKING_LOTS",
+            value_name: property.features.filter(
+              (feature) => feature.type[0] === "Garaje"
+            ).length,
+          },
+          {
+            id: "ROOMS",
+            value_name: 0,
+          },
+          {
+            id: "BEDROOMS",
+            value_name: property.features.filter(
+              (feature) => feature.type[0] === "Dormitorio"
+            ).length,
+          },
+          {
+            id: "COVERED_AREA",
+            value_name:
+              property.buildedSurface + " " + property.unitMeasurement,
+          },
+          {
+            id: "TOTAL_AREA",
+            value_name: property.totalSurface + " " + property.unitMeasurement,
+          },
+        ],
+      };
+      await axios
+        .post(`${process.env.REACT_APP_API_BASE_URL}mercadolibre`, postToSend)
+        .then((res) => {
+          console.log(res);
+          if (res.status === 201) {
+            Notification(
+              "Publicación en MercadoLibre creada correctamente",
+              "Deberás efectuar el pago en MercadoLibre para que la publicación sea visible.",
+              "success"
+            );
+          }
+        })
+        .catch((error) => {
+          Notification(
+            "Error al crear la publicación en MercadoLibre",
+            "Ocurrió un error intentado crear la publicación en MercadoLibre",
+            "error"
+          );
+        });
+    }
   };
 
   const getPostsByProperty = async (propertyId) => {

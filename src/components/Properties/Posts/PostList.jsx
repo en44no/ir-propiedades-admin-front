@@ -14,11 +14,12 @@ import {
   HStack,
   Divider,
   Tooltip,
+  Link,
 } from "@chakra-ui/react";
 import CreatePost from "./CreatePost";
 import SocialList from "../../Social/SocialList";
 import BadgePostState from "./BadgePostState";
-import { HiOutlineClipboardList } from "react-icons/hi";
+import { HiOutlineClipboardList, HiOutlineExternalLink } from "react-icons/hi";
 import { MdOutlineStar } from "react-icons/md";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import CopyInternalCode from "../CopyInternalCode";
@@ -137,13 +138,23 @@ const PostList = (props) => {
                           justifyContent="center"
                           textAlign="center"
                         >
+                          <Text>Título</Text>
+                        </Box>
+                        <Divider orientation="vertical" />
+                        <Box
+                          p="0"
+                          minW="10%"
+                          maxW="10%"
+                          justifyContent="center"
+                          textAlign="center"
+                        >
                           <Text>Venta</Text>
                         </Box>
                         <Divider orientation="vertical" />
                         <Box
                           p="0"
-                          minW="15%"
-                          maxW="15%"
+                          minW="10%"
+                          maxW="10%"
                           justifyContent="center"
                           textAlign="center"
                         >
@@ -151,8 +162,8 @@ const PostList = (props) => {
                         </Box>
                         <Divider orientation="vertical" />
                         <Box
-                          minW="15%"
-                          maxW="15%"
+                          minW="10%"
+                          maxW="10%"
                           justifyContent="center"
                           textAlign="center"
                         >
@@ -160,8 +171,8 @@ const PostList = (props) => {
                         </Box>
                         <Divider orientation="vertical" />
                         <Box
-                          minW="15%"
-                          maxW="15%"
+                          minW="10%"
+                          maxW="10%"
                           justifyContent="center"
                           textAlign="center"
                         >
@@ -173,15 +184,15 @@ const PostList = (props) => {
                           justifyContent="center"
                           textAlign="center"
                         >
-                          <Text ml="-4">Publicado en</Text>
+                          <Text>Publicado en</Text>
                         </HStack>
                         <Divider orientation="vertical" />
                         <HStack
-                          w="10%"
+                          w="12%"
                           justifyContent="center"
                           textAlign="center"
                         >
-                          <Text ml="-4">Opciones</Text>
+                          <Text>Opciones</Text>
                         </HStack>
                       </>
                     </HStack>
@@ -219,10 +230,37 @@ const PostList = (props) => {
                               {parsePostState(post)}
                             </Box>
                             <Divider orientation="vertical" />
-                            <HStack
-                              p="0"
+                            <Box
                               minW="15%"
                               maxW="15%"
+                              justifyContent="center"
+                              textAlign="center"
+                            >
+                              <Box>
+                                {post.title != null ? (
+                                  post.title.length > 30 ? (
+                                    <Tooltip
+                                      hasArrow
+                                      label={post.title}
+                                      bg="defaultColor.500"
+                                    >
+                                      <Box>
+                                        {post.title.slice(0, 30).concat("...")}
+                                      </Box>
+                                    </Tooltip>
+                                  ) : (
+                                    <Box ml="1">{post.title}</Box>
+                                  )
+                                ) : (
+                                  <Text>-</Text>
+                                )}
+                              </Box>
+                            </Box>
+                            <Divider orientation="vertical" />
+                            <HStack
+                              p="0"
+                              minW="10%"
+                              maxW="10%"
                               justifyContent="center"
                               textAlign="center"
                             >
@@ -246,8 +284,8 @@ const PostList = (props) => {
                             <Divider orientation="vertical" />
                             <HStack
                               p="0"
-                              minW="15%"
-                              maxW="15%"
+                              minW="10%"
+                              maxW="10%"
                               justifyContent="center"
                               textAlign="center"
                             >
@@ -266,8 +304,8 @@ const PostList = (props) => {
                             </HStack>
                             <Divider orientation="vertical" />
                             <Box
-                              minW="15%"
-                              maxW="15%"
+                              minW="10%"
+                              maxW="10%"
                               justifyContent="center"
                               textAlign="center"
                             >
@@ -275,8 +313,8 @@ const PostList = (props) => {
                             </Box>
                             <Divider orientation="vertical" />
                             <Box
-                              minW="15%"
-                              maxW="15%"
+                              minW="10%"
+                              maxW="10%"
                               justifyContent="center"
                               textAlign="center"
                             >
@@ -287,7 +325,7 @@ const PostList = (props) => {
                               <SocialList onlyIcons="true" />
                             </HStack>
                             <Divider orientation="vertical" />
-                            <HStack w="10%" justifyContent="center">
+                            <HStack w="12%" justifyContent="center">
                               <PostImagesList images={post.media} post={post} />
                               <Tooltip
                                 hasArrow
@@ -325,6 +363,34 @@ const PostList = (props) => {
                                   </Box>
                                 </HStack>
                               </Tooltip>
+                              <HStack>
+                                <Box
+                                  display="flex"
+                                  justifyContent="center"
+                                  textAlign="center"
+                                >
+                                  <Tooltip
+                                    hasArrow
+                                    label="Ver en MercadoLibre"
+                                    bg="defaultColor.500"
+                                  >
+                                    <Link
+                                      zIndex="0"
+                                      download
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      cursor="pointer"
+                                      px="3"
+                                      py="1.5"
+                                      bg="defaultColor.400"
+                                      borderRadius="7px"
+                                      alignItems="center"
+                                    >
+                                      <HiOutlineExternalLink fontSize="1.25rem" />
+                                    </Link>
+                                  </Tooltip>
+                                </Box>
+                              </HStack>
                             </HStack>
                           </>
                         </HStack>

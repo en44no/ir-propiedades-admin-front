@@ -83,7 +83,7 @@ const SpecificClientReport = (props) => {
                     display="flex"
                     justifyContent="center"
                   >
-                    <Image w="7rem" h="7rem" src={NoImage} />
+                    <Image loading="lazy" w="7rem" h="7rem" src={NoImage} />
                   </Box>
 
                   <Box p="3" color="#fff">

@@ -9,13 +9,10 @@ const Header = () => {
   const { userRealName, userRoles } = useContext(AuthContext);
 
   useEffect(() => {
-    if (userRealName) {
-      setName(userRealName);
-    }
     if (userRoles) {
       setRoles(userRoles);
     }
-  }, [userRealName, userRoles]);
+  }, [userRoles]);
 
   return (
     <>
@@ -31,6 +28,7 @@ const Header = () => {
             w="80px"
             h="80px"
             objectFit="contain"
+            loading="lazy"
           />
           <Box fontSize="21px" display="flex" placeContent="center" mt="1">
             Hola,

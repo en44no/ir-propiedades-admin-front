@@ -201,6 +201,7 @@ const EditAddress = (props) => {
                     {...register("door", {
                       required: "Número de puerta es requerido.",
                     })}
+                    type="number"
                     id="AddressDoor"
                     placeholder="Ingresa el número de puerta"
                     autoComplete="off"

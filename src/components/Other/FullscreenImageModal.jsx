@@ -38,6 +38,7 @@ const FullscreenImageModal = (props) => {
           cursor="pointer"
           objectFit="cover"
           alt={alt}
+          loading="lazy"
         />
       </Box>
       <Modal

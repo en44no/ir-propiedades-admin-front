@@ -65,6 +65,7 @@ const Login = () => {
             }}
             p="2"
             ml="2"
+            loading="lazy"
           />
           <form onSubmit={handleSubmit(handleLogin)}>
             <VStack spacing="14px" px="4" py="4">

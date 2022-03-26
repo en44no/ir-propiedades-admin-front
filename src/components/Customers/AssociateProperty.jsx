@@ -128,6 +128,7 @@ const AssociateProperty = (props) => {
                   id="CustomerProperty"
                   placeholder="Ingresa el código"
                   autoComplete="off"
+                  type="number"
                   value={propertyCode}
                   onChange={(e) => {
                     setPropertyCode(e.target.value);

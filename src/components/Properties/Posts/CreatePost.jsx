@@ -78,8 +78,6 @@ const CreatePost = (props) => {
         }
         addPost(data, property._id);
         reset();
-        setIsForRentDisabled(true);
-        setIsForSaleDisabled(true);
         onClose();
         setImagesPendingToAddForPost([]);
       }
@@ -160,6 +158,7 @@ const CreatePost = (props) => {
                             children={<IoLogoUsd color="#cacaca" />}
                           />
                           <Input
+                            type="number"
                             defaultValue="0"
                             disabled={isForSaleDisabled}
                             {...register("forSalePrice")}
@@ -200,6 +199,7 @@ const CreatePost = (props) => {
                             children={<IoLogoUsd color="#cacaca" />}
                           />
                           <Input
+                            type="number"
                             defaultValue="0"
                             disabled={isForRentDisabled}
                             {...register("forRentPrice")}
@@ -207,6 +207,22 @@ const CreatePost = (props) => {
                           ></Input>
                         </InputGroup>
                       </Box>
+                    </Box>
+                    <Box mb="1.5rem" mt="-1rem">
+                      <FormLabel htmlFor="propertyTitle">Título</FormLabel>
+                      <Input
+                        {...register("title", {
+                          required: "Título es requerido.",
+                        })}
+                        id="propertyTitle"
+                        placeholder="Ingresa el título"
+                        autoComplete="off"
+                      />
+                      {errors.title && (
+                        <Badge variant="required-error">
+                          {errors.title.message}
+                        </Badge>
+                      )}
                     </Box>
                   </SimpleGrid>
                   <SimpleGrid columns={2} spacing={10}>
@@ -266,22 +282,17 @@ const CreatePost = (props) => {
                         </Badge>
                       </Box>
                     </Stack>
-                    <Button
-                      visibility="hidden"
-                      type="submit"
-                      id="submitButtonCreatePost"
-                    ></Button>
                   </SimpleGrid>
                 </Stack>
                 <SimpleGrid columns={2} spacing={10}>
-                  <Box mt="-14">
+                  <Box mt="1rem">
                     <FormLabel htmlFor="createPostEndDate">Imágenes</FormLabel>
                     <PostImagesManagement
                       buttonText="Agregar imágenes"
                       property={property}
                     />
                   </Box>
-                  <Box mt="-3.3rem">
+                  <Box mt="1rem">
                     <SocialList />
                   </Box>
                 </SimpleGrid>

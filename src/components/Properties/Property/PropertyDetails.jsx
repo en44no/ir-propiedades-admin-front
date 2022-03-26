@@ -287,6 +287,7 @@ const PropertyDetails = (props) => {
                         <Input
                           {...register("appraisedSalePrice")}
                           id="detailsSellPrice"
+                          type="number"
                           value={propertyForDetails.appraisedSalePrice}
                           onChange={(e) =>
                             setPropertyForDetails({
@@ -337,6 +338,7 @@ const PropertyDetails = (props) => {
                         <Input
                           {...register("appraisedRentPrice")}
                           id="detailsRentPrice"
+                          type="number"
                           value={propertyForDetails.appraisedRentPrice}
                           onChange={(e) =>
                             setPropertyForDetails({

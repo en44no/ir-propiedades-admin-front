@@ -29,6 +29,7 @@ import moment from "moment";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import PostImagesManagement from "./PostImagesManagement";
 import { IoLogoUsd } from "react-icons/io";
+import Notification from "../../Other/Notification";
 
 const EditPost = (props) => {
   const { post, property } = props;
@@ -100,9 +101,9 @@ const EditPost = (props) => {
           setShowDateError(false);
         }, 5000);
       } else {
-        if (imagesPendingToAddForPost.length == 0) {
+        if (data.media != undefined && post.media.length == 0) {
           Notification(
-            `Error al crear publicación`,
+            `Error al editar publicación`,
             `Debes agregar al menos una imagen`,
             "warning"
           );
@@ -219,6 +220,8 @@ const EditPost = (props) => {
                                 children={<IoLogoUsd color="#cacaca" />}
                               />
                               <Input
+                                {...register("forSalePrice")}
+                                type="number"
                                 disabled={!isForSaleActive}
                                 value={reactivePost.forSalePrice}
                                 onChange={(e) =>
@@ -227,7 +230,6 @@ const EditPost = (props) => {
                                     forSalePrice: e.target.value,
                                   })
                                 }
-                                {...register("forSalePrice")}
                                 id="createPostSellPrice"
                               ></Input>
                             </InputGroup>
@@ -271,6 +273,7 @@ const EditPost = (props) => {
                               />
                               <Input
                                 {...register("forRentPrice")}
+                                type="number"
                                 disabled={!isForRentActive}
                                 value={reactivePost.forRentPrice}
                                 onChange={(e) =>
@@ -284,33 +287,70 @@ const EditPost = (props) => {
                             </InputGroup>
                           </Box>
                         </Box>
+                        <Box mb="1.5rem" mt="-1rem">
+                          <FormLabel htmlFor="propertyTitle">Título</FormLabel>
+                          <Input
+                            {...register("title", {
+                              required: "Título es requerido.",
+                            })}
+                            value={reactivePost.title}
+                            onChange={(e) =>
+                              setReactivePost({
+                                ...reactivePost,
+                                title: e.target.value,
+                              })
+                            }
+                            id="propertyTitle"
+                            placeholder="Ingresa el título"
+                            autoComplete="off"
+                          />
+                          {errors.title && (
+                            <Badge variant="required-error">
+                              {errors.title.message}
+                            </Badge>
+                          )}
+                        </Box>
                       </SimpleGrid>
                       <SimpleGrid columns={2} spacing={10}>
                         <Stack spacing="14px" id="leftColumn">
-                          <Box>
-                            <FormLabel htmlFor="createPostStartDate">
-                              Fecha inicio
-                            </FormLabel>
-                            <Controller
-                              control={control}
-                              name="startDate"
-                              render={({ field }) => (
-                                <DatePicker
-                                  defaultSelected={moment(
-                                    post.startDate
-                                  ).toDate()}
-                                  field={field}
-                                  placeholderText={"Ingresa la fecha de inicio"}
-                                  id={"createPostStartDate"}
-                                />
+                          {post.status == "Pendiente" ? (
+                            <Box>
+                              <FormLabel htmlFor="createPostStartDate">
+                                Fecha inicio
+                              </FormLabel>
+                              <Controller
+                                control={control}
+                                name="startDate"
+                                render={({ field }) => (
+                                  <DatePicker
+                                    defaultSelected={moment(
+                                      post.startDate
+                                    ).toDate()}
+                                    field={field}
+                                    placeholderText={
+                                      "Ingresa la fecha de inicio"
+                                    }
+                                    id={"createPostStartDate"}
+                                  />
+                                )}
+                              />
+                              {errors.startDate && (
+                                <Badge variant="required-error">
+                                  {errors.startDate.message}
+                                </Badge>
                               )}
-                            />
-                            {errors.startDate && (
-                              <Badge variant="required-error">
-                                {errors.startDate.message}
-                              </Badge>
-                            )}
-                          </Box>
+                            </Box>
+                          ) : (
+                            <Box>
+                              <FormLabel htmlFor="createPostStartDate">
+                                Fecha inicio
+                              </FormLabel>
+                              <Text>
+                                Modificable sólo cuando la publicación está
+                                pendiente
+                              </Text>
+                            </Box>
+                          )}
                         </Stack>
                         <Stack spacing="24px" id="rightColumn">
                           <Box>
@@ -383,13 +423,13 @@ const EditPost = (props) => {
                           </Badge>
                         )}
                       </Box>
-                      <Box mt="-14">
+                      <Box mt="-3.5rem">
                         <FormLabel htmlFor="createPostEndDate">
                           Imágenes
                         </FormLabel>
                         <PostImagesManagement property={property} post={post} />
                       </Box>
-                      <Box mt="-5">
+                      <Box mt="-1.5rem">
                         <SocialList />
                       </Box>
                     </SimpleGrid>

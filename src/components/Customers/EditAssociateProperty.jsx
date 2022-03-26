@@ -149,6 +149,7 @@ const EditAssociateProperty = (props) => {
                   Código interno de la propiedad
                 </FormLabel>
                 <Input
+                  type="number"
                   id="CustomerProperty"
                   placeholder="Ingresa el código"
                   autoComplete="off"

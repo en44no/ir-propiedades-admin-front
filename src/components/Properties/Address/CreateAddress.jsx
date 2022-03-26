@@ -123,14 +123,24 @@ const CreateAddress = (props) => {
                 </Box>
                 <Box>
                   <FormLabel htmlFor="AddressNeighborhood">Barrio</FormLabel>
-                  <Input
+                  <Select
+                    {...register("neighborhood", {
+                      required: "Barrio es requerido.",
+                    })}
+                    id="AddressNeighborhood"
+                  >
+                    <option selected value="argentina">
+                      Argentina
+                    </option>
+                  </Select>
+                  {/* <Input
                     {...register("neighborhood", {
                       required: "Barrio es requerido.",
                     })}
                     id="AddressNeighborhood"
                     placeholder="Ingresa el barrio"
                     autoComplete="off"
-                  />
+                  /> */}
                   {errors.neighborhood && (
                     <Badge variant="required-error">
                       {errors.neighborhood.message}
@@ -159,6 +169,7 @@ const CreateAddress = (props) => {
                     {...register("door", {
                       required: "Número de puerta es requerido.",
                     })}
+                    type="number"
                     id="AddressDoor"
                     placeholder="Ingresa el número de puerta"
                     autoComplete="off"

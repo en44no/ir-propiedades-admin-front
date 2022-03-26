@@ -118,6 +118,7 @@ const EditCustomer = (props) => {
                     {...register("phone", {
                       required: "Teléfono es requerido.",
                     })}
+                    type="number"
                     id="CustomerPhone"
                     placeholder="Ingresa el télefono"
                     autoComplete="off"

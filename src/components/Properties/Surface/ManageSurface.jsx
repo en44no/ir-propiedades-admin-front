@@ -106,8 +106,8 @@ const ManageSurface = (props) => {
                     {...register("buildedSurface", {
                       required: "Superficie construída es requerida.",
                     })}
-                    id="surfaceBuilded"
                     type="number"
+                    id="surfaceBuilded"
                     placeholder="Ingresa la superficie construída"
                     value={reactiveProperty.buildedSurface}
                     onChange={(e) =>
@@ -129,8 +129,8 @@ const ManageSurface = (props) => {
                     {...register("totalSurface", {
                       required: "Superficie total es requerida.",
                     })}
-                    id="surfaceTotal"
                     type="number"
+                    id="surfaceTotal"
                     placeholder="Ingresa la superficie total"
                     value={reactiveProperty.totalSurface}
                     onChange={(e) =>
