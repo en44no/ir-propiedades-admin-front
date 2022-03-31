@@ -2,10 +2,14 @@ import { Box } from "@chakra-ui/react";
 import React from "react";
 import "./loader.css";
 
-const Loader = () => {
+const Loader = (props) => {
+  const { color } = props;
   return (
     <>
-      <Box className="loader"></Box>
+      <Box
+        color={color == "white" ? "#fff" : "#304580"}
+        className="loader"
+      ></Box>
     </>
   );
 };

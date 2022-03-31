@@ -46,6 +46,10 @@ const EditPost = (props) => {
   const [warningStatusMessage, setWarningStatusMessage] = useState("");
   const [showDateError, setShowDateError] = useState(false);
   const [reactivePost, setReactivePost] = useState(post);
+  const [
+    showDateCannotBeLessThanTodayError,
+    setShowDateCannotBeLessThanTodayError,
+  ] = useState(false);
 
   useEffect(() => {
     setReactivePost(post);
@@ -86,7 +90,12 @@ const EditPost = (props) => {
       data.isForSale = false;
       data.isForRent = false;
     }
-    if (isForSale == false && isForRent == false) {
+    if (
+      isForSale == false &&
+      isForRent == false &&
+      data.status != "Finalizada" &&
+      data.status != "Pausada"
+    ) {
       Notification(
         `Error al crear publicación`,
         `Debes especificar si la publicación es para alquiler, venta o ambos`,
@@ -105,20 +114,35 @@ const EditPost = (props) => {
           setShowDateError(false);
         }, 5000);
       } else {
-        if (data.media != undefined && post.media.length == 0) {
-          Notification(
-            `Error al editar publicación`,
-            `Debes agregar al menos una imagen`,
-            "warning"
-          );
+        if (data.state == "Pendiente") {
+          let today = new Date();
+          today.setHours(0, 0, 0, 0);
+          let startDateWithoutHours = data.startDate.setHours(0, 0, 0, 0);
+          if (startDateWithoutHours < today) {
+            setShowDateCannotBeLessThanTodayError(true);
+            setTimeout(() => {
+              setShowDateCannotBeLessThanTodayError(false);
+            }, 5000);
+          }
         } else {
-          if (imagesPendingToAddForPost) {
-            data.media = imagesPendingToAddForPost;
+          if (
+            data.media == undefined &&
+            imagesPendingToAddForPost.length == 0
+          ) {
+            Notification(
+              `Error al editar publicación`,
+              `Debes agregar al menos una imagen`,
+              "warning"
+            );
+          } else {
+            if (imagesPendingToAddForPost) {
+              data.media = imagesPendingToAddForPost;
+            }
+            editPost(data, post._id, property._id);
+            reset();
+            onClose();
           }
         }
-        editPost(data, post._id, property._id);
-        reset();
-        onClose();
       }
     }
   };
@@ -316,6 +340,19 @@ const EditPost = (props) => {
                               <FormLabel htmlFor="createPostStartDate">
                                 Fecha inicio
                               </FormLabel>
+                              <Badge
+                                display={
+                                  showDateCannotBeLessThanTodayError
+                                    ? "inline-block"
+                                    : "none"
+                                }
+                                mb="-1rem"
+                                variant="required-error"
+                                whiteSpace="initial"
+                              >
+                                La fecha de inicio debe ser mayor a la fecha
+                                actual
+                              </Badge>
                               <Controller
                                 control={control}
                                 name="startDate"
@@ -426,13 +463,6 @@ const EditPost = (props) => {
                           Imágenes
                         </FormLabel>
                         <PostImagesManagement property={property} post={post} />
-                      </Box>
-                      <Box mt="-1.5rem">
-                        <SocialList
-                          isOnMercadoLibre={
-                            post.mercadoLibreLink != null ? true : false
-                          }
-                        />
                       </Box>
                     </SimpleGrid>
                   </form>

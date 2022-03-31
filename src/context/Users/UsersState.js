@@ -6,6 +6,7 @@ import UsersContext from "./UsersContext";
 const UsersState = (props) => {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
+  const [usersAreLoading, setUsersAreLoading] = useState(true);
 
   useEffect(() => {
     fetchUsers();
@@ -13,10 +14,12 @@ const UsersState = (props) => {
   }, []);
 
   const fetchUsers = async () => {
+    setUsersAreLoading(true);
     await axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/users`)
       .then((res) => {
         setUsers(res.data);
+        setUsersAreLoading(false);
       })
       .catch((error) => {});
   };
@@ -72,7 +75,6 @@ const UsersState = (props) => {
             );
           }
           setUsers([...users.filter((user) => user._id !== userId), res.data]);
-          fetchUsers();
         }
       })
       .catch((error) => {
@@ -124,6 +126,7 @@ const UsersState = (props) => {
         editUser,
         deleteUser,
         roles,
+        usersAreLoading,
       }}
     >
       {props.children}

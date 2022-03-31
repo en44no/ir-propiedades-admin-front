@@ -145,12 +145,7 @@ const ReportsPage = () => {
               modalTitle="Cantidad de propiedades alquiladas"
               buttonText="Alquiladas"
             />
-            {/* <ReportsByDate
-                atTheMoment="true"
-                dataQuantity={availablePropertiesForRent}
-                modalTitle="Cantidad de propiedades disponibles para alquiler"
-                buttonText="Disponibles para alquiler"
-              /> */}
+
             <ReportsByDate
               todayQuantity={soldProperties.todayQuantity}
               lastWeekQuantity={soldProperties.lastWeekQuantity}
@@ -169,12 +164,7 @@ const ReportsPage = () => {
               modalTitle="Cantidad de propiedades vendidas"
               buttonText="Vendidas"
             />
-            {/* <ReportsByDate
-                atTheMoment="true"
-                dataQuantity={availablePropertiesForSale}
-                modalTitle="Cantidad de propiedades disponibles para venta"
-                buttonText="Disponibles para venta"
-              /> */}
+
             <ReportsByDate
               todayQuantity={inventories.todayQuantity}
               lastWeekQuantity={inventories.lastWeekQuantity}
@@ -304,7 +294,9 @@ const ReportsPage = () => {
       </Box>
     </Box>
   ) : (
-    <Loader />
+    <Box h="100%" display="flex" justifyContent="center" alignItems="center">
+      <Loader />
+    </Box>
   );
 };
 

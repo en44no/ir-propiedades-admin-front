@@ -14,6 +14,7 @@ const Content = () => {
   return (
     <>
       <Box
+        mt="1rem"
         px={0}
         flexGrow="1"
         h="65%"

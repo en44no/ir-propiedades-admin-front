@@ -247,7 +247,8 @@ const InventoriesList = (props) => {
                                   onClick={() => {
                                     changeInventoryStatus(
                                       "Cerrado",
-                                      inventory._id
+                                      inventory._id,
+                                      property._id
                                     );
                                   }}
                                 >
@@ -271,7 +272,8 @@ const InventoriesList = (props) => {
                                   onClick={() => {
                                     changeInventoryStatus(
                                       "Finalizado",
-                                      inventory._id
+                                      inventory._id,
+                                      property._id
                                     );
                                   }}
                                 >

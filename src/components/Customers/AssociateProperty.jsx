@@ -251,7 +251,6 @@ const AssociateProperty = (props) => {
             </Button>
             <Button
               type="button"
-              form="CustomerForm"
               variant="confirm-add-button"
               onClick={() => submitAssociateProperty()}
             >

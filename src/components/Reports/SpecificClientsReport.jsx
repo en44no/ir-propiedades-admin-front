@@ -97,7 +97,7 @@ const SpecificClientsReport = (props) => {
                     <Box
                       border="2px solid #fff"
                       borderRadius="7px"
-                      p="0.5rem"
+                      p="0.2rem"
                       minW="15rem"
                       maxW="15rem"
                     >
@@ -130,12 +130,11 @@ const SpecificClientsReport = (props) => {
                           mt="0.5rem"
                           fontSize="0.9rem"
                           fontWeight="500"
-                          display="flex"
                           gap="1rem"
                           justifyContent="space-between"
                         >
-                          <Text>{customer.email}</Text>
                           <Text>{customer.phone}</Text>
+                          <Text>{customer.email}</Text>
                         </Box>
                       </Box>
                     </Box>

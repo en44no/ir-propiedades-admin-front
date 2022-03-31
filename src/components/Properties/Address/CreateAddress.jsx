@@ -81,7 +81,7 @@ const CreateAddress = (props) => {
                     })}
                     id="addressCountry"
                   >
-                    <option selected value="argentina">
+                    <option selected value="Argentina">
                       Argentina
                     </option>
                   </Select>
@@ -123,24 +123,14 @@ const CreateAddress = (props) => {
                 </Box>
                 <Box>
                   <FormLabel htmlFor="AddressNeighborhood">Barrio</FormLabel>
-                  <Select
-                    {...register("neighborhood", {
-                      required: "Barrio es requerido.",
-                    })}
-                    id="AddressNeighborhood"
-                  >
-                    <option selected value="argentina">
-                      Argentina
-                    </option>
-                  </Select>
-                  {/* <Input
+                  <Input
                     {...register("neighborhood", {
                       required: "Barrio es requerido.",
                     })}
                     id="AddressNeighborhood"
                     placeholder="Ingresa el barrio"
                     autoComplete="off"
-                  /> */}
+                  />
                   {errors.neighborhood && (
                     <Badge variant="required-error">
                       {errors.neighborhood.message}
@@ -166,35 +156,21 @@ const CreateAddress = (props) => {
                 <Box>
                   <FormLabel htmlFor="AddressDoor">Número de puerta</FormLabel>
                   <Input
-                    {...register("door", {
-                      required: "Número de puerta es requerido.",
-                    })}
+                    {...register("door")}
                     type="number"
                     id="AddressDoor"
                     placeholder="Ingresa el número de puerta"
                     autoComplete="off"
                   />
-                  {errors.door && (
-                    <Badge variant="required-error">
-                      {errors.door.message}
-                    </Badge>
-                  )}
                 </Box>
                 <Box>
                   <FormLabel htmlFor="AddressDetails">Detalles</FormLabel>
                   <Textarea
-                    {...register("details", {
-                      required: "Detalles es requerido.",
-                    })}
+                    {...register("details")}
                     id="AddressDetails"
                     placeholder="Ingresa los detalles"
                     autoComplete="off"
                   />
-                  {errors.details && (
-                    <Badge variant="required-error">
-                      {errors.details.message}
-                    </Badge>
-                  )}
                 </Box>
               </Stack>
             </form>

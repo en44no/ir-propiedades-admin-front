@@ -23,7 +23,7 @@ import PropertiesContext from "../../context/Properties/PropertiesContext";
 
 const EditAssociateProperty = (props) => {
   const { customer } = props;
-  const { editCustomer } = useContext(CustomersContext);
+  const { setAssociatedPropertiesPendingToAdd } = useContext(CustomersContext);
   const { properties } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [propertyCode, setPropertyCode] = useState("");
@@ -113,7 +113,7 @@ const EditAssociateProperty = (props) => {
     });
 
     const data = { ownerProperties, tenantProperties };
-    editCustomer(data, customer._id);
+    setAssociatedPropertiesPendingToAdd(data);
     onClose();
   };
 
@@ -275,7 +275,6 @@ const EditAssociateProperty = (props) => {
             </Button>
             <Button
               type="button"
-              form="CustomerForm"
               variant="confirm-add-button"
               onClick={() => submitAssociateProperty()}
             >

@@ -16,18 +16,13 @@ import {
 import { BsImages } from "react-icons/bs";
 import FullscreenImageModal from "../../Other/FullscreenImageModal";
 import Notification from "../../Other/Notification";
+import CopyInternalCode from "../CopyInternalCode";
 
 const PostImagesList = (props) => {
   const { images, post } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const noImagesNotification = () => {
-    Notification(
-      "Esta publicación no tiene imágenes",
-      "Edita la publicación para agregarlas",
-      "warning"
-    );
-  };
+  console.log(post);
 
   return (
     <>
@@ -39,7 +34,7 @@ const PostImagesList = (props) => {
           bg="defaultColor.400"
           borderRadius="7px"
           alignItems="center"
-          onClick={images.length == 0 ? () => noImagesNotification() : onOpen}
+          onClick={onOpen}
         >
           <Box fontSize="0.8rem" fontWeight="500">
             {images.length}
@@ -58,7 +53,15 @@ const PostImagesList = (props) => {
         <ModalContent bg="defaultColor.400" color="#fff">
           <ModalHeader fontSize="1.1rem" mb="0" pb="0" pt="2rem">
             <Box>
-              <Box mb="0.5rem">Imágenes de la publicación {post._id}</Box>
+              <Box mb="0.5rem" display="flex">
+                Imágenes de la publicación
+                <CopyInternalCode
+                  text="publicación"
+                  internalCode={
+                    post.internalCode ? post.internalCode : "CÓDIGO"
+                  }
+                />
+              </Box>
             </Box>
           </ModalHeader>
           <ModalCloseButton _focus={{ boxShadow: "none" }} onClick={onClose} />

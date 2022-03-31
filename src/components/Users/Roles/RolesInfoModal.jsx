@@ -25,7 +25,7 @@ const RolesInfoModal = () => {
         <BsFillInfoCircleFill />
       </Box>
 
-      <Modal isOpen={isOpen} size="xl" onClose={onClose} isCentered>
+      <Modal isOpen={isOpen} size="4xl" onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent bg="defaultColor.400" color="#fff">
           <ModalHeader>Información de los roles</ModalHeader>

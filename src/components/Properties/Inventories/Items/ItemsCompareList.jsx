@@ -117,7 +117,11 @@ const ItemsCompareList = (props) => {
   return (
     <>
       <>
-        <Tooltip hasArrow label="Ver objetos" bg="defaultColor.500">
+        <Tooltip
+          hasArrow
+          label="Ver comparación de objetos"
+          bg="defaultColor.500"
+        >
           <HStack
             cursor="pointer"
             px="3"

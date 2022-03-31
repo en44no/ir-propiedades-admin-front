@@ -40,6 +40,10 @@ const CreatePost = (props) => {
   const [isForRent, setIsForRent] = useState(false);
   const [isForSale, setIsForSale] = useState(false);
   const [showDateError, setShowDateError] = useState(false);
+  const [
+    showDateCannotBeLessThanTodayError,
+    setShowDateCannotBeLessThanTodayError,
+  ] = useState(false);
 
   const {
     register,
@@ -50,42 +54,52 @@ const CreatePost = (props) => {
   } = useForm();
 
   const submitPost = (data) => {
-    console.log(data);
     if (data.startDate > data.endDate) {
       setShowDateError(true);
       setTimeout(() => {
         setShowDateError(false);
       }, 5000);
-    }
-    if (isForSale == false && isForRent == false) {
-      Notification(
-        `Error al crear publicación`,
-        `Debes especificar si la publicación es para alquiler, venta o ambos`,
-        "warning"
-      );
     } else {
-      if (data.forSalePrice == undefined) {
-        data.forSalePrice = 0;
-      }
-      if (data.forRentPrice == undefined) {
-        data.forRentPrice = 0;
-      }
-      if (imagesPendingToAddForPost.length == 0) {
-        Notification(
-          `Error al crear publicación`,
-          `Debes agregar al menos una imagen`,
-          "warning"
-        );
+      let today = new Date();
+      today.setHours(0, 0, 0, 0);
+      let startDateWithoutHours = data.startDate.setHours(0, 0, 0, 0);
+      if (startDateWithoutHours < today) {
+        setShowDateCannotBeLessThanTodayError(true);
+        setTimeout(() => {
+          setShowDateCannotBeLessThanTodayError(false);
+        }, 5000);
       } else {
-        if (imagesPendingToAddForPost) {
-          data.media = imagesPendingToAddForPost;
+        if (isForSale == false && isForRent == false) {
+          Notification(
+            `Error al crear publicación`,
+            `Debes especificar si la publicación es para alquiler, venta o ambos`,
+            "warning"
+          );
+        } else {
+          if (data.forSalePrice == undefined) {
+            data.forSalePrice = 0;
+          }
+          if (data.forRentPrice == undefined) {
+            data.forRentPrice = 0;
+          }
+          if (imagesPendingToAddForPost.length == 0) {
+            Notification(
+              `Error al crear publicación`,
+              `Debes agregar al menos una imagen`,
+              "warning"
+            );
+          } else {
+            if (imagesPendingToAddForPost) {
+              data.media = imagesPendingToAddForPost;
+            }
+            addPost(data, property._id);
+            reset();
+            setIsForSale(false);
+            setIsForRent(false);
+            onClose();
+            setImagesPendingToAddForPost([]);
+          }
         }
-        addPost(data, property._id);
-        reset();
-        setIsForSale(false);
-        setIsForRent(false);
-        onClose();
-        setImagesPendingToAddForPost([]);
       }
     }
   };
@@ -250,6 +264,18 @@ const CreatePost = (props) => {
                             {errors.startDate.message}
                           </Badge>
                         )}
+                        <Badge
+                          display={
+                            showDateCannotBeLessThanTodayError
+                              ? "inline-block"
+                              : "none"
+                          }
+                          mb="-1rem"
+                          variant="required-error"
+                          whiteSpace="initial"
+                        >
+                          La fecha de inicio debe ser mayor a la fecha actual
+                        </Badge>
                       </Box>
                     </Stack>
                     <Stack spacing="24px" id="rightColumn">
@@ -288,7 +314,7 @@ const CreatePost = (props) => {
                 </Stack>
                 <SimpleGrid columns={2} spacing={10}>
                   <Box mt="1rem">
-                    <FormLabel htmlFor="createPostEndDate">Imágenes</FormLabel>
+                    <FormLabel>Imágenes</FormLabel>
                     <PostImagesManagement
                       buttonText="Agregar imágenes"
                       property={property}
@@ -311,11 +337,17 @@ const CreatePost = (props) => {
                       justifyContent="center"
                       bg="#cc9f0b"
                     >
-                      <FormLabel mt="0" mb="0" mr="2">
+                      <FormLabel htmlFor="postIn" mt="0" mb="0" mr="2">
                         {<Image src={mercadoLibreIcon} alt="MercadoLibre" />}
                       </FormLabel>
-                      <FormLabel m="0">MercadoLibre</FormLabel>
-                      <Switch {...register("mercadoLibre")} ml="3" />
+                      <FormLabel htmlFor="postIn" m="0">
+                        MercadoLibre
+                      </FormLabel>
+                      <Switch
+                        id="postIn"
+                        {...register("mercadoLibre")}
+                        ml="3"
+                      />
                     </Box>
                   </Box>
                 </SimpleGrid>

@@ -11,16 +11,19 @@ const CustomersState = (props) => {
     associatedPropertiesPendingToAdd,
     setAssociatedPropertiesPendingToAdd,
   ] = useState([]);
+  const [customersAreLoading, setCustomersAreLoading] = useState(true);
 
   useEffect(() => {
     fetchCustomers();
   }, []);
 
   const fetchCustomers = async () => {
+    setCustomersAreLoading(true);
     await axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/customers`)
       .then((res) => {
         setCustomers(res.data);
+        setCustomersAreLoading(false);
       })
       .catch((error) => {});
   };
@@ -128,7 +131,7 @@ const CustomersState = (props) => {
         data
       )
       .then((res) => {
-        if (res.status === 200) {
+        if (res.status === 200 || res.status === 201) {
           Notification(
             "Cliente editado correctamente",
             "Has editado un cliente",
@@ -140,7 +143,6 @@ const CustomersState = (props) => {
             ...customers.filter((customer) => customer._id !== customerId),
             res.data,
           ]);
-          fetchCustomers();
         }
       })
       .catch((error) => {
@@ -187,6 +189,7 @@ const CustomersState = (props) => {
         deleteCustomer,
         associatedPropertiesPendingToAdd,
         setAssociatedPropertiesPendingToAdd,
+        customersAreLoading,
       }}
     >
       {props.children}

@@ -34,6 +34,11 @@ const CreateDocument = (props) => {
     reset,
   } = useForm();
 
+  const selectFile = (event) => {
+    setSelectedFile(event.target.files[0]);
+    errors.files = null;
+  };
+
   const submitDocument = (data) => {
     if (
       selectedFile.type == "application/pdf" ||
@@ -91,12 +96,37 @@ const CreateDocument = (props) => {
               >
                 <Stack spacing="14px">
                   <Box>
-                    <FormLabel htmlFor="propertyName">Nombre</FormLabel>
+                    <FormLabel margin="0" htmlFor="createDocumentFile">
+                      Archivo (PDF o imagen)
+                      <Input
+                        accept="application/pdf, image/jpeg, image/png"
+                        mt="0.4rem"
+                        pt="0.3rem"
+                        type="file"
+                        {...register("files", {
+                          required: "Archivo es requerido.",
+                        })}
+                        onChange={(e) => {
+                          selectFile(e);
+                        }}
+                        id="createDocumentFile"
+                        w="100%"
+                        fontSize="1rem"
+                      ></Input>
+                      {errors.files && (
+                        <Badge variant="required-error">
+                          {errors.files.message}
+                        </Badge>
+                      )}
+                    </FormLabel>
+                  </Box>
+                  <Box>
+                    <FormLabel htmlFor="createDocumentName">Nombre</FormLabel>
                     <Input
                       {...register("name", {
                         required: "Nombre es requerido.",
                       })}
-                      id="propertyName"
+                      id="createDocumentName"
                       placeholder="Ingresa el nombre"
                       autoComplete="off"
                     />
@@ -107,14 +137,14 @@ const CreateDocument = (props) => {
                     )}
                   </Box>
                   <Box>
-                    <FormLabel htmlFor="propertyDescription">
+                    <FormLabel htmlFor="createDocumentDescription">
                       Descripción
                     </FormLabel>
                     <Textarea
                       {...register("description", {
                         required: "Descripción es requerido.",
                       })}
-                      id="propertyDescription"
+                      id="createDocumentDescription"
                       placeholder="Ingresa la descripción"
                       autoComplete="off"
                     />
@@ -123,23 +153,6 @@ const CreateDocument = (props) => {
                         {errors.description.message}
                       </Badge>
                     )}
-                  </Box>
-                  <Box>
-                    <FormLabel margin="0" htmlFor="createMediaImage">
-                      Archivo (PDF o imagen)
-                      <Input
-                        accept="application/pdf, image/jpeg, image/png"
-                        mt="0.4rem"
-                        pt="0.3rem"
-                        type="file"
-                        onChange={(e) => {
-                          setSelectedFile(e.target.files[0]);
-                        }}
-                        id="createMediaImage"
-                        w="100%"
-                        fontSize="1rem"
-                      ></Input>
-                    </FormLabel>
                   </Box>
                 </Stack>
               </form>

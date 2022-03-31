@@ -84,7 +84,7 @@ const DocumentList = (props) => {
             </Text>
           </DrawerHeader>
           <DrawerBody zIndex="0" color="#fff">
-            {property.documents.length > 0 && (
+            {property.documents && property.documents.length > 0 && (
               <Box position="relative">
                 <Box
                   display="flex"
@@ -113,7 +113,7 @@ const DocumentList = (props) => {
               </Box>
             )}
 
-            {property.documents.length === 0 ? (
+            {property.documents && property.documents.length === 0 ? (
               <Text
                 fontSize="xl"
                 color="#EAE9ED"

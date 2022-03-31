@@ -12,6 +12,8 @@ const PropertiesState = (props) => {
   const [imagesPendingToAddForPost, setImagesPendingToAddForPost] = useState(
     []
   );
+  const [propertiesAreLoading, setPropertiesAreLoading] = useState(true);
+  const [postsAreLoading, setPostsAreLoading] = useState(true);
 
   useEffect(() => {
     fetchProperties();
@@ -20,10 +22,12 @@ const PropertiesState = (props) => {
   useEffect(() => {}, []);
 
   const fetchProperties = async () => {
+    setPropertiesAreLoading(true);
     await axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/properties`)
       .then((res) => {
         setProperties(res.data);
+        setPropertiesAreLoading(false);
       })
       .catch((error) => {});
   };
@@ -154,6 +158,12 @@ const PropertiesState = (props) => {
           data.type != null && (property.type[0] = data.type);
           data.isForRent != null && (property.isForRent = data.isForRent);
           data.isForSale != null && (property.isForSale = data.isForSale);
+          data.saleDate != null
+            ? (property.saleDate = data.saleDate)
+            : (property.saleDate = null);
+          data.rentDate != null
+            ? (property.rentDate = data.rentDate)
+            : (property.rentDate = null);
           data.name != null && (property.name = data.name);
           data.comment != null && (property.comment = data.comment);
           data.description != null && (property.description = data.description);
@@ -208,7 +218,6 @@ const PropertiesState = (props) => {
   };
 
   const addPost = async (data, propertyId) => {
-    console.log(data);
     let nowWithoutHours = new Date(new Date().toDateString());
     let startDateWithoutHours = new Date(data.startDate.toDateString());
     if (startDateWithoutHours <= nowWithoutHours) {
@@ -217,34 +226,89 @@ const PropertiesState = (props) => {
       data.status = "Pendiente";
     }
     data.property = propertyId;
-    await axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/posts`, data)
-      .then((res) =>
-        res.status === 201
-          ? (Notification(
-              "Publicación creada correctamente",
-              "Has creado una nueva publicación",
-              "success"
-            ),
-            setPosts([...posts, res.data]),
-            data.mercadoLibre == true && postInMercadolibre(res.data),
-            getPostsByProperty(propertyId))
-          : null
-      )
-      .catch((error) => {
-        Notification(
-          "Error al crear la publicación",
-          "Ocurrió un error intentado crear la publicación",
-          "error"
-        );
-      });
+    if (data.mercadoLibre == false) {
+      await axios
+        .post(`${process.env.REACT_APP_API_BASE_URL}/posts`, data)
+        .then((res) =>
+          res.status === 201
+            ? (Notification(
+                "Publicación creada correctamente",
+                "Has creado una nueva publicación",
+                "success"
+              ),
+              setPosts([...posts, res.data]))
+            : null
+        )
+        .catch((error) => {
+          Notification(
+            "Error al crear la publicación",
+            "Ocurrió un error intentado crear la publicación",
+            "error"
+          );
+        });
+    } else {
+      if (data.isForSale == true) {
+        await axios
+          .post(`${process.env.REACT_APP_API_BASE_URL}/posts`, data)
+          .then((res) =>
+            res.status === 201
+              ? (Notification(
+                  "Publicación de venta creada correctamente",
+                  "Has creado una nueva publicación de venta",
+                  "success",
+                  7000
+                ),
+                setPosts([...posts, res.data]),
+                data.mercadoLibre == true &&
+                  postInMercadolibre(res.data, "venta"))
+              : null
+          )
+          .catch((error) => {
+            if (error.status == 500 || error.status == 400) {
+              Notification(
+                "Error al crear la publicación de venta",
+                "Ocurrió un error intentado crear la publicación de venta",
+                "error",
+                7000
+              );
+            }
+          });
+      }
+      if (data.isForRent == true) {
+        await axios
+          .post(`${process.env.REACT_APP_API_BASE_URL}/posts`, data)
+          .then((res) =>
+            res.status === 201
+              ? (Notification(
+                  "Publicación de alquiler creada correctamente",
+                  "Has creado una nueva publicación de alquiler",
+                  "success",
+                  7000
+                ),
+                setPosts([...posts, res.data]),
+                data.mercadoLibre == true &&
+                  postInMercadolibre(res.data, "alquiler"))
+              : null
+          )
+          .catch((error) => {
+            if (error.status == 500 || error.status == 400) {
+              Notification(
+                "Error al crear la publicación de alquiler",
+                "Ocurrió un error intentado crear la publicación de alquiler",
+                "error",
+                7000
+              );
+            }
+          });
+      }
+    }
   };
 
-  const postInMercadolibre = async (post) => {
+  const postInMercadolibre = async (post, type) => {
     let property = properties.find(
       (property) => property._id === post.property
     );
-    if (post.isForSale === true) {
+    if (type == "venta") {
       const postToSend = {
         title: post.title,
         category_id: "MLU1468",
@@ -272,7 +336,8 @@ const PropertiesState = (props) => {
             ", " +
             property.address.state +
             ", " +
-            property.address.country,
+            property.address.country +
+            ", ",
           zip_code: null,
           neighborhood: {
             id: "TUxBQlBBUzgyNjBa",
@@ -319,24 +384,26 @@ const PropertiesState = (props) => {
         .then((res) => {
           if (res.status == 201) {
             Notification(
-              "Publicación en MercadoLibre creada correctamente",
+              "Publicación en MercadoLibre para venta creada correctamente",
               "Deberás efectuar el pago en MercadoLibre para que la publicación sea visible.",
-              "success"
+              "success",
+              7000
             );
             addMercadoLibreLinkToPost(post, res.data.permalink);
-            getPostsByProperty(propertyId);
           }
         })
         .catch((error) => {
-          console.log(error);
-          Notification(
-            "Error al crear la publicación en MercadoLibre",
-            "Ocurrió un error intentado crear la publicación en MercadoLibre",
-            "error"
-          );
+          if (error.status == 500 || error.status == 400) {
+            Notification(
+              "Error al crear la publicación para venta en MercadoLibre",
+              "Ocurrió un error intentado crear la publicación en MercadoLibre",
+              "error",
+              7000
+            );
+          }
         });
     }
-    if (post.isForRent === true) {
+    if (type === "alquiler") {
       const postToSend = {
         title: post.title,
         category_id: "MLU1467",
@@ -364,7 +431,8 @@ const PropertiesState = (props) => {
             ", " +
             property.address.state +
             ", " +
-            property.address.country,
+            property.address.country +
+            ", ",
           zip_code: null,
           neighborhood: {
             id: "TUxBQlBBUzgyNjBa",
@@ -407,34 +475,40 @@ const PropertiesState = (props) => {
         ],
       };
       await axios
-        .post(`${process.env.REACT_APP_API_BASE_URL}mercadolibre`, postToSend)
+        .post(`${process.env.REACT_APP_API_BASE_URL}/mercadolibre`, postToSend)
         .then((res) => {
-          console.log(res);
           if (res.status === 201) {
             Notification(
-              "Publicación en MercadoLibre creada correctamente",
+              "Publicación en MercadoLibre para alquiler creada correctamente",
               "Deberás efectuar el pago en MercadoLibre para que la publicación sea visible.",
-              "success"
+              "success",
+              7000
             );
+            addMercadoLibreLinkToPost(post, res.data.permalink);
           }
         })
         .catch((error) => {
-          Notification(
-            "Error al crear la publicación en MercadoLibre",
-            "Ocurrió un error intentado crear la publicación en MercadoLibre",
-            "error"
-          );
+          if (error.status == 500 || error.status == 400) {
+            Notification(
+              "Error al crear la publicación para alquiler en MercadoLibre",
+              "Ocurrió un error intentado crear la publicación en MercadoLibre",
+              "error",
+              7000
+            );
+          }
         });
     }
   };
 
   const getPostsByProperty = async (propertyId) => {
+    setPostsAreLoading(true);
     await axios
       .get(
         `${process.env.REACT_APP_API_BASE_URL}/posts/byPropertyId/${propertyId}`
       )
       .then((res) => {
         setPosts(res.data);
+        setPostsAreLoading(false);
       })
       .catch((error) => {});
   };
@@ -461,15 +535,19 @@ const PropertiesState = (props) => {
           });
           res.data.media = images;
           setPosts([...posts.filter((post) => post._id !== postId), res.data]);
-          fetchProperties();
+          if (res.data.status == "Finalizada" || res.data.status == "Pausada") {
+            getPostsByProperty(propertyId);
+          }
         }
       })
       .catch((error) => {
-        Notification(
-          "Error al editar la publicación",
-          "Ocurrió un error intentado editar la publicación",
-          "error"
-        );
+        if (error.status == 500 || error.status == 400) {
+          Notification(
+            "Error al editar la publicación",
+            "Ocurrió un error intentado editar la publicación",
+            "error"
+          );
+        }
       });
   };
 
@@ -580,7 +658,10 @@ const PropertiesState = (props) => {
             "success"
           );
           post.isFeatured = newState;
-          fetchProperties();
+          setPosts([
+            ...posts.filter((post) => post._id !== res.data._id),
+            post,
+          ]);
         } else {
           Notification(
             "Error al marcar la publicación como destacada",
@@ -600,7 +681,7 @@ const PropertiesState = (props) => {
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           post.mercadoLibreLink = link;
-          getPostsByProperty(post.property);
+          setPosts([...posts, post]);
         } else {
         }
       })
@@ -769,7 +850,8 @@ const PropertiesState = (props) => {
       .then((resMedia) => {});
   };
 
-  const changeInventoryStatus = async (status, inventoryId) => {
+  const changeInventoryStatus = async (status, inventoryId, propertyId) => {
+    const property = properties.find((property) => property._id === propertyId);
     await axios
       .put(`${process.env.REACT_APP_API_BASE_URL}/inventories/${inventoryId}`, {
         status: [status],
@@ -781,7 +863,24 @@ const PropertiesState = (props) => {
             "Has modicado el estado de un inventario",
             "success"
           );
-          fetchProperties();
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          let inventory = property.inventories.find(
+            (inventory) => inventory._id === inventoryId
+          );
+          inventory.status = [status];
+          property.inventories = [
+            ...property.inventories.filter(
+              (inventory) => inventory._id !== inventoryId
+            ),
+            inventory,
+          ];
+          setProperties(newProperties);
         } else {
           Notification(
             "Error al modificar el estado del inventario",
@@ -793,7 +892,13 @@ const PropertiesState = (props) => {
       .catch((error) => {});
   };
 
-  const changeReviewStatus = async (status, reviewsId) => {
+  const changeReviewStatus = async (
+    status,
+    reviewsId,
+    propertyId,
+    inventoryId
+  ) => {
+    const property = properties.find((property) => property._id === propertyId);
     await axios
       .put(`${process.env.REACT_APP_API_BASE_URL}/reviews/${reviewsId}`, {
         status: status,
@@ -805,7 +910,33 @@ const PropertiesState = (props) => {
             "Has modicado el estado de un control",
             "success"
           );
-          fetchProperties();
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          let inventory = property.inventories.find(
+            (inventory) => inventory._id === inventoryId
+          );
+          let inventories = property.inventories;
+          let review = "";
+          inventories.forEach((inventory) => {
+            review = inventory.reviews.find(
+              (review) => review._id === reviewsId
+            );
+          });
+          review.status = status;
+          inventory.reviews = [
+            ...inventory.reviews.filter((review) => review._id !== reviewsId),
+            review,
+          ];
+          property.inventories = [
+            ...property.inventories.filter((inv) => inv._id !== inventory),
+            inventory,
+          ];
+          setProperties(newProperties);
         } else {
           Notification(
             "Error al modificar el estado del control",
@@ -876,7 +1007,6 @@ const PropertiesState = (props) => {
             }
           });
           setProperties(newProperties);
-          fetchProperties();
         } else {
           Notification(
             "Error al modificar la superficie",
@@ -1062,6 +1192,8 @@ const PropertiesState = (props) => {
         editDocument,
         deleteDocument,
         changePostIsFeature,
+        propertiesAreLoading,
+        postsAreLoading,
       }}
     >
       {props.children}

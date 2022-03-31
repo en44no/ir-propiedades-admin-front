@@ -88,7 +88,6 @@ const EditAddress = (props) => {
                       required: " País es requerido.",
                     })}
                     id="addressCountry"
-                    placeholder="Ingresa el país"
                     value={reactiveAddress.country}
                     onChange={(e) =>
                       setReactiveAddress({
@@ -97,7 +96,9 @@ const EditAddress = (props) => {
                       })
                     }
                   >
-                    <option value="argentina">Argentina</option>
+                    <option selected value="argentina">
+                      Argentina
+                    </option>
                   </Select>
                   {errors.country && (
                     <Badge variant="required-error">
@@ -198,9 +199,7 @@ const EditAddress = (props) => {
                 <Box>
                   <FormLabel htmlFor="AddressDoor">Número de puerta</FormLabel>
                   <Input
-                    {...register("door", {
-                      required: "Número de puerta es requerido.",
-                    })}
+                    {...register("door")}
                     type="number"
                     id="AddressDoor"
                     placeholder="Ingresa el número de puerta"
@@ -213,18 +212,11 @@ const EditAddress = (props) => {
                       })
                     }
                   />
-                  {errors.door && (
-                    <Badge variant="required-error">
-                      {errors.door.message}
-                    </Badge>
-                  )}
                 </Box>
                 <Box>
                   <FormLabel htmlFor="AddressDetails">Detalles</FormLabel>
                   <Textarea
-                    {...register("details", {
-                      required: "Detalles es requerido.",
-                    })}
+                    {...register("details")}
                     id="AddressDetails"
                     placeholder="Ingresa los detalles"
                     autoComplete="off"
@@ -236,11 +228,6 @@ const EditAddress = (props) => {
                       })
                     }
                   />
-                  {errors.details && (
-                    <Badge variant="required-error">
-                      {errors.details.message}
-                    </Badge>
-                  )}
                 </Box>
               </Stack>
             </form>

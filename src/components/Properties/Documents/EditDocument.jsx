@@ -79,12 +79,26 @@ const EditDocument = (props) => {
               >
                 <Stack spacing="14px">
                   <Box>
-                    <FormLabel htmlFor="propertyName">Nombre</FormLabel>
+                    <FormLabel margin="0" htmlFor="editDocumentFile">
+                      Archivo (PDF o imagen)
+                      <Input
+                        disabled
+                        mt="0.4rem"
+                        pt="0.3rem"
+                        type="file"
+                        w="100%"
+                        fontSize="1rem"
+                        id="editDocumentFile"
+                      ></Input>
+                    </FormLabel>
+                  </Box>
+                  <Box>
+                    <FormLabel htmlFor="editDocumentName">Nombre</FormLabel>
                     <Input
                       {...register("name", {
                         required: "Nombre es requerido.",
                       })}
-                      id="propertyName"
+                      id="editDocumentName"
                       value={reactiveDocument.name}
                       onChange={(e) =>
                         setReactiveDocument({
@@ -102,14 +116,14 @@ const EditDocument = (props) => {
                     )}
                   </Box>
                   <Box>
-                    <FormLabel htmlFor="propertyDescription">
+                    <FormLabel htmlFor="editDocumentDescription">
                       Descripción
                     </FormLabel>
                     <Textarea
                       {...register("description", {
                         required: "Descripción es requerido.",
                       })}
-                      id="propertyDescription"
+                      id="editDocumentDescription"
                       value={reactiveDocument.description}
                       onChange={(e) =>
                         setReactiveDocument({
@@ -125,19 +139,6 @@ const EditDocument = (props) => {
                         {errors.description.message}
                       </Badge>
                     )}
-                  </Box>
-                  <Box>
-                    <FormLabel margin="0" htmlFor="createMediaImage">
-                      Archivo (PDF o imagen)
-                      <Input
-                        disabled
-                        mt="0.4rem"
-                        pt="0.3rem"
-                        type="file"
-                        w="100%"
-                        fontSize="1rem"
-                      ></Input>
-                    </FormLabel>
                   </Box>
                 </Stack>
               </form>

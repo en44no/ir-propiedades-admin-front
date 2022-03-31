@@ -40,7 +40,7 @@ const MediaList = (props) => {
   const { property, text, width, buttonWithoutIcon, drawerSize, columns } =
     props;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { deleteMedia, changeOrderMediaFromProperty } =
+  const { deleteMedia, changeOrderMediaFromProperty, propertiesAreLoading } =
     useContext(PropertiesContext);
 
   useEffect(() => {
@@ -118,220 +118,236 @@ const MediaList = (props) => {
             </Text>
           </DrawerHeader>
           <DrawerBody color="#fff" overflow="hidden">
-            {property.media ? (
-              <DragDropContext onDragEnd={onDragEnd}>
-                {property.media.length > 0 && (
-                  <Box display="flex">
-                    <Box
-                      borderRadius="7px"
-                      display="flex"
-                      flexDirection="column"
-                      w="100%"
-                      ml="0.5rem"
-                      p="0.5rem 2rem 2rem 2rem"
-                      position="relative"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <Droppable droppableId="images" type="IMAGES">
-                        {(provided, snapshot) => {
-                          return (
-                            <Box
-                              display="flex"
-                              p="3"
-                              flexDirection="column"
-                              alignItems="center"
-                              overflowY="auto"
-                              h="73vh"
-                              w="40%"
-                              borderRadius="7px"
-                              ref={provided.innerRef}
-                              {...provided.droppableProps}
-                            >
-                              {state.images?.map((image, index) => {
-                                return (
-                                  <Draggable
-                                    key={image._id}
-                                    draggableId={image._id}
-                                    index={index}
-                                  >
-                                    {(provided, snapshot) => {
-                                      return (
-                                        <Box
-                                          position="relative"
-                                          ref={provided.innerRef}
-                                          {...provided.draggableProps}
-                                          {...provided.dragHandleProps}
-                                        >
-                                          {index + 1 == 1 && (
-                                            <Tooltip
-                                              label="Esta imagen es la portada"
-                                              placement="left"
-                                              bg="defaultColor.500"
-                                              py="1.5"
-                                            >
-                                              <Box
-                                                cursor="pointer"
-                                                position="absolute"
-                                                top="0.8rem"
-                                                left="-2rem"
-                                              >
-                                                <BsFillInfoCircleFill />
-                                              </Box>
-                                            </Tooltip>
-                                          )}
-                                          <Box
-                                            display="flex"
-                                            h="110px"
-                                            mb="0.9rem"
-                                            outline="2px solid #cacaca"
-                                            borderRadius="7px"
-                                            _hover={{
-                                              transition: "transform .2s",
-                                              transform: "scale(0.98)",
-                                            }}
-                                          >
+            {propertiesAreLoading == true ? (
+              <Box
+                h="100%"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Loader color="white" />
+              </Box>
+            ) : (
+              <>
+                {property.media && (
+                  <DragDropContext onDragEnd={onDragEnd}>
+                    {property.media.length > 0 && (
+                      <Box display="flex">
+                        <Box
+                          borderRadius="7px"
+                          display="flex"
+                          flexDirection="column"
+                          w="100%"
+                          ml="0.5rem"
+                          p="0.5rem 2rem 2rem 2rem"
+                          position="relative"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          <Droppable droppableId="images" type="IMAGES">
+                            {(provided, snapshot) => {
+                              return (
+                                <Box
+                                  display="flex"
+                                  p="3"
+                                  flexDirection="column"
+                                  alignItems="center"
+                                  overflowY="auto"
+                                  h="73vh"
+                                  w="40%"
+                                  borderRadius="7px"
+                                  ref={provided.innerRef}
+                                  {...provided.droppableProps}
+                                >
+                                  {state.images?.map((image, index) => {
+                                    return (
+                                      <Draggable
+                                        key={image._id}
+                                        draggableId={image._id}
+                                        index={index}
+                                      >
+                                        {(provided, snapshot) => {
+                                          return (
                                             <Box
-                                              minW="200px"
-                                              maxW="200px"
-                                              h="110px"
-                                              borderStartStartRadius="7px"
-                                              borderEndStartRadius="7px"
-                                              overflow="hidden"
-                                              mb="0.8rem"
                                               position="relative"
+                                              ref={provided.innerRef}
+                                              {...provided.draggableProps}
+                                              {...provided.dragHandleProps}
                                             >
+                                              {index + 1 == 1 && (
+                                                <Tooltip
+                                                  label="Esta imagen es la portada"
+                                                  placement="left"
+                                                  bg="defaultColor.500"
+                                                  py="1.5"
+                                                >
+                                                  <Box
+                                                    cursor="pointer"
+                                                    position="absolute"
+                                                    top="0.8rem"
+                                                    left="-2rem"
+                                                  >
+                                                    <BsFillInfoCircleFill />
+                                                  </Box>
+                                                </Tooltip>
+                                              )}
                                               <Box
-                                                bg="defaultColor.400"
-                                                borderRadius="50%"
-                                                position="absolute"
-                                                p="0"
-                                                h="1.7rem"
-                                                w="1.7rem"
-                                                top="2"
-                                                left="2"
-                                                cursor="pointer"
+                                                display="flex"
+                                                h="110px"
+                                                mb="0.9rem"
+                                                outline="2px solid #cacaca"
+                                                borderRadius="7px"
                                                 _hover={{
-                                                  bg: "defaultColor.500",
+                                                  transition: "transform .2s",
+                                                  transform: "scale(0.98)",
                                                 }}
                                               >
                                                 <Box
-                                                  textAlign="center"
-                                                  mt="1px"
-                                                >
-                                                  <Text fontWeight="500">
-                                                    {index + 1}
-                                                  </Text>
-                                                </Box>
-                                              </Box>
-                                              <FullscreenImageModal
-                                                minWidth="200px"
-                                                maxWidth="200px"
-                                                src={image.url}
-                                                alt={image.description}
-                                                hover="yes"
-                                                text={`Imagen de la propiedad ${property.internalCode}`}
-                                                description={image.description}
-                                              />
-                                            </Box>
-                                            <Box
-                                              bg="defaultColor.400"
-                                              borderRadius="50%"
-                                              position="absolute"
-                                              p="0"
-                                              minW="1.7rem"
-                                              minH="1.7rem"
-                                              h="1.7rem"
-                                              w="1.7rem"
-                                              top="2.5"
-                                              right="2.5"
-                                              cursor="pointer"
-                                              _hover={{
-                                                bg: "defaultColor.500",
-                                              }}
-                                            >
-                                              <ConfirmDelete
-                                                text="¿Estás seguro de que deseas eliminar esta imagen?"
-                                                name={`imagen "${image.description}"`}
-                                                functionToExecute={deleteMedia}
-                                                element={property}
-                                                anotherElement={image}
-                                                onlyIcon="true"
-                                              />
-                                            </Box>
-                                            <Box
-                                              bg="defaultColor.700"
-                                              borderStartEndRadius="7px"
-                                              borderEndEndRadius="7px"
-                                              justifyContent="center"
-                                              alignItems="center"
-                                              textAlign="center"
-                                              w="17rem"
-                                              h="100%"
-                                            >
-                                              <Box
-                                                display="flex"
-                                                justifyContent="center"
-                                                alignItems="center"
-                                                textAlign="center"
-                                                fontWeight="500"
-                                                mt="0.5rem"
-                                                fontSize="0.95rem"
-                                              >
-                                                Imagen{" "}
-                                                {image.type == "360"
-                                                  ? "360"
-                                                  : "normal"}
-                                                {image.type == "360" && (
-                                                  <Box ml="0.3rem">
-                                                    <MdOutline360 fontSize="1.2rem" />
-                                                  </Box>
-                                                )}
-                                              </Box>
-                                              {image.description.length > 90 ? (
-                                                <Tooltip
-                                                  hasArrow
-                                                  label={image.description}
-                                                  bg="defaultColor.500"
+                                                  minW="200px"
+                                                  maxW="200px"
+                                                  h="110px"
+                                                  borderStartStartRadius="7px"
+                                                  borderEndStartRadius="7px"
+                                                  overflow="hidden"
+                                                  mb="0.8rem"
+                                                  position="relative"
                                                 >
                                                   <Box
-                                                    fontSize="0.9rem"
-                                                    p="2"
-                                                    mt="-0.5rem"
+                                                    bg="defaultColor.400"
+                                                    borderRadius="50%"
+                                                    position="absolute"
+                                                    p="0"
+                                                    h="1.7rem"
+                                                    w="1.7rem"
+                                                    top="2"
+                                                    left="2"
+                                                    cursor="pointer"
+                                                    _hover={{
+                                                      bg: "defaultColor.500",
+                                                    }}
                                                   >
-                                                    {image.description
-                                                      .slice(0, 90)
-                                                      .concat("...")}
+                                                    <Box
+                                                      textAlign="center"
+                                                      mt="1px"
+                                                    >
+                                                      <Text fontWeight="500">
+                                                        {index + 1}
+                                                      </Text>
+                                                    </Box>
                                                   </Box>
-                                                </Tooltip>
-                                              ) : (
-                                                <Box
-                                                  fontSize="0.9rem"
-                                                  p="2"
-                                                  mt="-0.5rem"
-                                                >
-                                                  {image.description}
+                                                  <FullscreenImageModal
+                                                    minWidth="200px"
+                                                    maxWidth="200px"
+                                                    src={image.url}
+                                                    alt={image.description}
+                                                    hover="yes"
+                                                    text={`Imagen de la propiedad ${property.internalCode}`}
+                                                    description={
+                                                      image.description
+                                                    }
+                                                  />
                                                 </Box>
-                                              )}
+                                                <Box
+                                                  bg="defaultColor.400"
+                                                  borderRadius="50%"
+                                                  position="absolute"
+                                                  p="0"
+                                                  minW="1.7rem"
+                                                  minH="1.7rem"
+                                                  h="1.7rem"
+                                                  w="1.7rem"
+                                                  top="2.5"
+                                                  right="2.5"
+                                                  cursor="pointer"
+                                                  _hover={{
+                                                    bg: "defaultColor.500",
+                                                  }}
+                                                >
+                                                  <ConfirmDelete
+                                                    text="¿Estás seguro de que deseas eliminar esta imagen?"
+                                                    name={`imagen "${image.description}"`}
+                                                    functionToExecute={
+                                                      deleteMedia
+                                                    }
+                                                    element={property}
+                                                    anotherElement={image}
+                                                    onlyIcon="true"
+                                                  />
+                                                </Box>
+                                                <Box
+                                                  bg="defaultColor.700"
+                                                  borderStartEndRadius="7px"
+                                                  borderEndEndRadius="7px"
+                                                  justifyContent="center"
+                                                  alignItems="center"
+                                                  textAlign="center"
+                                                  w="17rem"
+                                                  h="100%"
+                                                >
+                                                  <Box
+                                                    display="flex"
+                                                    justifyContent="center"
+                                                    alignItems="center"
+                                                    textAlign="center"
+                                                    fontWeight="500"
+                                                    mt="0.5rem"
+                                                    fontSize="0.95rem"
+                                                  >
+                                                    Imagen{" "}
+                                                    {image.type == "360"
+                                                      ? "360"
+                                                      : "normal"}
+                                                    {image.type == "360" && (
+                                                      <Box ml="0.3rem">
+                                                        <MdOutline360 fontSize="1.2rem" />
+                                                      </Box>
+                                                    )}
+                                                  </Box>
+                                                  {image.description.length >
+                                                  90 ? (
+                                                    <Tooltip
+                                                      hasArrow
+                                                      label={image.description}
+                                                      bg="defaultColor.500"
+                                                    >
+                                                      <Box
+                                                        fontSize="0.9rem"
+                                                        p="2"
+                                                        mt="-0.5rem"
+                                                      >
+                                                        {image.description
+                                                          .slice(0, 90)
+                                                          .concat("...")}
+                                                      </Box>
+                                                    </Tooltip>
+                                                  ) : (
+                                                    <Box
+                                                      fontSize="0.9rem"
+                                                      p="2"
+                                                      mt="-0.5rem"
+                                                    >
+                                                      {image.description}
+                                                    </Box>
+                                                  )}
+                                                </Box>
+                                              </Box>
                                             </Box>
-                                          </Box>
-                                        </Box>
-                                      );
-                                    }}
-                                  </Draggable>
-                                );
-                              })}
-                              {provided.placeholder}
-                            </Box>
-                          );
-                        }}
-                      </Droppable>
-                    </Box>
-                  </Box>
+                                          );
+                                        }}
+                                      </Draggable>
+                                    );
+                                  })}
+                                  {provided.placeholder}
+                                </Box>
+                              );
+                            }}
+                          </Droppable>
+                        </Box>
+                      </Box>
+                    )}
+                  </DragDropContext>
                 )}
-              </DragDropContext>
-            ) : (
-              <Loader />
+              </>
             )}
           </DrawerBody>
           {property.media.length === 0 && (

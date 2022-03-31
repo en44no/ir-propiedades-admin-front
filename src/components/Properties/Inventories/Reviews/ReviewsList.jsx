@@ -225,7 +225,12 @@ const ReviewsList = (props) => {
                                 borderRadius="7px"
                                 alignItems="center"
                                 onClick={() => {
-                                  changeReviewStatus("Cerrado", review._id);
+                                  changeReviewStatus(
+                                    "Cerrado",
+                                    review._id,
+                                    property._id,
+                                    inventory._id
+                                  );
                                 }}
                               >
                                 <GiPadlock fontSize="1.2rem" />

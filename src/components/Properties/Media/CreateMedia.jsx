@@ -20,6 +20,7 @@ import {
 import { MdFileUpload } from "react-icons/md";
 import PropertiesContext from "../../../context/Properties/PropertiesContext";
 import { useForm } from "react-hook-form";
+import Notification from "../../Other/Notification";
 
 const CreateMedia = (props) => {
   const { full, property, normalAddButton, noRightMargin } = props;
@@ -34,12 +35,28 @@ const CreateMedia = (props) => {
     reset,
   } = useForm();
 
+  const selectImage = (event) => {
+    setSelectedImage(event.target.files[0]);
+    errors.image = null;
+  };
+
   const submitMedia = (data) => {
-    data.position = property.media.length + 1;
-    data.image = selectedImage;
-    addMedia(data, property);
-    reset();
-    onClose();
+    if (
+      selectedImage.type == "image/jpeg" ||
+      selectedImage.type == "image/png"
+    ) {
+      data.image = selectedImage;
+      data.position = property.media.length + 1;
+      addMedia(data, property);
+      reset();
+      onClose();
+    } else {
+      Notification(
+        `Error al subir archivo`,
+        "Solo se permiten imagenes",
+        "warning"
+      );
+    }
   };
 
   return (
@@ -81,23 +98,39 @@ const CreateMedia = (props) => {
                     <Input
                       pt="0.3rem"
                       type="file"
+                      accept="image/jpeg, image/png"
+                      {...register("image", {
+                        required: "Imagen es requerido.",
+                      })}
                       onChange={(e) => {
-                        setSelectedImage(e.target.files[0]);
+                        selectImage(e);
                       }}
                       id="createMediaImage"
                       w="100%"
                       fontSize="1rem"
                     ></Input>
+                    {errors.image && (
+                      <Badge variant="required-error">
+                        {errors.image.message}
+                      </Badge>
+                    )}
                   </Box>
                   <Box>
                     <FormLabel htmlFor="createMediaDescription">
                       Descripción
                     </FormLabel>
                     <Textarea
-                      {...register("description")}
+                      {...register("description", {
+                        required: "Descripción es requerido.",
+                      })}
                       id="createMediaDescription"
                       placeholder="Ingresa la descripción"
                     ></Textarea>
+                    {errors.description && (
+                      <Badge variant="required-error">
+                        {errors.description.message}
+                      </Badge>
+                    )}
                   </Box>
                   <Box>
                     <FormLabel htmlFor="createMediaType">Tipo</FormLabel>
@@ -111,9 +144,9 @@ const CreateMedia = (props) => {
                       <option value="Imagen">Imagen</option>
                       <option value="360">Imagen 360</option>
                     </Select>
-                    {errors.status && (
+                    {errors.type && (
                       <Badge variant="required-error">
-                        {errors.status.message}
+                        {errors.type.message}
                       </Badge>
                     )}
                   </Box>
