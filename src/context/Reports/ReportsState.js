@@ -8,6 +8,13 @@ const ReportsState = (props) => {
   const [propertiesFromDB, setPropertiesFromDB] = useState([]);
   const [inventoriesFromDB, setInventoriesFromDB] = useState([]);
   const [postsFromDB, setPostsFromDB] = useState([]);
+  const [posts, setPosts] = useState({});
+
+  useEffect(() => {
+    fetchProperties();
+    fetchInventories();
+    fetchPosts();
+  }, []);
 
   const getPercentage = (quantity, comparisonQuantity) => {
     if (comparisonQuantity == 0) {
@@ -54,12 +61,6 @@ const ReportsState = (props) => {
       .catch((error) => {});
   };
 
-  useEffect(() => {
-    fetchProperties();
-    fetchInventories();
-    fetchPosts();
-  }, []);
-
   const getPropertyWithLargestArea = () => {
     return propertiesFromDB.sort((a, b) => b.totalSurface - a.totalSurface)[0];
   };
@@ -88,26 +89,6 @@ const ReportsState = (props) => {
         : null;
     });
     return customersWithoutProperties;
-  };
-
-  const getAvailablePropertiesForRent = () => {
-    let availablePropertiesForRentQuantity = 0;
-    propertiesFromDB.forEach((property) => {
-      return property.isForRent == false
-        ? availablePropertiesForRentQuantity++
-        : null;
-    });
-    return availablePropertiesForRentQuantity;
-  };
-
-  const getAvailablePropertiesForSale = () => {
-    let availablePropertiesForSaleQuantity = 0;
-    propertiesFromDB.forEach((property) => {
-      return property.isForSale == false
-        ? availablePropertiesForSaleQuantity++
-        : null;
-    });
-    return availablePropertiesForSaleQuantity;
   };
 
   const getRentedProperties = () => {
@@ -832,17 +813,14 @@ const ReportsState = (props) => {
         getPropertyWithLargestArea,
         getPropertyWithLessArea,
         getCustomerWithMoreProperties,
-        getAvailableProperties,
-        getAvailablePropertiesForRent,
-        getAvailablePropertiesForSale,
-        getCustomersWithoutProperties,
         getRentedProperties,
         getSoldProperties,
+        getAvailableProperties,
         getInventories,
+        getPosts,
         getNewProperties,
         getNewCustomers,
-        fetchInventories,
-        getPosts,
+        getCustomersWithoutProperties,
         propertiesFromDB,
       }}
     >

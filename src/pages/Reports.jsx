@@ -14,52 +14,16 @@ const ReportsPage = () => {
     getPropertyWithLargestArea,
     getPropertyWithLessArea,
     getCustomerWithMoreProperties,
-    getAvailableProperties,
-    getCustomersWithoutProperties,
     getRentedProperties,
     getSoldProperties,
+    getAvailableProperties,
     getInventories,
+    getPosts,
     getNewProperties,
     getNewCustomers,
-    getPosts,
+    getCustomersWithoutProperties,
     propertiesFromDB,
   } = useContext(ReportsContext);
-
-  const [rentedProperties, setRentedProperties] = useState({});
-  const [soldProperties, setSoldProperties] = useState({});
-  const [availableProperties, setAvailableProperties] = useState({});
-  const [inventories, setInventories] = useState({});
-  const [posts, setPosts] = useState({});
-  const [newProperties, setNewProperties] = useState({});
-  const [newCustomers, setNewCustomers] = useState({});
-  const [customersWithoutProperties, setCustomersWithoutProperties] = useState(
-    []
-  );
-
-  useEffect(() => {
-    let availablePropertiesR = getAvailableProperties();
-    setAvailableProperties(availablePropertiesR);
-
-    let rentedPropertiesR = getRentedProperties();
-    setRentedProperties(rentedPropertiesR);
-
-    let soldPropertiesR = getSoldProperties();
-    setSoldProperties(soldPropertiesR);
-    let inventoriesR = getInventories();
-    setInventories(inventoriesR);
-
-    let postsR = getPosts();
-    setPosts(postsR);
-
-    let newPropertiesR = getNewProperties();
-    setNewProperties(newPropertiesR);
-
-    let newCustomersR = getNewCustomers();
-    setNewCustomers(newCustomersR);
-
-    let customersWithoutPropertiesR = getCustomersWithoutProperties();
-    setCustomersWithoutProperties(customersWithoutPropertiesR);
-  }, []);
 
   return propertiesFromDB.length > 0 ? (
     <Box mt="0rem" w="100%" h="100%" position="relative">
@@ -106,95 +70,101 @@ const ReportsPage = () => {
           </Text>
           <Box>
             <ReportsByDate
-              todayQuantity={availableProperties.todayQuantity}
-              lastWeekQuantity={availableProperties.lastWeekQuantity}
-              lastMonthQuantity={availableProperties.lastMonthQuantity}
-              lastYearQuantity={availableProperties.lastYearQuantity}
+              todayQuantity={getAvailableProperties().todayQuantity}
+              lastWeekQuantity={getAvailableProperties().lastWeekQuantity}
+              lastMonthQuantity={getAvailableProperties().lastMonthQuantity}
+              lastYearQuantity={getAvailableProperties().lastYearQuantity}
               percentageTodayYesterday={
-                availableProperties.percentageTodayYesterday
+                getAvailableProperties().percentageTodayYesterday
               }
               percentageLastWeekTwoWeekAgo={
-                availableProperties.percentageLastWeekTwoWeekAgo
+                getAvailableProperties().percentageLastWeekTwoWeekAgo
               }
               percentageLastMonthTwoMonthAgo={
-                availableProperties.percentageLastMonthTwoMonthAgo
+                getAvailableProperties().percentageLastMonthTwoMonthAgo
               }
               percentageLastYearTwoYearsAgo={
-                availableProperties.percentageLastYearTwoYearsAgo
+                getAvailableProperties().percentageLastYearTwoYearsAgo
               }
               modalTitle="Cantidad de propiedades disponibles"
               buttonText="Disponibles venta y alquiler"
             />
             <ReportsByDate
-              todayQuantity={rentedProperties.todayQuantity}
-              lastWeekQuantity={rentedProperties.lastWeekQuantity}
-              lastMonthQuantity={rentedProperties.lastMonthQuantity}
-              lastYearQuantity={rentedProperties.lastYearQuantity}
+              todayQuantity={getRentedProperties().todayQuantity}
+              lastWeekQuantity={getRentedProperties().lastWeekQuantity}
+              lastMonthQuantity={getRentedProperties().lastMonthQuantity}
+              lastYearQuantity={getRentedProperties().lastYearQuantity}
               percentageTodayYesterday={
-                rentedProperties.percentageTodayYesterday
+                getRentedProperties().percentageTodayYesterday
               }
               percentageLastWeekTwoWeekAgo={
-                rentedProperties.percentageLastWeekTwoWeekAgo
+                getRentedProperties().percentageLastWeekTwoWeekAgo
               }
               percentageLastMonthTwoMonthAgo={
-                rentedProperties.percentageLastMonthTwoMonthAgo
+                getRentedProperties().percentageLastMonthTwoMonthAgo
               }
               percentageLastYearTwoYearsAgo={
-                rentedProperties.percentageLastYearTwoYearsAgo
+                getRentedProperties().percentageLastYearTwoYearsAgo
               }
               modalTitle="Cantidad de propiedades alquiladas"
               buttonText="Alquiladas"
             />
 
             <ReportsByDate
-              todayQuantity={soldProperties.todayQuantity}
-              lastWeekQuantity={soldProperties.lastWeekQuantity}
-              lastMonthQuantity={soldProperties.lastMonthQuantity}
-              lastYearQuantity={soldProperties.lastYearQuantity}
-              percentageTodayYesterday={soldProperties.percentageTodayYesterday}
+              todayQuantity={getSoldProperties().todayQuantity}
+              lastWeekQuantity={getSoldProperties().lastWeekQuantity}
+              lastMonthQuantity={getSoldProperties().lastMonthQuantity}
+              lastYearQuantity={getSoldProperties().lastYearQuantity}
+              percentageTodayYesterday={
+                getSoldProperties().percentageTodayYesterday
+              }
               percentageLastWeekTwoWeekAgo={
-                soldProperties.percentageLastWeekTwoWeekAgo
+                getSoldProperties().percentageLastWeekTwoWeekAgo
               }
               percentageLastMonthTwoMonthAgo={
-                soldProperties.percentageLastMonthTwoMonthAgo
+                getSoldProperties().percentageLastMonthTwoMonthAgo
               }
               percentageLastYearTwoYearsAgo={
-                soldProperties.percentageLastYearTwoYearsAgo
+                getSoldProperties().percentageLastYearTwoYearsAgo
               }
               modalTitle="Cantidad de propiedades vendidas"
               buttonText="Vendidas"
             />
 
             <ReportsByDate
-              todayQuantity={inventories.todayQuantity}
-              lastWeekQuantity={inventories.lastWeekQuantity}
-              lastMonthQuantity={inventories.lastMonthQuantity}
-              lastYearQuantity={inventories.lastYearQuantity}
-              percentageTodayYesterday={inventories.percentageTodayYesterday}
+              todayQuantity={getInventories().todayQuantity}
+              lastWeekQuantity={getInventories().lastWeekQuantity}
+              lastMonthQuantity={getInventories().lastMonthQuantity}
+              lastYearQuantity={getInventories().lastYearQuantity}
+              percentageTodayYesterday={
+                getInventories().percentageTodayYesterday
+              }
               percentageLastWeekTwoWeekAgo={
-                inventories.percentageLastWeekTwoWeekAgo
+                getInventories().percentageLastWeekTwoWeekAgo
               }
               percentageLastMonthTwoMonthAgo={
-                inventories.percentageLastMonthTwoMonthAgo
+                getInventories().percentageLastMonthTwoMonthAgo
               }
               percentageLastYearTwoYearsAgo={
-                inventories.percentageLastYearTwoYearsAgo
+                getInventories().percentageLastYearTwoYearsAgo
               }
               modalTitle="Cantidad de inventarios realizados"
               buttonText="Inventarios"
             />
             <ReportsByDate
-              todayQuantity={posts.todayQuantity}
-              lastWeekQuantity={posts.lastWeekQuantity}
-              lastMonthQuantity={posts.lastMonthQuantity}
-              lastYearQuantity={posts.lastYearQuantity}
-              percentageTodayYesterday={posts.percentageTodayYesterday}
-              percentageLastWeekTwoWeekAgo={posts.percentageLastWeekTwoWeekAgo}
+              todayQuantity={getPosts().todayQuantity}
+              lastWeekQuantity={getPosts().lastWeekQuantity}
+              lastMonthQuantity={getPosts().lastMonthQuantity}
+              lastYearQuantity={getPosts().lastYearQuantity}
+              percentageTodayYesterday={getPosts().percentageTodayYesterday}
+              percentageLastWeekTwoWeekAgo={
+                getPosts().percentageLastWeekTwoWeekAgo
+              }
               percentageLastMonthTwoMonthAgo={
-                posts.percentageLastMonthTwoMonthAgo
+                getPosts().percentageLastMonthTwoMonthAgo
               }
               percentageLastYearTwoYearsAgo={
-                posts.percentageLastYearTwoYearsAgo
+                getPosts().percentageLastYearTwoYearsAgo
               }
               modalTitle="Cantidad de publicaciones realizadas"
               buttonText="Publicaciones"
@@ -218,19 +188,21 @@ const ReportsPage = () => {
               buttonText="Menor superficie"
             />
             <ReportsByDate
-              todayQuantity={newProperties.todayQuantity}
-              lastWeekQuantity={newProperties.lastWeekQuantity}
-              lastMonthQuantity={newProperties.lastMonthQuantity}
-              lastYearQuantity={newProperties.lastYearQuantity}
-              percentageTodayYesterday={newProperties.percentageTodayYesterday}
+              todayQuantity={getNewProperties().todayQuantity}
+              lastWeekQuantity={getNewProperties().lastWeekQuantity}
+              lastMonthQuantity={getNewProperties().lastMonthQuantity}
+              lastYearQuantity={getNewProperties().lastYearQuantity}
+              percentageTodayYesterday={
+                getNewProperties().percentageTodayYesterday
+              }
               percentageLastWeekTwoWeekAgo={
-                newProperties.percentageLastWeekTwoWeekAgo
+                getNewProperties().percentageLastWeekTwoWeekAgo
               }
               percentageLastMonthTwoMonthAgo={
-                newProperties.percentageLastMonthTwoMonthAgo
+                getNewProperties().percentageLastMonthTwoMonthAgo
               }
               percentageLastYearTwoYearsAgo={
-                newProperties.percentageLastYearTwoYearsAgo
+                getNewProperties().percentageLastYearTwoYearsAgo
               }
               modalTitle="Cantidad de propiedades agregadas al sistema"
               buttonText="Nuevas"
@@ -261,19 +233,21 @@ const ReportsPage = () => {
           </Text>
           <Box>
             <ReportsByDate
-              todayQuantity={newCustomers.todayQuantity}
-              lastWeekQuantity={newCustomers.lastWeekQuantity}
-              lastMonthQuantity={newCustomers.lastMonthQuantity}
-              lastYearQuantity={newCustomers.lastYearQuantity}
-              percentageTodayYesterday={newCustomers.percentageTodayYesterday}
+              todayQuantity={getNewCustomers().todayQuantity}
+              lastWeekQuantity={getNewCustomers().lastWeekQuantity}
+              lastMonthQuantity={getNewCustomers().lastMonthQuantity}
+              lastYearQuantity={getNewCustomers().lastYearQuantity}
+              percentageTodayYesterday={
+                getNewCustomers().percentageTodayYesterday
+              }
               percentageLastWeekTwoWeekAgo={
-                newCustomers.percentageLastWeekTwoWeekAgo
+                getNewCustomers().percentageLastWeekTwoWeekAgo
               }
               percentageLastMonthTwoMonthAgo={
-                newCustomers.percentageLastMonthTwoMonthAgo
+                getNewCustomers().percentageLastMonthTwoMonthAgo
               }
               percentageLastYearTwoYearsAgo={
-                newCustomers.percentageLastYearTwoYearsAgo
+                getNewCustomers().percentageLastYearTwoYearsAgo
               }
               modalTitle="Clientes registrados"
               buttonText="Registrados"
@@ -284,7 +258,7 @@ const ReportsPage = () => {
               buttonText="Más propiedades"
             />
             <SpecificClientsReport
-              customers={customersWithoutProperties}
+              customers={getCustomersWithoutProperties()}
               modalTitle="Clientes sin propiedades"
               buttonText="Sin propiedades"
               topText="Estos son los clientes que no tienen propiedades registradas en el sistema."

@@ -95,6 +95,7 @@ const SpecificClientsReport = (props) => {
                   )}
                   {customers.map((customer) => (
                     <Box
+                      key={customer.id}
                       border="2px solid #fff"
                       borderRadius="7px"
                       p="0.2rem"
