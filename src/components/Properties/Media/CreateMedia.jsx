@@ -53,7 +53,7 @@ const CreateMedia = (props) => {
     } else {
       Notification(
         `Error al subir archivo`,
-        "Solo se permiten imagenes",
+        "Solo se permiten imagenes jpeg y png",
         "warning"
       );
     }

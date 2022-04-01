@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ImEye, ImEyeBlocked } from "react-icons/im";
 import AuthContext from "../context/Auth/AuthContext";
+import Logo from "../assets/ir-logo.png";
 
 const Login = () => {
   const { authenticateUser, logOut } = useContext(AuthContext);
@@ -52,19 +53,20 @@ const Login = () => {
         <Box
           border="2px solid #cacaca !important"
           p="4"
+          px="8"
           maxW="md"
           borderWidth="1px"
           borderRadius="lg"
           overflow="hidden"
         >
           <Image
-            src="https://res.cloudinary.com/t3p/image/upload/v1632783660/realty-agancy/logo-full_jkcyon.png"
+            src={Logo}
             _hover={{
               transition: "transform .2s",
               transform: "scale(0.98)",
             }}
-            p="2"
-            ml="2"
+            p="10"
+            w="350px"
             loading="lazy"
           />
           <form onSubmit={handleSubmit(handleLogin)}>

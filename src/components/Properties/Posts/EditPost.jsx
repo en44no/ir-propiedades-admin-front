@@ -196,7 +196,12 @@ const EditPost = (props) => {
         </Button>
         <Drawer size="md" isOpen={isOpen} placement="left" onClose={onClose}>
           <DrawerOverlay />
-          <DrawerContent bg="defaultColor.400">
+          <DrawerContent
+            borderRight="1px white solid"
+            bg="defaultColor.400"
+            borderStartEndRadius="7px"
+            borderEndEndRadius="7px"
+          >
             <DrawerCloseButton
               _focus={{ boxShadow: "none" }}
               color="#fff"

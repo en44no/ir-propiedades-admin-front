@@ -87,7 +87,7 @@ const FeatureList = (props) => {
                         </Box>
                         <Divider orientation="vertical" />
                         <Box w="50%" justifyContent="center" textAlign="center">
-                          <Text fontWeight="500">Nombre</Text>
+                          <Text fontWeight="500">Título</Text>
                         </Box>
                         <Divider orientation="vertical" />
                         <Box

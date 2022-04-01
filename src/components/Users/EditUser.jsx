@@ -77,7 +77,12 @@ function EditUser(props) {
       <FaUserEdit onClick={onOpen} cursor="pointer" fontSize="1.3rem" />
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent bg="defaultColor.400">
+        <DrawerContent
+          borderLeft="1px white solid"
+          bg="defaultColor.400"
+          borderStartStartRadius="7px"
+          borderEndStartRadius="7px"
+        >
           <DrawerCloseButton
             _focus={{ boxShadow: "none" }}
             color="#fff"
