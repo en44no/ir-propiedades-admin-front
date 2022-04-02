@@ -129,7 +129,7 @@ function CreateUser() {
                     </Badge>
                   )}
                 </Box>
-                <Box>
+                {/* <Box>
                   <FormLabel htmlFor="userRoles">
                     Selecciona los roles
                   </FormLabel>
@@ -160,7 +160,7 @@ function CreateUser() {
                       </Box>
                     ))}
                   </FormControl>
-                </Box>
+                </Box> */}
                 <Box>
                   <FormLabel htmlFor="userPassword">Contraseña</FormLabel>
                   <InputGroup size="md">

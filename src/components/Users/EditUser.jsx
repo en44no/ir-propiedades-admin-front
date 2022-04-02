@@ -167,7 +167,7 @@ function EditUser(props) {
                     </Badge>
                   )}
                 </Box>
-                <Box>
+                {/* <Box>
                   <FormLabel htmlFor="userRoles">
                     Selecciona los roles
                   </FormLabel>
@@ -201,7 +201,7 @@ function EditUser(props) {
                       </Box>
                     ))}
                   </FormControl>
-                </Box>
+                </Box> */}
                 <Box>
                   <Box display="flex">
                     <FormLabel htmlFor="editPasswordSwitch">

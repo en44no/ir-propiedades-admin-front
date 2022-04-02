@@ -62,12 +62,12 @@ const UsersPage = () => {
                   <Th fontSize="14px" textAlign="center" maxWidth="50px">
                     Email
                   </Th>
-                  <Th fontSize="14px" textAlign="center" maxWidth="60px">
+                  {/* <Th fontSize="14px" textAlign="center" maxWidth="60px">
                     <Box display="flex" gap="10px" justifyContent="center">
                       Roles
                       <RolesInfoModal />
                     </Box>
-                  </Th>
+                  </Th> */}
                   <Th fontSize="14px" textAlign="center" maxWidth="50px">
                     Acciones
                   </Th>
@@ -85,7 +85,7 @@ const UsersPage = () => {
                     <Td textAlign="center" maxWidth="80px">
                       {user.email}
                     </Td>
-                    <Td textAlign="center" maxWidth="60px">
+                    {/* <Td textAlign="center" maxWidth="60px">
                       {user.roles.length > 0 ? (
                         user.roles.map((role) => {
                           return (
@@ -108,7 +108,7 @@ const UsersPage = () => {
                       ) : (
                         <Text>Sin roles</Text>
                       )}
-                    </Td>
+                    </Td> */}
                     <Td textAlign="center" maxWidth="50px">
                       <HStack justifyContent="center">
                         <EditUser user={user} />

@@ -37,7 +37,7 @@ const Header = () => {
             </Box>
           </Box>
 
-          {roles != null ? (
+          {/* {roles != null ? (
             <HStack flexDirection="column" spacing="10px">
               {userRoles != ""
                 ? userRoles
@@ -78,21 +78,21 @@ const Header = () => {
                     </Tag>
                   ))}
             </HStack>
-          ) : (
-            <Tag
-              fontSize="12px"
-              fontWeight="bold"
-              color="white"
-              bgColor="defaultColor.400"
-              boxShadow="base"
-              borderRadius="15px"
-              px={3}
-              py={1.5}
-              mt={2}
-            >
-              FUNCIONARIO
-            </Tag>
-          )}
+          ) : ( */}
+          <Tag
+            fontSize="12px"
+            fontWeight="bold"
+            color="white"
+            bgColor="defaultColor.400"
+            boxShadow="base"
+            borderRadius="15px"
+            px={3}
+            py={1.5}
+            mt={2}
+          >
+            FUNCIONARIO
+          </Tag>
+          {/* )} */}
         </Box>
       </Box>
     </>
