@@ -22,8 +22,6 @@ const PostImagesList = (props) => {
   const { images, post } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  console.log(post);
-
   return (
     <>
       <Tooltip hasArrow label="Ver imágenes" bg="defaultColor.500">
