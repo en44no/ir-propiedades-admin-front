@@ -813,7 +813,6 @@ const PropertiesState = (props) => {
             "Has eliminado una imagen",
             "success"
           );
-          debugger;
           const newPosts = posts.map((post) => {
             if (
               post.property === property._id ||
