@@ -19,7 +19,7 @@ const CopyInternalCode = (props) => {
         isClosable: true,
       });
     }
-    navigator.clipboard.writeText(internalCode);
+    navigator.clipboard?.writeText(internalCode);
   };
 
   return (
