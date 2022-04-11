@@ -142,7 +142,7 @@ const PropertiesState = (props) => {
       });
   };
 
-  const addDetailsToProperty = async (data, property) => {
+  const addDetailsToProperty = async (data, property, withoutNotification) => {
     await axios
       .put(
         `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}`,
@@ -150,12 +150,16 @@ const PropertiesState = (props) => {
       )
       .then((res) => {
         if (res.status === 200) {
-          Notification(
-            "Detalles agregados correctamente",
-            "Has agregado detalles a una propiedad",
-            "success"
-          );
+          if (!withoutNotification) {
+            Notification(
+              "Detalles agregados correctamente",
+              "Has agregado detalles a una propiedad",
+              "success"
+            );
+          }
           data.type != null && (property.type[0] = data.type);
+          data.media != null && (property.media = data.media);
+          data.virtualTour != null && (property.virtualTour = data.virtualTour);
           data.isForRent != null && (property.isForRent = data.isForRent);
           data.isForSale != null && (property.isForSale = data.isForSale);
           data.saleDate != null
@@ -809,6 +813,32 @@ const PropertiesState = (props) => {
             "Has eliminado una imagen",
             "success"
           );
+          debugger;
+          const newPosts = posts.map((post) => {
+            if (
+              post.property === property._id ||
+              post.property._id === property._id
+            ) {
+              if (post.status[0] == "Activa") {
+                post.media = post.media.filter((m) => m._id !== image._id);
+                if (post.media.length === 0) {
+                  deletePost(post);
+                } else {
+                  editPost(post, post._id, property._id);
+                }
+              }
+            }
+          });
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          property.media = property.media.filter((m) => m._id !== image._id);
+          setProperties(newProperties);
+          deleteMediaToProperty(property, image);
         } else {
           Notification(
             "Error al eliminar la imagen",
@@ -816,16 +846,6 @@ const PropertiesState = (props) => {
             "error"
           );
         }
-        const newProperties = properties.map((prop) => {
-          if (prop._id === property._id) {
-            return property;
-          } else {
-            return prop;
-          }
-        });
-        property.media = property.media.filter((m) => m._id !== image._id);
-        setProperties(newProperties);
-        deleteMediaToProperty(property, image);
       })
       .catch((error) => {});
   };
@@ -847,7 +867,23 @@ const PropertiesState = (props) => {
         `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}/removeMedia`,
         { id: image._id }
       )
-      .then((resMedia) => {});
+      .then((resMedia) => {
+        if (resMedia.data.virtualTour.find((tour) => tour === image._id)) {
+          const newProperties = properties.map((prop) => {
+            if (prop._id === property._id) {
+              return property;
+            } else {
+              return prop;
+            }
+          });
+          property.media = property.media.filter((m) => m._id !== image._id);
+          property.virtualTour = property.virtualTour.filter(
+            (m) => m._id !== image._id
+          );
+          addDetailsToProperty(property, property, true);
+          setProperties(newProperties);
+        }
+      });
   };
 
   const changeInventoryStatus = async (status, inventoryId, propertyId) => {

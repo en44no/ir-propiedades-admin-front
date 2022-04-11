@@ -27,6 +27,10 @@ import Notification from "../../Other/Notification";
 
 const dragReducer = produce((draft, action) => {
   switch (action.type) {
+    case "IMAGES": {
+      draft.images = action.payload;
+      break;
+    }
     case "MOVE": {
       draft[action.from] = draft[action.from] || [];
       draft[action.to] = draft[action.to] || [];
@@ -44,7 +48,7 @@ const MediaList = (props) => {
     useContext(PropertiesContext);
 
   useEffect(() => {
-    state.images = property.media;
+    dispatch({ type: "IMAGES", payload: property.media });
   }, [property.media]);
 
   const [state, dispatch] = useReducer(dragReducer, {
@@ -264,6 +268,7 @@ const MediaList = (props) => {
                                                   }}
                                                 >
                                                   <ConfirmDelete
+                                                    topText="En caso de que esta imagen sea parte de una publicación que se encuentre activa, también será eliminada de la misma. Si la publicación queda sin imágenes será eliminada."
                                                     text="¿Estás seguro de que deseas eliminar esta imagen?"
                                                     name={`imagen "${image.description}"`}
                                                     functionToExecute={

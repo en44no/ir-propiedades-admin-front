@@ -38,6 +38,10 @@ const PropertyCard = (props) => {
       >
         <PropertyDetails propertyName={property.name} property={property} />
         <Image
+          _hover={{
+            transition: "transform .2s",
+            transform: "scale(1.02)",
+          }}
           minW="270px"
           maxW="270px"
           minH="170px"

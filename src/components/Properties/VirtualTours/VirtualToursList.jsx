@@ -1,4 +1,4 @@
-import { useCallback, useContext, useReducer } from "react";
+import { useCallback, useContext, useEffect, useReducer } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import produce from "immer";
 import {
@@ -29,6 +29,14 @@ import PropertiesContext from "../../../context/Properties/PropertiesContext";
 
 const dragReducer = produce((draft, action) => {
   switch (action.type) {
+    case "SELECTED_IMAGES": {
+      draft.selectedImages = action.payload;
+      break;
+    }
+    case "AVAILABLE_IMAGES": {
+      draft.availableImages = action.payload;
+      break;
+    }
     case "MOVE": {
       draft[action.from] = draft[action.from] || [];
       draft[action.to] = draft[action.to] || [];
@@ -50,6 +58,15 @@ const VirtualToursList = (props) => {
         !property.virtualTour.some(({ _id: id2 }) => id2 === id1)
     ),
   });
+
+  useEffect(() => {
+    dispatch({
+      type: "SELECTED_IMAGES",
+      payload: property.virtualTour,
+    });
+
+    dispatch({ type: "AVAILABLE_IMAGES", payload: property.media });
+  }, [property.media]);
 
   const onDragEnd = useCallback((result) => {
     if (result.reason === "DROP") {
@@ -519,7 +536,8 @@ const VirtualToursList = (props) => {
               alignItems="center"
               mt="-2rem"
             >
-              Esta propiedad aún no cuenta con imágenes.
+              Esta propiedad aún no cuenta con imágenes, por lo tanto no puedes
+              crear un tour virtual.
             </Text>
           )}
           <DrawerFooter borderTopWidth="1px">

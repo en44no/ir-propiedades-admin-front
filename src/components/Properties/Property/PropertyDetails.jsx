@@ -152,6 +152,7 @@ const PropertyDetails = (props) => {
         _hover={{ bg: "defaultColor.500" }}
         borderRadius="50%"
         color="white"
+        zIndex={100}
       >
         <Box fontSize="1rem">
           <BsFillInfoCircleFill />
