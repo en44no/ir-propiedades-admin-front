@@ -127,7 +127,7 @@ const EditPost = (props) => {
         } else {
           if (
             data.media == undefined &&
-            imagesPendingToAddForPost.length == 0
+            imagesPendingToAddForPost.length == 0 && post.media.length == 0
           ) {
             Notification(
               `Error al editar publicación`,
@@ -135,8 +135,10 @@ const EditPost = (props) => {
               "warning"
             );
           } else {
-            if (imagesPendingToAddForPost) {
+            if (imagesPendingToAddForPost?.length > 0) {
               data.media = imagesPendingToAddForPost;
+            } else {
+              data.media = post.media;
             }
             editPost(data, post._id, property._id);
             reset();
