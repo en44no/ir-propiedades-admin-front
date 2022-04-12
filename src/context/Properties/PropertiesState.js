@@ -14,6 +14,7 @@ const PropertiesState = (props) => {
   );
   const [propertiesAreLoading, setPropertiesAreLoading] = useState(true);
   const [postsAreLoading, setPostsAreLoading] = useState(true);
+  const [imagesAreLoading, setImagesAreLoading] = useState(false);
 
   useEffect(() => {
     fetchProperties();
@@ -761,6 +762,7 @@ const PropertiesState = (props) => {
   };
 
   const addMedia = async (data, property) => {
+    setImagesAreLoading(true);
     let formData = new FormData();
     formData.append("images", data.image);
     await axios
@@ -780,23 +782,24 @@ const PropertiesState = (props) => {
                 "Has agregado una nueva imagen",
                 "success"
               );
+               property.media = [...property.media, resMedia.data];
+               addMediaToProperty(resMedia.data, property);
+               setProperties(newProperties);
+                const newProperties = properties.map((prop) => {
+                  if (prop._id === property._id) {
+                    return property;
+                  } else {
+                    return prop;
+                  }
+                });
             } else {
               Notification(
                 "Error al agregar la imagen",
                 "Ocurrió un error intentado agregar la imagen",
                 "error"
               );
+              setImagesAreLoading(false);
             }
-            const newProperties = properties.map((prop) => {
-              if (prop._id === property._id) {
-                return property;
-              } else {
-                return prop;
-              }
-            });
-            property.media = [...property.media, resMedia.data];
-            addMediaToProperty(resMedia.data, property);
-            setProperties(newProperties);
           })
           .catch((error) => {})
           .catch((error) => {});
@@ -857,7 +860,9 @@ const PropertiesState = (props) => {
         `${process.env.REACT_APP_API_BASE_URL}/properties/${property._id}/addMedia`,
         images
       )
-      .then((resMedia) => {});
+      .then((resMedia) => {
+        setImagesAreLoading(false);
+      });
   };
 
   const deleteMediaToProperty = async (property, image) => {
@@ -1229,6 +1234,7 @@ const PropertiesState = (props) => {
         changePostIsFeature,
         propertiesAreLoading,
         postsAreLoading,
+        imagesAreLoading,
       }}
     >
       {props.children}

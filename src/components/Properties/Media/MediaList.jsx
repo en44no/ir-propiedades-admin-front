@@ -44,10 +44,11 @@ const MediaList = (props) => {
   const { property, text, width, buttonWithoutIcon, drawerSize, columns } =
     props;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { deleteMedia, changeOrderMediaFromProperty, propertiesAreLoading } =
+  const { deleteMedia, changeOrderMediaFromProperty, propertiesAreLoading, imagesAreLoading } =
     useContext(PropertiesContext);
 
   useEffect(() => {
+    console.log(imagesAreLoading)
     dispatch({ type: "IMAGES", payload: property.media });
   }, [property.media]);
 
@@ -122,7 +123,20 @@ const MediaList = (props) => {
             </Text>
           </DrawerHeader>
           <DrawerBody color="#fff" overflow="hidden">
-            {propertiesAreLoading == true ? (
+            {imagesAreLoading == true && (
+              <Box
+                fontSize="xl"
+                position="relative"
+                display="flex"
+                h="100%"
+                w="100%"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Loader color='white' />
+              </Box>
+            )}
+            {imagesAreLoading == true ? (
               <Box
                 h="100%"
                 display="flex"
@@ -355,21 +369,22 @@ const MediaList = (props) => {
               </>
             )}
           </DrawerBody>
-          {property.media.length === 0 && (
-            <Text
-              fontSize="xl"
-              color="#fff"
-              position="relative"
-              display="flex"
-              h="100%"
-              w="100%"
-              justifyContent="center"
-              alignItems="center"
-              mt="-2rem"
-            >
-              Esta propiedad aún no cuenta con imágenes.
-            </Text>
-          )}
+          {property.media.length === 0 &&
+            !imagesAreLoading && (
+              <Text
+                fontSize="xl"
+                color="#fff"
+                position="relative"
+                display="flex"
+                h="100%"
+                w="100%"
+                justifyContent="center"
+                alignItems="center"
+                mt="-2rem"
+              >
+                Esta propiedad aún no cuenta con imágenes.
+              </Text>
+            )}
           <DrawerFooter borderTopWidth="1px">
             <Button variant="cancel-action" mr={3} onClick={onClose}>
               Cerrar
