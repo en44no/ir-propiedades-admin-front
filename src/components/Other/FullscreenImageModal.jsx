@@ -62,6 +62,7 @@ const FullscreenImageModal = (props) => {
               borderRadius="7px"
               w="100%"
               h="100%"
+              maxH='30rem'
               src={src}
               alt={alt}
               loading="lazy"

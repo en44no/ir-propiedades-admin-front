@@ -64,10 +64,17 @@ const PostImagesList = (props) => {
           </ModalHeader>
           <ModalCloseButton _focus={{ boxShadow: "none" }} onClick={onClose} />
           <ModalBody pb="1.5rem">
-            <Flex flexWrap="wrap" justifyContent="center" alignItems="center">
+            <Flex
+              h="70vh"
+              overflowY="scroll"
+              flexWrap="wrap"
+              justifyContent="center"
+              alignItems="center"
+            >
               {images.map((image) => (
                 <Center key={image.url} flexGrow={1} w="33%" mb="1.5rem">
                   <Box
+                    mt="0.5rem"
                     minW="270px"
                     maxW="270px"
                     minH="150px"
