@@ -26,6 +26,14 @@ import PropertiesContext from "../../../context/Properties/PropertiesContext";
 
 const dragReducer = produce((draft, action) => {
   switch (action.type) {
+    case "SELECTED_IMAGES": {
+      draft.selectedImages = action.payload;
+      break;
+    }
+    case "AVAILABLE_IMAGES": {
+      draft.availableImages = action.payload;
+      break;
+    }
     case "MOVE": {
       draft[action.from] = draft[action.from] || [];
       draft[action.to] = draft[action.to] || [];
@@ -71,23 +79,25 @@ const PostImagesManagement = (props) => {
   };
 
   const selectAllImages = () => {
-    for (let i = 0; i < state.availableImages.length; i++) {
-      dispatch({
-        type: "MOVE",
-        from: "availableImages",
-        to: "selectedImages",
-      });
-    }
+    dispatch({
+      type: "SELECTED_IMAGES",
+      payload: state.availableImages,
+    });
+    dispatch({
+      type: "AVAILABLE_IMAGES",
+      payload: [],
+    });
   };
 
   const deselectAllImages = () => {
-    for (let i = 0; i < state.selectedImages.length; i++) {
-      dispatch({
-        type: "MOVE",
-        from: "selectedImages",
-        to: "availableImages",
-      });
-    }
+    dispatch({
+      type: "AVAILABLE_IMAGES",
+      payload: state.selectedImages,
+    });
+    dispatch({
+      type: "SELECTED_IMAGES",
+      payload: [],
+    });
   };
 
   return (

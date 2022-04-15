@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import { BsHouseDoorFill } from "react-icons/bs";
@@ -121,11 +122,11 @@ const ViewCustomerProperties = (props) => {
               >
                 <HStack w="100%" spacing="13px" height="25px">
                   <>
-                    <Box w="12%" px="1rem" py="0.5" textAlign="center">
+                    <Box w="13%" px="1rem" py="0.5" textAlign="center">
                       <Text fontWeight="500">C. Interno</Text>
                     </Box>
                     <Divider orientation="vertical" />
-                    <Box w="10%" px="1rem" py="0.5" textAlign="center">
+                    <Box w="15%" px="1rem" py="0.5" textAlign="center">
                       <Text fontWeight="500">Tipo</Text>
                     </Box>
                     <Divider orientation="vertical" />
@@ -167,16 +168,44 @@ const ViewCustomerProperties = (props) => {
                           />
                         </Box>
                         <Divider orientation="vertical" />
-                        <Box w="10%" px="0rem" py="0.5" textAlign="center">
+                        <Box w="15%" px="0rem" py="0.5" textAlign="center">
                           <Box>{parsePropertyType(property.type)}</Box>
                         </Box>
                         <Divider orientation="vertical" />
                         <Box w="20%" px="1rem" py="0.5" textAlign="center">
-                          <Box>{property.name}</Box>
+                          {property.name.length > 17 ? (
+                            <Tooltip
+                              hasArrow
+                              label={property.name}
+                              bg="defaultColor.500"
+                            >
+                              <Box>
+                                {property.name
+                                  .slice(0, 17)
+                                  .concat("...")}
+                              </Box>
+                            </Tooltip>
+                          ) : (
+                            <Box>{property.name}</Box>
+                          )}
                         </Box>
                         <Divider orientation="vertical" />
                         <Box w="43%" px="1rem" py="0.5" textAlign="center">
-                          <Box>{property.description}</Box>
+                          {property.description.length > 38 ? (
+                            <Tooltip
+                              hasArrow
+                              label={property.description}
+                              bg="defaultColor.500"
+                            >
+                              <Box>
+                                {property.description
+                                  .slice(0, 38)
+                                  .concat("...")}
+                              </Box>
+                            </Tooltip>
+                          ) : (
+                            <Box>{property.description}</Box>
+                          )}
                         </Box>
                         <Divider orientation="vertical" />
                         <Box w="10%" px="0.5rem" py="0.5" textAlign="center">

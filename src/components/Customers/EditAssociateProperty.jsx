@@ -131,13 +131,13 @@ const EditAssociateProperty = (props) => {
       >
         Asociar propiedades
       </Button>
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent
-          borderRight="1px white solid"
+          borderLeft="1px white solid"
           bg="defaultColor.400"
-          borderStartEndRadius="7px"
-          borderEndEndRadius="7px"
+          borderStartStartRadius="7px"
+          borderEndStartRadius="7px"
         >
           <DrawerCloseButton
             _focus={{ boxShadow: "none" }}

@@ -65,7 +65,10 @@ const VirtualToursList = (props) => {
       payload: property.virtualTour,
     });
 
-    dispatch({ type: "AVAILABLE_IMAGES", payload: property.media });
+    dispatch({ type: "AVAILABLE_IMAGES", payload: property.media.filter(
+      ({ _id: id1 }) =>
+        !property.virtualTour.some(({ _id: id2 }) => id2 === id1)
+    ), });
   }, [property.media]);
 
   const onDragEnd = useCallback((result) => {
@@ -90,23 +93,25 @@ const VirtualToursList = (props) => {
   };
 
   const selectAllImages = () => {
-    for (let i = 0; i < state.availableImages.length; i++) {
-      dispatch({
-        type: "MOVE",
-        from: "availableImages",
-        to: "selectedImages",
-      });
-    }
+    dispatch({
+      type: "SELECTED_IMAGES",
+      payload: state.availableImages,
+    });
+    dispatch({
+      type: "AVAILABLE_IMAGES",
+      payload: [],
+    });
   };
 
   const deselectAllImages = () => {
-    for (let i = 0; i < state.selectedImages.length; i++) {
-      dispatch({
-        type: "MOVE",
-        from: "selectedImages",
-        to: "availableImages",
-      });
-    }
+        dispatch({
+          type: "AVAILABLE_IMAGES",
+          payload: state.selectedImages,
+        });
+        dispatch({
+          type: "SELECTED_IMAGES",
+          payload: [],
+        });
   };
 
   return (
