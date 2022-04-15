@@ -104,14 +104,14 @@ const VirtualToursList = (props) => {
   };
 
   const deselectAllImages = () => {
-        dispatch({
-          type: "AVAILABLE_IMAGES",
-          payload: state.selectedImages,
-        });
-        dispatch({
-          type: "SELECTED_IMAGES",
-          payload: [],
-        });
+    dispatch({
+      type: "AVAILABLE_IMAGES",
+      payload: state.selectedImages,
+    });
+    dispatch({
+      type: "SELECTED_IMAGES",
+      payload: [],
+    });
   };
 
   return (
