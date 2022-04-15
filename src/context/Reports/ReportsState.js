@@ -62,11 +62,13 @@ const ReportsState = (props) => {
   };
 
   const getPropertyWithLargestArea = () => {
-    return propertiesFromDB.sort((a, b) => b.totalSurface - a.totalSurface)[0];
+    return propertiesFromDB.filter(s => s.totalSurface).sort((a, b) => b.totalSurface - a.totalSurface)[0];
   };
 
   const getPropertyWithLessArea = () => {
-    return propertiesFromDB.sort((a, b) => a.totalSurface - b.totalSurface)[0];
+    return propertiesFromDB
+      .filter((s) => s.totalSurface)
+      .sort((a, b) => a.totalSurface - b.totalSurface)[0];
   };
 
   const getCustomerWithMoreProperties = () => {
