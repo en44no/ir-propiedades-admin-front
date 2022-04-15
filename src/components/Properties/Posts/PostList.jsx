@@ -260,7 +260,7 @@ const PostList = (props) => {
                                 >
                                   <Box>
                                     {post.title != null ? (
-                                      post.title.length > 28 ? (
+                                      post.title.length > 25 ? (
                                         <Tooltip
                                           hasArrow
                                           label={post.title}
@@ -268,7 +268,7 @@ const PostList = (props) => {
                                         >
                                           <Box>
                                             {post.title
-                                              .slice(0, 28)
+                                              .slice(0, 25)
                                               .concat("...")}
                                           </Box>
                                         </Tooltip>
