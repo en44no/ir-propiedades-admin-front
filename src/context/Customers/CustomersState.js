@@ -20,7 +20,7 @@ const CustomersState = (props) => {
   const fetchCustomers = async () => {
     setCustomersAreLoading(true);
     await axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/customers`)
+      .get(`http://168.181.187.43:4000/customers`)
       .then((res) => {
         setCustomers(res.data);
         setCustomersAreLoading(false);
@@ -66,7 +66,7 @@ const CustomersState = (props) => {
       data.tenantProperties = tenantPropertiesIds;
     }
     await axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/customers`, data)
+      .post(`http://168.181.187.43:4000/customers`, data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -127,7 +127,7 @@ const CustomersState = (props) => {
     }
     await axios
       .put(
-        `${process.env.REACT_APP_API_BASE_URL}/customers/${customerId}`,
+        `http://168.181.187.43:4000/customers/${customerId}`,
         data
       )
       .then((res) => {
@@ -156,7 +156,7 @@ const CustomersState = (props) => {
 
   const deleteCustomer = async (data) => {
     await axios
-      .delete(`${process.env.REACT_APP_API_BASE_URL}/customers/${data._id}`)
+      .delete(`http://168.181.187.43:4000/customers/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(

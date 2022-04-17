@@ -185,7 +185,7 @@ const DocumentList = (props) => {
                           >
                             <Link
                               zIndex="0"
-                              href={`${process.env.REACT_APP_API_BASE_URL}/${document.url}`}
+                              href={`http://168.181.187.43:4000/${document.url}`}
                               download
                               target="_blank"
                               rel="noreferrer"

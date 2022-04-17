@@ -16,7 +16,7 @@ const UsersState = (props) => {
   const fetchUsers = async () => {
     setUsersAreLoading(true);
     await axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/users`)
+      .get(`http://168.181.187.43:4000/users`)
       .then((res) => {
         setUsers(res.data);
         setUsersAreLoading(false);
@@ -29,7 +29,7 @@ const UsersState = (props) => {
       data.roles = [];
     }
     await axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/users`, data)
+      .post(`http://168.181.187.43:4000/users`, data)
       .then((res) => {
         if (res.status === 201 || res.status === 200) {
           Notification(
@@ -58,7 +58,7 @@ const UsersState = (props) => {
       delete data.password;
     }
     await axios
-      .put(`${process.env.REACT_APP_API_BASE_URL}/users/${userId}`, data)
+      .put(`http://168.181.187.43:4000/users/${userId}`, data)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           Notification(
@@ -88,7 +88,7 @@ const UsersState = (props) => {
 
   const deleteUser = async (userId) => {
     await axios
-      .delete(`${process.env.REACT_APP_API_BASE_URL}/users/${userId}`)
+      .delete(`http://168.181.187.43:4000/users/${userId}`)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           Notification(
@@ -110,7 +110,7 @@ const UsersState = (props) => {
 
   const fetchRoles = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/roles`)
+      .get(`http://168.181.187.43:4000/roles`)
       .then((res) => {
         setRoles(res.data);
       })
