@@ -221,14 +221,9 @@ const MediaList = (props) => {
                                                 }}
                                               >
                                                 <Box
-                                                  minW="200px"
-                                                  maxW="200px"
-                                                  h="110px"
-                                                  borderStartStartRadius="7px"
-                                                  borderEndStartRadius="7px"
                                                   overflow="hidden"
-                                                  mb="0.8rem"
-                                                  position="relative"
+                                                  w='220px'
+                                                  h='auto'
                                                 >
                                                   <Box
                                                     bg="defaultColor.400"
@@ -254,8 +249,6 @@ const MediaList = (props) => {
                                                     </Box>
                                                   </Box>
                                                   <FullscreenImageModal
-                                                    minWidth="200px"
-                                                    maxWidth="200px"
                                                     src={image.url}
                                                     alt={image.description}
                                                     hover="yes"

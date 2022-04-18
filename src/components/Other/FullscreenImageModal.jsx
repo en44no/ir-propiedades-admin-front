@@ -15,10 +15,6 @@ const FullscreenImageModal = (props) => {
   const {
     src,
     alt,
-    width,
-    height,
-    minWidth,
-    maxWidth,
     text,
     description,
     borderRadius,
@@ -27,12 +23,10 @@ const FullscreenImageModal = (props) => {
 
   return (
     <>
-      <Box onClick={onOpen} w="15%" textAlign="-webkit-center">
+      <Box onClick={onOpen} textAlign="-webkit-center">
         <Image
-          w={width ? width : null}
-          h={height ? height : null}
-          minW={minWidth ? minWidth : null}
-          maxW={maxWidth ? maxWidth : null}
+          w="220px"
+          h="110px"
           borderRadius={borderRadius ? "7px" : null}
           src={src}
           cursor="pointer"
@@ -62,7 +56,7 @@ const FullscreenImageModal = (props) => {
               borderRadius="7px"
               w="100%"
               h="100%"
-              maxH='30rem'
+              maxH="30rem"
               src={src}
               alt={alt}
               loading="lazy"
