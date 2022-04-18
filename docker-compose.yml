@@ -8,6 +8,6 @@ services:
     volumes:
       - ./src:/app/src
     ports:
-      - "3000:3000"
+      - "5000:3000"
     environment:
-      REACT_APP_API_BASE_URL: "http://66.97.43.140:4000"
+      REACT_APP_API_BASE_URL: "http://168.181.187.43:4000"
