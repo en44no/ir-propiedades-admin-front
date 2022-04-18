@@ -10,6 +10,7 @@ import {
   Image,
   Box,
 } from "@chakra-ui/react";
+import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
 
 const FullscreenImageModal = (props) => {
   const {
@@ -21,19 +22,34 @@ const FullscreenImageModal = (props) => {
   } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+    const ref = React.useRef();
+      const [isVisible, setIsVisible] = React.useState(false);
+
+      useIntersectionObserver({
+        target: ref,
+        onIntersect: ([{ isIntersecting }], observerElement) => {
+          if (isIntersecting) {
+            setIsVisible(true);
+            observerElement.unobserve(ref.current);
+          }
+        },
+      });
+
   return (
     <>
-      <Box onClick={onOpen} textAlign="-webkit-center">
-        <Image
-          w="220px"
-          h="110px"
-          borderRadius={borderRadius ? "7px" : null}
-          src={src}
-          cursor="pointer"
-          objectFit="cover"
-          alt={alt}
-          loading="lazy"
-        />
+      <Box ref={ref} onClick={onOpen} textAlign="-webkit-center">
+        {isVisible && (
+          <Image
+            w="220px"
+            h="110px"
+            borderRadius={borderRadius ? "7px" : null}
+            src={src}
+            cursor="pointer"
+            objectFit="cover"
+            alt={alt}
+            loading="lazy"
+          />
+        )}
       </Box>
       <Modal
         size="xl"
