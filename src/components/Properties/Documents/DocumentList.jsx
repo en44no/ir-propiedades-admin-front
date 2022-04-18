@@ -185,7 +185,7 @@ const DocumentList = (props) => {
                           >
                             <Link
                               zIndex="0"
-                              href={`http://168.181.187.43:4000/${document.url}`}
+                              href={`https://api.ianrodriguezprop.com/${document.url}`}
                               download
                               target="_blank"
                               rel="noreferrer"

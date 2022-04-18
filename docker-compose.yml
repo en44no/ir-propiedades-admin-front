@@ -10,4 +10,4 @@ services:
     ports:
       - "5000:3000"
     environment:
-      REACT_APP_API_BASE_URL: "http://168.181.187.43:4000"
+      REACT_APP_API_BASE_URL: "https://api.ianrodriguezprop.com"

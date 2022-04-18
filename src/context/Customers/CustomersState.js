@@ -20,7 +20,7 @@ const CustomersState = (props) => {
   const fetchCustomers = async () => {
     setCustomersAreLoading(true);
     await axios
-      .get(`http://168.181.187.43:4000/customers`)
+      .get(`https://api.ianrodriguezprop.com/customers`)
       .then((res) => {
         setCustomers(res.data);
         setCustomersAreLoading(false);
@@ -66,7 +66,7 @@ const CustomersState = (props) => {
       data.tenantProperties = tenantPropertiesIds;
     }
     await axios
-      .post(`http://168.181.187.43:4000/customers`, data)
+      .post(`https://api.ianrodriguezprop.com/customers`, data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -127,7 +127,7 @@ const CustomersState = (props) => {
     }
     await axios
       .put(
-        `http://168.181.187.43:4000/customers/${customerId}`,
+        `https://api.ianrodriguezprop.com/customers/${customerId}`,
         data
       )
       .then((res) => {
@@ -156,7 +156,7 @@ const CustomersState = (props) => {
 
   const deleteCustomer = async (data) => {
     await axios
-      .delete(`http://168.181.187.43:4000/customers/${data._id}`)
+      .delete(`https://api.ianrodriguezprop.com/customers/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(

@@ -8,7 +8,7 @@ const AuthState = (props) => {
 
   const authenticateUser = async (data) => {
     await axios
-      .post(`http://168.181.187.43:4000/auth/signin`, data)
+      .post(`https://api.ianrodriguezprop.com/auth/signin`, data)
       .then((res) => {
         if (res.data.token) {
           sessionStorage.setItem("token", res.data.token);
@@ -23,7 +23,7 @@ const AuthState = (props) => {
 
   const getUser = async (username) => {
     await axios
-      .get(`http://168.181.187.43:4000/users/`)
+      .get(`https://api.ianrodriguezprop.com/users/`)
       .then((res) => {
         const user = res.data.find((user) => user.username === username);
         sessionStorage.setItem("userLoggedName", user.name.split(" ")[0]);
