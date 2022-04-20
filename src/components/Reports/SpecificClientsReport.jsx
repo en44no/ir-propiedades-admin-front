@@ -10,13 +10,10 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Badge,
   Image,
-  Divider,
 } from "@chakra-ui/react";
 import { MdLooksOne } from "react-icons/md";
 import NoImage from "../../assets/userIcon.png";
-import ViewCustomerProperties from "../Customers/ViewCustomerProperties";
 
 const SpecificClientsReport = (props) => {
   const { buttonText, modalTitle, customers, topText } = props;
@@ -26,6 +23,7 @@ const SpecificClientsReport = (props) => {
     const newDate = new Date();
     return newDate.toLocaleDateString("en-GB");
   };
+
 
   return (
     <>
@@ -77,7 +75,7 @@ const SpecificClientsReport = (props) => {
                 alignItems="center"
               >
                 <Box display="flex" gap="2rem">
-                  {topText && (
+                  {topText && customers.length > 0 ? (
                     <Box
                       color="defaultColor.50"
                       fontWeight="500"
@@ -92,6 +90,18 @@ const SpecificClientsReport = (props) => {
                         {topText}
                       </Text>
                     </Box>
+                  ) : (
+                    <Text
+                      fontSize="xl"
+                      color="#fff"
+                      position="relative"
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      zIndex="-10"
+                    >
+                      El sistema no cuenta con clientes sin propiedades.
+                    </Text>
                   )}
                   {customers.map((customer) => (
                     <Box
