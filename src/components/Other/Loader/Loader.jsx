@@ -7,7 +7,7 @@ const Loader = (props) => {
   return (
     <>
       <Box
-        color={color == "white" ? "#fff" : "#304580"}
+        color={color == "white" ? "#fff !important" : "#304580"}
         className="loader"
       ></Box>
     </>
