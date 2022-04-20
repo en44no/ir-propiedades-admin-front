@@ -16,7 +16,6 @@ import {
 } from "@chakra-ui/react";
 import { MdLooksOne } from "react-icons/md";
 import NoImage from "../../assets/userIcon.png";
-import { BsFillHouseDoorFill } from "react-icons/bs";
 import ViewCustomerProperties from "../Customers/ViewCustomerProperties";
 import Loader from "../Other/Loader/Loader";
 
@@ -28,6 +27,7 @@ const SpecificClientReport = (props) => {
     const newDate = new Date();
     return newDate.toLocaleDateString("en-GB");
   };
+
 
   return (
     <>
@@ -66,18 +66,19 @@ const SpecificClientReport = (props) => {
               >
                 Hoy es {formatDate()}
               </Text>
-              {customer ? (
-                <Box
-                  borderRadius="7px"
-                  border="2px solid #fff"
-                  p="0.3rem"
-                  mb="1rem"
-                  h="85vh"
-                  display="flex"
-                  alignContent="center"
-                  justifyContent="center"
-                  alignItems="center"
-                >
+
+              <Box
+                borderRadius="7px"
+                border="2px solid #fff"
+                p="0.3rem"
+                mb="1rem"
+                h="85vh"
+                display="flex"
+                alignContent="center"
+                justifyContent="center"
+                alignItems="center"
+              >
+                {customer ? (
                   <Box border="2px solid #fff" borderRadius="7px">
                     <Box
                       mt="0.7rem"
@@ -179,17 +180,20 @@ const SpecificClientReport = (props) => {
                       />
                     </Box>
                   </Box>
-                </Box>
-              ) : (
-                <Box
-                  h="100%"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Loader />
-                </Box>
-              )}
+                ) : (
+                  <Text
+                    fontSize="xl"
+                    color="#fff"
+                    position="relative"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    zIndex="-10"
+                  >
+                    El sistema aún no cuenta con clientes registrados.
+                  </Text>
+                )}
+              </Box>
             </Box>
           </ModalBody>
         </ModalContent>
