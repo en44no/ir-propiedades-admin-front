@@ -88,7 +88,7 @@ const CreateMedia = (props) => {
               mt="2"
             />
             <DrawerHeader color="#fff" borderBottomWidth="1px">
-              Subir imagen {property.name ? `para "${property.name}"` : ""}
+              Subir imagen
             </DrawerHeader>
             <DrawerBody color="#fff">
               <form id="formMedia" onSubmit={handleSubmit(submitMedia)}>
