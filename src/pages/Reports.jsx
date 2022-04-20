@@ -27,7 +27,7 @@ const ReportsPage = () => {
 
   return propertiesFromDB.length > 0 ? (
     <Box mt="0rem" w="100%" h="100%" position="relative">
-      <Text
+      <Box
         justifyContent="center"
         fontSize="1rem"
         fontWeight="500"
@@ -45,7 +45,7 @@ const ReportsPage = () => {
           <FaCalendarCheck fontSize="1rem" />
         </Box>{" "}
         indica que el reporte es por fechas.
-      </Text>
+      </Box>
       <Box
         bg="#fff"
         border="2px solid"
