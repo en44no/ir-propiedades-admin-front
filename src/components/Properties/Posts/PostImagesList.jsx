@@ -67,7 +67,7 @@ const PostImagesList = (props) => {
             <Flex
               h="auto"
               minH='20vh'
-              maxH='70vh'
+              maxH='60vh'
               overflowY="scroll"
               flexWrap="wrap"
               justifyContent="center"
@@ -78,7 +78,7 @@ const PostImagesList = (props) => {
                   <Box
                     display="flex"
                     h="110px"
-                    mb="0.9rem"
+                    mt='1rem'
                     outline="2px solid #cacaca"
                     borderRadius="7px"
                     _hover={{
