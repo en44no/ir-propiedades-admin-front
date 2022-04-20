@@ -10,7 +10,7 @@ const PropertiesState = (props) => {
   const [addresses, setAddresses] = useState([]);
   const [featuresProperty, setFeaturesProperty] = useState([]);
   const [imagesPendingToAddForPost, setImagesPendingToAddForPost] = useState(
-    []
+    {}
   );
   const [propertiesAreLoading, setPropertiesAreLoading] = useState(true);
   const [postsAreLoading, setPostsAreLoading] = useState(true);
@@ -203,6 +203,7 @@ const PropertiesState = (props) => {
             "Has modificado el virtual tour de una propiedad",
             "success"
           );
+          property.virtualTour = virtualTourImages;
           const newProperties = properties.map((prop) => {
             if (prop._id === property._id) {
               return property;
