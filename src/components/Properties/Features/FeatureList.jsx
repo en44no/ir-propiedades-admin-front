@@ -138,7 +138,7 @@ const FeatureList = (props) => {
                             border="2px solid #fff"
                             color="#fff"
                           >
-                            <Box textAlign="center">{feature.type}</Box>
+                            <Text textAlign="center">{feature.type}</Text>
                           </Badge>
                           <Divider orientation="vertical" />
                           <Box
