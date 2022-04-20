@@ -22,7 +22,6 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import SocialList from "../../Social/SocialList";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "../../Other/DatePicker/DatePicker";
 import moment from "moment";
@@ -33,7 +32,7 @@ import Notification from "../../Other/Notification";
 
 const EditPost = (props) => {
   const { post, property } = props;
-  const { editPost, imagesPendingToAddForPost } = useContext(PropertiesContext);
+  const { editPost, imagesPendingToAddForPost, setImagesPendingToAddForPost } = useContext(PropertiesContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isForRent, setIsForRent] = useState(
     post.isForRent == true ? true : false
@@ -127,7 +126,7 @@ const EditPost = (props) => {
         } else {
           if (
             data.media == undefined &&
-            imagesPendingToAddForPost.length == 0 && post.media.length == 0
+            imagesPendingToAddForPost.images.length == 0 && post.media.length == 0
           ) {
             Notification(
               `Error al editar publicación`,
@@ -135,8 +134,11 @@ const EditPost = (props) => {
               "warning"
             );
           } else {
-            if (imagesPendingToAddForPost?.length > 0) {
-              data.media = imagesPendingToAddForPost;
+            debugger;
+            if (
+              imagesPendingToAddForPost?.images.length > 0 &&
+              imagesPendingToAddForPost?.post._id == post._id) {
+              data.media = imagesPendingToAddForPost.images;
             } else {
               data.media = post.media;
             }
