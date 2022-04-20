@@ -123,30 +123,11 @@ const MediaList = (props) => {
           </DrawerHeader>
           <DrawerBody color="#fff" overflow="hidden">
             {imagesAreLoading == true && (
-              <Box
-                fontSize="xl"
-                position="relative"
-                display="flex"
-                h="100%"
-                w="100%"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Loader color='white' />
-              </Box>
-            )}
-            {imagesAreLoading == true ? (
-              <Box
-                h="100%"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
+              <Box position="absolute" bottom="-10px" left="0" right="0">
                 <Loader color="white" />
               </Box>
-            ) : (
-              <>
-                {property.media && (
+            )}
+              {property.media && (
                   <DragDropContext onDragEnd={onDragEnd}>
                     {property.media.length > 0 && (
                       <Box display="flex">
@@ -221,8 +202,8 @@ const MediaList = (props) => {
                                               >
                                                 <Box
                                                   overflow="hidden"
-                                                  w='220px'
-                                                  h='auto'
+                                                  w="220px"
+                                                  h="auto"
                                                 >
                                                   <Box
                                                     bg="defaultColor.400"
@@ -357,26 +338,23 @@ const MediaList = (props) => {
                       </Box>
                     )}
                   </DragDropContext>
-                )}
-              </>
-            )}
+              )}
           </DrawerBody>
-          {property.media.length === 0 &&
-            !imagesAreLoading && (
-              <Text
-                fontSize="xl"
-                color="#fff"
-                position="relative"
-                display="flex"
-                h="100%"
-                w="100%"
-                justifyContent="center"
-                alignItems="center"
-                mt="-2rem"
-              >
-                Esta propiedad aún no cuenta con imágenes.
-              </Text>
-            )}
+          {property.media.length === 0 && !imagesAreLoading && (
+            <Text
+              fontSize="xl"
+              color="#fff"
+              position="relative"
+              display="flex"
+              h="100%"
+              w="100%"
+              justifyContent="center"
+              alignItems="center"
+              mt="-2rem"
+            >
+              Esta propiedad aún no cuenta con imágenes.
+            </Text>
+          )}
           <DrawerFooter borderTopWidth="1px">
             <Button variant="cancel-action" mr={3} onClick={onClose}>
               Cerrar
