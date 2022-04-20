@@ -41,14 +41,13 @@ const dragReducer = produce((draft, action) => {
 });
 
 const MediaList = (props) => {
-  const { property, text, width, buttonWithoutIcon, drawerSize, columns } =
+  const { property, text, width, buttonWithoutIcon} =
     props;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { deleteMedia, changeOrderMediaFromProperty, propertiesAreLoading, imagesAreLoading } =
+  const { deleteMedia, changeOrderMediaFromProperty, imagesAreLoading } =
     useContext(PropertiesContext);
 
   useEffect(() => {
-    console.log(imagesAreLoading)
     dispatch({ type: "IMAGES", payload: property.media });
   }, [property.media]);
 
