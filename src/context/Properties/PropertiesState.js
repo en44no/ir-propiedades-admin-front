@@ -107,7 +107,7 @@ const PropertiesState = (props) => {
             ),
             setAddressToAdd(null),
             setProperties(
-              properties.filter((property) => property._id !== res.data._id)
+              properties.filter((property) => property._id !== data._id)
             ))
           : null
       )
