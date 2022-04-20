@@ -65,7 +65,9 @@ const PostImagesList = (props) => {
           <ModalCloseButton _focus={{ boxShadow: "none" }} onClick={onClose} />
           <ModalBody pb="1.5rem">
             <Flex
-              h="70vh"
+              h="auto"
+              minH='20vh'
+              maxH='70vh'
               overflowY="scroll"
               flexWrap="wrap"
               justifyContent="center"
@@ -74,23 +76,19 @@ const PostImagesList = (props) => {
               {images.map((image) => (
                 <Center key={image.url} flexGrow={1} w="33%" mb="1.5rem">
                   <Box
-                    mt="0.5rem"
-                    minW="270px"
-                    maxW="270px"
-                    minH="150px"
-                    maxH="150px"
+                    display="flex"
+                    h="110px"
+                    mb="0.9rem"
                     outline="2px solid #cacaca"
-                    borderRadius="lg"
-                    overflow="hidden"
-                    position="relative"
+                    borderRadius="7px"
                     _hover={{
                       transition: "transform .2s",
                       transform: "scale(0.98)",
                     }}
                   >
                     <FullscreenImageModal
-                      minWidth="270px"
-                      maxWidth="270px"
+                      minWidth="200px"
+                      maxWidth="200px"
                       src={image.url}
                       alt={image.description}
                       description={image.description}
