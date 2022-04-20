@@ -82,15 +82,15 @@ const CreatePost = (props) => {
           if (data.forRentPrice == undefined) {
             data.forRentPrice = 0;
           }
-          if (imagesPendingToAddForPost.length == 0) {
+          if (imagesPendingToAddForPost?.images.length == 0) {
             Notification(
               `Error al crear publicación`,
               `Debes agregar al menos una imagen`,
               "warning"
             );
           } else {
-            if (imagesPendingToAddForPost) {
-              data.media = imagesPendingToAddForPost;
+            if (imagesPendingToAddForPost?.images.length > 0) {
+              data.media = imagesPendingToAddForPost.images;
             }
             addPost(data, property._id);
             reset();

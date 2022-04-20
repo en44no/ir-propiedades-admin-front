@@ -74,7 +74,7 @@ const PostImagesManagement = (props) => {
 
   const sendImages = () => {
     const images = state.selectedImages;
-    setImagesPendingToAddForPost(images);
+    setImagesPendingToAddForPost({images, post});
     onClose();
   };
 
