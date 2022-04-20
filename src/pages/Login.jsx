@@ -55,20 +55,23 @@ const Login = () => {
           p="4"
           px="8"
           maxW="md"
+          w='md'
           borderWidth="1px"
           borderRadius="lg"
           overflow="hidden"
         >
-          <Image
-            src={Logo}
-            _hover={{
-              transition: "transform .2s",
-              transform: "scale(0.98)",
-            }}
-            p="10"
-            w="350px"
-            loading="lazy"
-          />
+          <Box display='flex' justifyContent='center'>
+            <Image
+              src={Logo}
+              _hover={{
+                transition: "transform .2s",
+                transform: "scale(0.98)",
+              }}
+              p="10"
+              w="350px"
+              loading="lazy"
+            />
+          </Box>
           <form onSubmit={handleSubmit(handleLogin)}>
             <VStack spacing="14px" px="4" py="4">
               <Box w="100%">
