@@ -20,7 +20,7 @@ const CustomersState = (props) => {
   const fetchCustomers = async () => {
     setCustomersAreLoading(true);
     await axios
-      .get(`https://api.ianrodriguezprop.com/customers`)
+      .get(`http://66.97.43.140:4000/customers`)
       .then((res) => {
         setCustomers(res.data);
         setCustomersAreLoading(false);
@@ -66,7 +66,7 @@ const CustomersState = (props) => {
       data.tenantProperties = tenantPropertiesIds;
     }
     await axios
-      .post(`https://api.ianrodriguezprop.com/customers`, data)
+      .post(`http://66.97.43.140:4000/customers`, data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -127,7 +127,7 @@ const CustomersState = (props) => {
     }
     await axios
       .put(
-        `https://api.ianrodriguezprop.com/customers/${customerId}`,
+        `http://66.97.43.140:4000/customers/${customerId}`,
         data
       )
       .then((res) => {
@@ -156,7 +156,7 @@ const CustomersState = (props) => {
 
   const deleteCustomer = async (data) => {
     await axios
-      .delete(`https://api.ianrodriguezprop.com/customers/${data._id}`)
+      .delete(`http://66.97.43.140:4000/customers/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(

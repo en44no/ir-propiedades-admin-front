@@ -16,7 +16,7 @@ const UsersState = (props) => {
   const fetchUsers = async () => {
     setUsersAreLoading(true);
     await axios
-      .get(`https://api.ianrodriguezprop.com/users`)
+      .get(`http://66.97.43.140:4000/users`)
       .then((res) => {
         setUsers(res.data);
         setUsersAreLoading(false);
@@ -29,7 +29,7 @@ const UsersState = (props) => {
       data.roles = [];
     }
     await axios
-      .post(`https://api.ianrodriguezprop.com/users`, data)
+      .post(`http://66.97.43.140:4000/users`, data)
       .then((res) => {
         if (res.status === 201 || res.status === 200) {
           Notification(
@@ -58,7 +58,7 @@ const UsersState = (props) => {
       delete data.password;
     }
     await axios
-      .put(`https://api.ianrodriguezprop.com/users/${userId}`, data)
+      .put(`http://66.97.43.140:4000/users/${userId}`, data)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           Notification(
@@ -88,7 +88,7 @@ const UsersState = (props) => {
 
   const deleteUser = async (userId) => {
     await axios
-      .delete(`https://api.ianrodriguezprop.com/users/${userId}`)
+      .delete(`http://66.97.43.140:4000/users/${userId}`)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           Notification(
@@ -110,7 +110,7 @@ const UsersState = (props) => {
 
   const fetchRoles = async () => {
     await axios
-      .get(`https://api.ianrodriguezprop.com/roles`)
+      .get(`http://66.97.43.140:4000/roles`)
       .then((res) => {
         setRoles(res.data);
       })

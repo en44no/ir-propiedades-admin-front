@@ -36,7 +36,7 @@ const ReportsState = (props) => {
 
   const fetchProperties = async () => {
     await axios
-      .get(`https://api.ianrodriguezprop.com/properties`)
+      .get(`http://66.97.43.140:4000/properties`)
       .then((res) => {
         setPropertiesFromDB(res.data);
       })
@@ -45,7 +45,7 @@ const ReportsState = (props) => {
 
   const fetchInventories = async () => {
     await axios
-      .get(`https://api.ianrodriguezprop.com/inventories`)
+      .get(`http://66.97.43.140:4000/inventories`)
       .then((res) => {
         setInventoriesFromDB(res.data);
       })
@@ -54,7 +54,7 @@ const ReportsState = (props) => {
 
   const fetchPosts = async () => {
     await axios
-      .get(`https://api.ianrodriguezprop.com/posts`)
+      .get(`http://66.97.43.140:4000/posts`)
       .then((res) => {
         setPostsFromDB(res.data);
       })
