@@ -370,24 +370,6 @@ const PropertyDetails = (props) => {
                       }
                     />
                   </Box>
-
-                  <Box>
-                    <FormLabel htmlFor="propertyComments">
-                      Comentarios
-                    </FormLabel>
-                    <Textarea
-                      {...register("comment")}
-                      id="propertyComments"
-                      placeholder="Ingresa los comentarios"
-                      value={propertyForDetails.comment}
-                      onChange={(e) =>
-                        setPropertyForDetails({
-                          ...propertyForDetails,
-                          comment: e.target.value,
-                        })
-                      }
-                    />
-                  </Box>
                   <Box>
                     <FormLabel htmlFor="propertySurface">Superficie</FormLabel>
                     <Box>
@@ -416,6 +398,24 @@ const PropertyDetails = (props) => {
                     </FormLabel>
                     <VirtualToursList full="yes" property={property} />
                   </Box>
+                  <Box>
+                    <FormLabel htmlFor="propertyDescription">
+                      Descripción
+                    </FormLabel>
+                    <Textarea
+                      rows="7"
+                      {...register("description")}
+                      id="propertyDescription"
+                      placeholder="Ingresa la descripción"
+                      value={propertyForDetails.description}
+                      onChange={(e) =>
+                        setPropertyForDetails({
+                          ...propertyForDetails,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </Box>
                 </Stack>
                 <Stack spacing="14px" id="rightColumn">
                   <Box>
@@ -442,23 +442,7 @@ const PropertyDetails = (props) => {
                       </Badge>
                     )}
                   </Box>
-                  <Box>
-                    <FormLabel htmlFor="propertyDescription">
-                      Descripción
-                    </FormLabel>
-                    <Textarea
-                      {...register("description")}
-                      id="propertyDescription"
-                      placeholder="Ingresa la descripción"
-                      value={propertyForDetails.description}
-                      onChange={(e) =>
-                        setPropertyForDetails({
-                          ...propertyForDetails,
-                          description: e.target.value,
-                        })
-                      }
-                    />
-                  </Box>
+
                   <Box>
                     <FormLabel htmlFor="propertyAddress">Dirección</FormLabel>
                     {propertyForDetails.address ? (
@@ -483,6 +467,24 @@ const PropertyDetails = (props) => {
                       Inventarios
                     </FormLabel>
                     <InventoriesList full="yes" property={property} />
+                  </Box>
+                  <Box>
+                    <FormLabel htmlFor="propertyComments">
+                      Comentarios
+                    </FormLabel>
+                    <Textarea
+                      rows="7"
+                      {...register("comment")}
+                      id="propertyComments"
+                      placeholder="Ingresa los comentarios"
+                      value={propertyForDetails.comment}
+                      onChange={(e) =>
+                        setPropertyForDetails({
+                          ...propertyForDetails,
+                          comment: e.target.value,
+                        })
+                      }
+                    />
                   </Box>
                 </Stack>
               </SimpleGrid>
