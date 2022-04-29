@@ -126,10 +126,7 @@ const CustomersState = (props) => {
       data.tenantProperties = tenantPropertiesIds;
     }
     await axios
-      .put(
-        `https://api.ianrodriguezprop.com/customers/${customerId}`,
-        data
-      )
+      .put(`https://api.ianrodriguezprop.com/customers/${customerId}`, data)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           Notification(
