@@ -145,10 +145,7 @@ const PropertiesState = (props) => {
 
   const addDetailsToProperty = async (data, property, withoutNotification) => {
     await axios
-      .put(
-        `https://api.ianrodriguezprop.com/properties/${property._id}`,
-        data
-      )
+      .put(`https://api.ianrodriguezprop.com/properties/${property._id}`, data)
       .then((res) => {
         if (res.status === 200) {
           if (!withoutNotification) {
@@ -509,9 +506,7 @@ const PropertiesState = (props) => {
   const getPostsByProperty = async (propertyId) => {
     setPostsAreLoading(true);
     await axios
-      .get(
-        `https://api.ianrodriguezprop.com/posts/byPropertyId/${propertyId}`
-      )
+      .get(`https://api.ianrodriguezprop.com/posts/byPropertyId/${propertyId}`)
       .then((res) => {
         setPosts(res.data);
         setPostsAreLoading(false);
@@ -762,8 +757,7 @@ const PropertiesState = (props) => {
       .catch((error) => {});
   };
 
-  const addMedia = async (data, property) => {
-    setImagesAreLoading(true);
+  const addMedia = async (data, property, pendingCount) => {
     let formData = new FormData();
     formData.append("images", data.image);
     await axios
@@ -778,27 +772,31 @@ const PropertiesState = (props) => {
           .post(`https://api.ianrodriguezprop.com/media`, data)
           .then((resMedia) => {
             if (resMedia.status === 201 || res.status === 200) {
-              Notification(
-                "Imagen agregada correctamente",
-                "Has agregado una nueva imagen",
-                "success"
-              );
-               property.media = [...property.media, resMedia.data];
-               addMediaToProperty(resMedia.data, property);
-               setProperties(newProperties);
-                const newProperties = properties.map((prop) => {
-                  if (prop._id === property._id) {
-                    return property;
-                  } else {
-                    return prop;
-                  }
-                });
+              if (pendingCount == 0) {
+                Notification(
+                  "Imágenes agregadas correctamente",
+                  "Has agregado nuevas imágenes",
+                  "success"
+                );
+              }
+              property.media = [...property.media, resMedia.data];
+              addMediaToProperty(resMedia.data, property);
+              const newProperties = properties.map((prop) => {
+                if (prop._id === property._id) {
+                  return property;
+                } else {
+                  return prop;
+                }
+              });
+              setProperties(newProperties);
             } else {
-              Notification(
-                "Error al agregar la imagen",
-                "Ocurrió un error intentado agregar la imagen",
-                "error"
-              );
+              if (pendingCount == 0) {
+                Notification(
+                  "Error al agregar imágenes",
+                  "Ocurrió un error intentado agregar imágenes",
+                  "error"
+                );
+              }
               setImagesAreLoading(false);
             }
           })
@@ -870,7 +868,9 @@ const PropertiesState = (props) => {
     await axios
       .put(
         `https://api.ianrodriguezprop.com/properties/${property._id}/removeMedia`,
-        { id: image._id }
+        {
+          id: image._id,
+        }
       )
       .then((resMedia) => {
         if (resMedia.data.virtualTour.find((tour) => tour === image._id)) {
@@ -1127,10 +1127,7 @@ const PropertiesState = (props) => {
   const editDocument = async (data, documentId, propertyId) => {
     let property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(
-        `https://api.ianrodriguezprop.com/documents/${documentId}`,
-        data
-      )
+      .put(`https://api.ianrodriguezprop.com/documents/${documentId}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -1236,6 +1233,7 @@ const PropertiesState = (props) => {
         propertiesAreLoading,
         postsAreLoading,
         imagesAreLoading,
+        setImagesAreLoading,
       }}
     >
       {props.children}

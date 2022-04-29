@@ -9,48 +9,49 @@ import {
   useDisclosure,
   Image,
   Box,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useIntersectionObserver } from "../../hooks/useIntersectionObserver";
 
 const FullscreenImageModal = (props) => {
-  const {
-    src,
-    alt,
-    text,
-    description,
-    borderRadius,
-  } = props;
+  const { src, alt, text, description, borderRadius, width, height } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const ref = React.useRef();
-      const [isVisible, setIsVisible] = React.useState(false);
+  const ref = React.useRef();
+  const [isVisible, setIsVisible] = React.useState(false);
 
-      useIntersectionObserver({
-        target: ref,
-        onIntersect: ([{ isIntersecting }], observerElement) => {
-          if (isIntersecting) {
-            setIsVisible(true);
-            observerElement.unobserve(ref.current);
-          }
-        },
-      });
+  useIntersectionObserver({
+    target: ref,
+    onIntersect: ([{ isIntersecting }], observerElement) => {
+      if (isIntersecting) {
+        setIsVisible(true);
+        observerElement.unobserve(ref.current);
+      }
+    },
+  });
 
   return (
     <>
-      <Box ref={ref} onClick={onOpen} textAlign="-webkit-center">
-        {isVisible && (
-          <Image
-            w="220px"
-            h="110px"
-            borderRadius={borderRadius ? "7px" : null}
-            src={src}
-            cursor="pointer"
-            objectFit="cover"
-            alt={alt}
-            loading="lazy"
-          />
-        )}
-      </Box>
+      <Tooltip
+        hasArrow
+        label="Click para ver en pantalla completa"
+        bg="defaultColor.500"
+      >
+        <Box ref={ref} onClick={onOpen} textAlign="-webkit-center">
+          {isVisible && (
+            <Image
+              w={width ? width : "220px"}
+              h={height ? height : "110px"}
+              borderRadius={borderRadius ? "7px" : null}
+              src={src}
+              cursor="pointer"
+              objectFit="cover"
+              alt={alt}
+              loading="lazy"
+            />
+          )}
+        </Box>
+      </Tooltip>
       <Modal
         size="xl"
         isOpen={isOpen}
@@ -67,8 +68,9 @@ const FullscreenImageModal = (props) => {
             </Box>
           </ModalHeader>
           <ModalCloseButton _focus={{ boxShadow: "none" }} onClick={onClose} />
-          <ModalBody pb="1.5rem">
+          <ModalBody p="1.5rem">
             <Image
+              p="0rem"
               borderRadius="7px"
               w="100%"
               h="100%"
