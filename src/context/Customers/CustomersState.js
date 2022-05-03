@@ -20,7 +20,7 @@ const CustomersState = (props) => {
   const fetchCustomers = async () => {
     setCustomersAreLoading(true);
     await axios
-      .get(`https://api.ianrodriguezprop.com/customers`)
+      .get(`http://test.ianrodriguezprop.com:4000/customers`)
       .then((res) => {
         setCustomers(res.data);
         setCustomersAreLoading(false);
@@ -66,7 +66,7 @@ const CustomersState = (props) => {
       data.tenantProperties = tenantPropertiesIds;
     }
     await axios
-      .post(`https://api.ianrodriguezprop.com/customers`, data)
+      .post(`http://test.ianrodriguezprop.com:4000/customers`, data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -126,7 +126,7 @@ const CustomersState = (props) => {
       data.tenantProperties = tenantPropertiesIds;
     }
     await axios
-      .put(`https://api.ianrodriguezprop.com/customers/${customerId}`, data)
+      .put(`http://test.ianrodriguezprop.com:4000/customers/${customerId}`, data)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           Notification(
@@ -153,7 +153,7 @@ const CustomersState = (props) => {
 
   const deleteCustomer = async (data) => {
     await axios
-      .delete(`https://api.ianrodriguezprop.com/customers/${data._id}`)
+      .delete(`http://test.ianrodriguezprop.com:4000/customers/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(

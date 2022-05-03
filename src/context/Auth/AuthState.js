@@ -8,7 +8,7 @@ const AuthState = (props) => {
 
   const authenticateUser = async (data) => {
     await axios
-      .post(`https://api.ianrodriguezprop.com/auth/signin`, data)
+      .post(`http://test.ianrodriguezprop.com:4000/auth/signin`, data)
       .then((res) => {
         if (res.data.token) {
           sessionStorage.setItem("token", res.data.token);
@@ -23,7 +23,7 @@ const AuthState = (props) => {
 
   const getUser = async (username) => {
     await axios
-      .get(`https://api.ianrodriguezprop.com/users/`)
+      .get(`http://test.ianrodriguezprop.com:4000/users/`)
       .then((res) => {
         const user = res.data.find((user) => user.username === username);
         sessionStorage.setItem("userLoggedName", user.name.split(" ")[0]);

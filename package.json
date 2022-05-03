@@ -2,7 +2,7 @@
   "name": "template-react-chakraui-eslint-eslint",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://api.ianrodriguezprop.com",
+  "proxy": "http://test.ianrodriguezprop.com:4000",
   "dependencies": {
     "@chakra-ui/react": "^1.6.10",
     "@emotion/react": "^11.5.0",

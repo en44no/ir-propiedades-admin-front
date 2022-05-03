@@ -25,7 +25,7 @@ const PropertiesState = (props) => {
   const fetchProperties = async () => {
     setPropertiesAreLoading(true);
     await axios
-      .get(`https://api.ianrodriguezprop.com/properties`)
+      .get(`http://test.ianrodriguezprop.com:4000/properties`)
       .then((res) => {
         setProperties(res.data);
         setPropertiesAreLoading(false);
@@ -36,7 +36,7 @@ const PropertiesState = (props) => {
   const addProperty = async (data, address) => {
     data.address = address;
     await axios
-      .post(`https://api.ianrodriguezprop.com/properties`, data)
+      .post(`http://test.ianrodriguezprop.com:4000/properties`, data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -66,7 +66,7 @@ const PropertiesState = (props) => {
       return addAddress(data);
     }
     await axios
-      .put(`https://api.ianrodriguezprop.com/addresses/${addressId}`, data)
+      .put(`http://test.ianrodriguezprop.com:4000/addresses/${addressId}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -97,7 +97,7 @@ const PropertiesState = (props) => {
 
   const deleteProperty = async (data) => {
     await axios
-      .delete(`https://api.ianrodriguezprop.com/properties/${data._id}`)
+      .delete(`http://test.ianrodriguezprop.com:4000/properties/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(
@@ -122,7 +122,7 @@ const PropertiesState = (props) => {
 
   const addAddress = async (data) => {
     await axios
-      .post(`https://api.ianrodriguezprop.com/addresses`, data)
+      .post(`http://test.ianrodriguezprop.com:4000/addresses`, data)
       .then((res) =>
         res.status === 201
           ? (Notification(
@@ -145,7 +145,7 @@ const PropertiesState = (props) => {
 
   const addDetailsToProperty = async (data, property, withoutNotification) => {
     await axios
-      .put(`https://api.ianrodriguezprop.com/properties/${property._id}`, data)
+      .put(`http://test.ianrodriguezprop.com:4000/properties/${property._id}`, data)
       .then((res) => {
         if (res.status === 200) {
           if (!withoutNotification) {
@@ -190,7 +190,7 @@ const PropertiesState = (props) => {
 
   const addVirtualTourToProperty = async (virtualTourImages, property) => {
     await axios
-      .put(`https://api.ianrodriguezprop.com/properties/${property._id}`, {
+      .put(`http://test.ianrodriguezprop.com:4000/properties/${property._id}`, {
         virtualTour: virtualTourImages,
       })
       .then((res) => {
@@ -231,7 +231,7 @@ const PropertiesState = (props) => {
     data.property = propertyId;
     if (data.mercadoLibre == false) {
       await axios
-        .post(`https://api.ianrodriguezprop.com/posts`, data)
+        .post(`http://test.ianrodriguezprop.com:4000/posts`, data)
         .then((res) =>
           res.status === 201
             ? (Notification(
@@ -252,7 +252,7 @@ const PropertiesState = (props) => {
     } else {
       if (data.isForSale == true) {
         await axios
-          .post(`https://api.ianrodriguezprop.com/posts`, data)
+          .post(`http://test.ianrodriguezprop.com:4000/posts`, data)
           .then((res) =>
             res.status === 201
               ? (Notification(
@@ -279,7 +279,7 @@ const PropertiesState = (props) => {
       }
       if (data.isForRent == true) {
         await axios
-          .post(`https://api.ianrodriguezprop.com/posts`, data)
+          .post(`http://test.ianrodriguezprop.com:4000/posts`, data)
           .then((res) =>
             res.status === 201
               ? (Notification(
@@ -383,7 +383,7 @@ const PropertiesState = (props) => {
         ],
       };
       await axios
-        .post(`https://api.ianrodriguezprop.com/mercadolibre`, postToSend)
+        .post(`http://test.ianrodriguezprop.com:4000/mercadolibre`, postToSend)
         .then((res) => {
           if (res.status == 201) {
             Notification(
@@ -478,7 +478,7 @@ const PropertiesState = (props) => {
         ],
       };
       await axios
-        .post(`https://api.ianrodriguezprop.com/mercadolibre`, postToSend)
+        .post(`http://test.ianrodriguezprop.com:4000/mercadolibre`, postToSend)
         .then((res) => {
           if (res.status === 201) {
             Notification(
@@ -506,7 +506,7 @@ const PropertiesState = (props) => {
   const getPostsByProperty = async (propertyId) => {
     setPostsAreLoading(true);
     await axios
-      .get(`https://api.ianrodriguezprop.com/posts/byPropertyId/${propertyId}`)
+      .get(`http://test.ianrodriguezprop.com:4000/posts/byPropertyId/${propertyId}`)
       .then((res) => {
         setPosts(res.data);
         setPostsAreLoading(false);
@@ -517,7 +517,7 @@ const PropertiesState = (props) => {
   const editPost = async (data, postId, propertyId) => {
     const property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`https://api.ianrodriguezprop.com/posts/${postId}`, data)
+      .put(`http://test.ianrodriguezprop.com:4000/posts/${postId}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -554,7 +554,7 @@ const PropertiesState = (props) => {
 
   const deletePost = async (data) => {
     await axios
-      .delete(`https://api.ianrodriguezprop.com/posts/${data._id}`)
+      .delete(`http://test.ianrodriguezprop.com:4000/posts/${data._id}`)
       .then((res) =>
         res.status === 200
           ? (Notification(
@@ -578,7 +578,7 @@ const PropertiesState = (props) => {
     let property = properties.find((property) => property._id === propertyId);
     data.property = propertyId;
     await axios
-      .post(`https://api.ianrodriguezprop.com/features`, data)
+      .post(`http://test.ianrodriguezprop.com:4000/features`, data)
       .then((res) => {
         if (res.status === 201) {
           Notification(
@@ -610,7 +610,7 @@ const PropertiesState = (props) => {
   const editFeature = async (data, featureId, propertyId) => {
     let property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`https://api.ianrodriguezprop.com/features/${featureId}`, data)
+      .put(`http://test.ianrodriguezprop.com:4000/features/${featureId}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -644,7 +644,7 @@ const PropertiesState = (props) => {
 
   const changePostIsFeature = async (post, newState) => {
     await axios
-      .put(`https://api.ianrodriguezprop.com/posts/${post._id}`, {
+      .put(`http://test.ianrodriguezprop.com:4000/posts/${post._id}`, {
         isFeatured: newState,
       })
       .then((res) => {
@@ -676,7 +676,7 @@ const PropertiesState = (props) => {
 
   const addMercadoLibreLinkToPost = async (post, link) => {
     await axios
-      .put(`https://api.ianrodriguezprop.com/posts/${post._id}`, {
+      .put(`http://test.ianrodriguezprop.com:4000/posts/${post._id}`, {
         mercadoLibreLink: link,
       })
       .then((res) => {
@@ -691,7 +691,7 @@ const PropertiesState = (props) => {
 
   const deleteFeature = async (feature, property) => {
     await axios
-      .delete(`https://api.ianrodriguezprop.com/features/${feature._id}`)
+      .delete(`http://test.ianrodriguezprop.com:4000/features/${feature._id}`)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -728,7 +728,7 @@ const PropertiesState = (props) => {
       return feature._id;
     });
     await axios
-      .put(`https://api.ianrodriguezprop.com/properties/${propertyId}`, {
+      .put(`http://test.ianrodriguezprop.com:4000/properties/${propertyId}`, {
         features: [...features],
       })
       .then((res) => {
@@ -750,7 +750,7 @@ const PropertiesState = (props) => {
     const property = properties.find((property) => property._id === propertyId);
     const features = property.features;
     await axios
-      .post(`https://api.ianrodriguezprop.com/features/many`, features)
+      .post(`http://test.ianrodriguezprop.com:4000/features/many`, features)
       .then((res) => {
         setFeaturesProperty(res.data);
       })
@@ -762,14 +762,14 @@ const PropertiesState = (props) => {
     formData.append("images", data.image);
     await axios
       .post(
-        `https://api.ianrodriguezprop.com/uploads/${property._id}`,
+        `http://test.ianrodriguezprop.com:4000/uploads/${property._id}`,
         formData
       )
       .then(async (res) => {
         data.url = res.data.files[0].url;
         delete data.image;
         await axios
-          .post(`https://api.ianrodriguezprop.com/media`, data)
+          .post(`http://test.ianrodriguezprop.com:4000/media`, data)
           .then((resMedia) => {
             if (resMedia.status === 201 || res.status === 200) {
               if (pendingCount == 0) {
@@ -807,7 +807,7 @@ const PropertiesState = (props) => {
 
   const deleteMedia = async (property, image) => {
     await axios
-      .delete(`https://api.ianrodriguezprop.com/media/${image._id}`)
+      .delete(`http://test.ianrodriguezprop.com:4000/media/${image._id}`)
       .then((resMedia) => {
         if (resMedia.status === 200) {
           Notification(
@@ -856,7 +856,7 @@ const PropertiesState = (props) => {
     images.push(data._id);
     await axios
       .put(
-        `https://api.ianrodriguezprop.com/properties/${property._id}/addMedia`,
+        `http://test.ianrodriguezprop.com:4000/properties/${property._id}/addMedia`,
         images
       )
       .then((resMedia) => {
@@ -867,7 +867,7 @@ const PropertiesState = (props) => {
   const deleteMediaToProperty = async (property, image) => {
     await axios
       .put(
-        `https://api.ianrodriguezprop.com/properties/${property._id}/removeMedia`,
+        `http://test.ianrodriguezprop.com:4000/properties/${property._id}/removeMedia`,
         {
           id: image._id,
         }
@@ -894,7 +894,7 @@ const PropertiesState = (props) => {
   const changeInventoryStatus = async (status, inventoryId, propertyId) => {
     const property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`https://api.ianrodriguezprop.com/inventories/${inventoryId}`, {
+      .put(`http://test.ianrodriguezprop.com:4000/inventories/${inventoryId}`, {
         status: [status],
       })
       .then((res) => {
@@ -941,7 +941,7 @@ const PropertiesState = (props) => {
   ) => {
     const property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`https://api.ianrodriguezprop.com/reviews/${reviewsId}`, {
+      .put(`http://test.ianrodriguezprop.com:4000/reviews/${reviewsId}`, {
         status: status,
       })
       .then((res) => {
@@ -992,7 +992,7 @@ const PropertiesState = (props) => {
   const changeOrderMediaFromProperty = async (data, propertyId) => {
     const property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`https://api.ianrodriguezprop.com/properties/${propertyId}`, {
+      .put(`http://test.ianrodriguezprop.com:4000/properties/${propertyId}`, {
         media: data,
       })
       .then((res) => {
@@ -1025,7 +1025,7 @@ const PropertiesState = (props) => {
   const addSurfaceToProperty = async (surfaceData, propertyId) => {
     const property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`https://api.ianrodriguezprop.com/properties/${propertyId}`, {
+      .put(`http://test.ianrodriguezprop.com:4000/properties/${propertyId}`, {
         totalSurface: surfaceData.totalSurface,
         buildedSurface: surfaceData.buildedSurface,
         unitMeasurement: surfaceData.unitMeasurement,
@@ -1067,7 +1067,7 @@ const PropertiesState = (props) => {
       });
     }
     await axios
-      .put(`https://api.ianrodriguezprop.com/properties/${property._id}`, {
+      .put(`http://test.ianrodriguezprop.com:4000/properties/${property._id}`, {
         documents:
           property.documents.length > 0
             ? [...documents, documentId]
@@ -1078,7 +1078,7 @@ const PropertiesState = (props) => {
 
   const removeDocumentFromProperty = async (documentId, property) => {
     await axios
-      .put(`https://api.ianrodriguezprop.com/properties/${property._id}`, {
+      .put(`http://test.ianrodriguezprop.com:4000/properties/${property._id}`, {
         documents: [
           ...property.documents.filter(
             (document) => document._id !== documentId
@@ -1095,7 +1095,7 @@ const PropertiesState = (props) => {
     formData.append("documents", data.files);
     let property = properties.find((property) => property._id === propertyId);
     await axios
-      .post(`https://api.ianrodriguezprop.com/documents`, formData)
+      .post(`http://test.ianrodriguezprop.com:4000/documents`, formData)
       .then((res) => {
         if (res.status === 201 || res.status === 200) {
           Notification(
@@ -1127,7 +1127,7 @@ const PropertiesState = (props) => {
   const editDocument = async (data, documentId, propertyId) => {
     let property = properties.find((property) => property._id === propertyId);
     await axios
-      .put(`https://api.ianrodriguezprop.com/documents/${documentId}`, data)
+      .put(`http://test.ianrodriguezprop.com:4000/documents/${documentId}`, data)
       .then((res) => {
         if (res.status === 200) {
           Notification(
@@ -1162,7 +1162,7 @@ const PropertiesState = (props) => {
 
   const deleteDocument = async (documentId, property) => {
     await axios
-      .delete(`https://api.ianrodriguezprop.com/documents/${documentId}`)
+      .delete(`http://test.ianrodriguezprop.com:4000/documents/${documentId}`)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
           Notification(
