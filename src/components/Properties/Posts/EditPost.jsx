@@ -124,21 +124,17 @@ const EditPost = (props) => {
             }, 5000);
           }
         } else {
-          if (
-            data.media == undefined &&
-            imagesPendingToAddForPost.images.length == 0 && post.media.length == 0
-          ) {
+          if (!data.media && !imagesPendingToAddForPost && post.media.length == 0) {
             Notification(
               `Error al editar publicación`,
               `Debes agregar al menos una imagen`,
               "warning"
             );
           } else {
-            debugger;
-            if (
-              imagesPendingToAddForPost?.images.length > 0 &&
-              imagesPendingToAddForPost?.post._id == post._id) {
-              data.media = imagesPendingToAddForPost.images;
+            if (imagesPendingToAddForPost) {
+              if(imagesPendingToAddForPost?.post?._id && imagesPendingToAddForPost?.post._id == post._id) {
+                data.media = imagesPendingToAddForPost.images;
+              }
             } else {
               data.media = post.media;
             }
